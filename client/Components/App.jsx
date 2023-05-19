@@ -2,8 +2,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import Wheel from  './Wheel.jsx';
 
-
-
 function App() {
   const [selectedUser, setSelectedUser] = useState(null);
 
