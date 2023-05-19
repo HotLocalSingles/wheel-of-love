@@ -1,12 +1,19 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 //Including google auth's client id from the .env file here so that it can be used for the GoogleStrategy
 require('dotenv').config();
 
-
 const app = express();
 const server = require('http').createServer(app);
+
+//Importing the Sequelize database:
+const { sequelize, testConnection } = require('../server/db/index');
+
+//Testing the database connection before we start messing with it
+testConnection();
+
 
 // Passport is being configured with the google auth information, also known as google strategy
 passport.use(
@@ -16,7 +23,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
     },
-    (accessToken, refreshToken, profile, done) => {
+    (accessToken, refreshToken, profile, cb) => {
 
       //INSIDE OF HERE WE CALL THE USER INFORMATION, SEEING IF THEY LOGIN
       //NEED TO SETUP WITH THE MYSQL DATABASE
@@ -25,7 +32,7 @@ passport.use(
       //   return cb(err, user);
       // });
 
-      return done(null, profile);
+      return cb(null, profile);
     }
   )
 );
