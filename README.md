@@ -1,22 +1,23 @@
-# wheel-of-love
+# **Wheel Of Love**
 This is a dating app that utilizes a wheel to match users
 
-# Getting Started
+## **Getting Started**
 
 Install Dependencies:
 
-# ReactJS
+* ### **ReactJS**
 npm i react
 
-# Webpack compiler
-npm i --save-dev webpack or npm i @airbnb/config-webpack
+* ### **Webpack compiler**
+`npm i --save-dev webpack`
+`npm i @airbnb/config-webpack`
 
 Setting up Webpack:
 
 
-# Setting up ESLint
+* ### **ESLint**
 Create a webpack.config.js
-npm init @eslint/config
+`npm init @eslint/config`
 
 Follow the setup in the terminal
 options:
@@ -27,24 +28,26 @@ options:
     -airbnb style guide
     -config file JSON
 
-# Setting up Babel
+* ### **Babel**
 Create a babel.config.json file in the root directory
 
-npm i --save-dev babel-loader @babel/core
-npm i @babel/preset-env --save-dev
+`npm i --save-dev babel-loader @babel/core`
 
-# Axios
-npm i axios --save-dev
+`npm i @babel/preset-env --save-dev`
 
-# Express
-npm i express --save-dev
+* ### **Axios**
+`npm i axios --save-dev`
 
-# Socket.io
-npm i ws (websocket needed for socket.io)
-npm i socket.io
+* ### **Express**
+`npm i express --save-dev`
 
-# Passport
-npm i passport passport-google-oauth2
+* ### **Socket.io and Websocket**
+`npm i ws` (websocket needed for socket.io)
 
-# MaterialUI
-npm i @mui/material @emotion/react @emotion/styled
+`npm i socket.io`
+
+* ### **Passport**
+`npm i passport passport-google-oauth2`
+
+* ### **MaterialUI**
+`npm i @mui/material @emotion/react @emotion/styled`
