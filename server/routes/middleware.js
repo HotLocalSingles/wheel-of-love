@@ -7,10 +7,10 @@ const app = require('../index');
 const router = express.Router();
 
 
-router.get('/auth/google',
+router.get('/login/federated/google',
   passport.authenticate('google', { scope: ['profile'] }));
 
-router.get('/auth/google/callback',
+router.get('/oauth20/redirect/google',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.

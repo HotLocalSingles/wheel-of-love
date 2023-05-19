@@ -27,7 +27,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/auth/google/callback',
+      callbackURL: 'http://localhost:3000/oauth20/redirect/google',
     },
     //Cb is the verify callback
     // which receives the access token and optional refresh token, as well
@@ -54,7 +54,8 @@ app.use('/', middlewareRouter);
 app.use('/', authRouter);
 
 app.get('/', (req, res) => {
-  res.send('<h1>Hello world</h1>');
+  res.send(
+    '<h1>Sign in</h1> <a class="button google" href="/login/federated/google">Sign in with Google</a>');
 });
 
 //Start server
