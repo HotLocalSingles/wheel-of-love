@@ -10,7 +10,7 @@ const initializePassport = () => {
       {
         clientID: process.env['GOOGLE_CLIENT_ID'],
         clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
-        callbackURL: '/oauth2/redirect/google',
+        callbackURL: 'http://localhost:3000/oauth20/redirect/google',
         scope: ['profile'],
       },
 
@@ -25,7 +25,7 @@ const initializePassport = () => {
           //Check if FederatedCredential record exists for the provider and subject
           const credential = await FederatedCredential.findOne({
             where: {
-              provider: profile.issuer,
+              provider: 'google',
               subject: profile.id,
               user_id: user.id,
             },
@@ -34,7 +34,7 @@ const initializePassport = () => {
           //If doesn't exist, create a new one
           if (!credential) {
             await FederatedCredential.create({
-              provider: profile.issuer,
+              provider: 'google',
               subject: profile.id,
               user_id: user.id,
             });

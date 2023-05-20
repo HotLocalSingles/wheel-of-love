@@ -17,6 +17,7 @@ router.get('/oauth20/redirect/google',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     //Success, logged in, so redirect home
+    console.log('Signed in');
     res.redirect('/');
   });
 

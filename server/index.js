@@ -28,9 +28,7 @@ app.use(passport.session());
 
 //Routes from middleware and auth
 const middlewareRouter = require('./routes/middleware');
-const authRouter = require('./routes/auth');
 app.use('/', middlewareRouter);
-app.use('/', authRouter);
 
 //Parses incoming JSON requests
 app.use(express.json());
