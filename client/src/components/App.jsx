@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
+//Material UI:
+import { Button, Avatar } from '@mui/material';
+
 import Wheel from '../components/Wheel.jsx';
 
 const App = () => {
@@ -68,7 +71,11 @@ const App = () => {
               </div>
             )}
           </div>
-          <img src={ profile.picture } alt="user image" />
+          <Avatar
+            alt="User Profile Image"
+            src={ profile.picture }
+            sx={{ width: 80, height: 80 }}
+          />
           <h3>User Logged in</h3>
           <p>Name: { profile.name }</p>
           <p>Email Address: { profile.email }</p>
@@ -77,7 +84,10 @@ const App = () => {
           <button onClick={ logOut }>Log out</button>
         </div>
       ) : (
-        <><h2>Google Login</h2><br /><br /><button onClick={() => login()}>Sign in with Google</button></>
+        <div>
+          <><h2>Wheel of Love Login</h2><br /><br />
+            <Button variant="contained" size="medium" onClick={() => login()}>Sign in with Google</Button></>
+        </div>
       )}
     </div>
   );
