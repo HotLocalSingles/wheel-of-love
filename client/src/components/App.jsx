@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Wheel from './Wheel.jsx';
-import Bar from './bar/Bar.jsx';
-import Chat from './chat/Chat.jsx';
+// import Bar from './bar/Bar.jsx';
+import Chat from './Chat.jsx';
 
 const App = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -20,7 +20,6 @@ const App = () => {
         <div>
           <h3>Chat with {selectedUser}</h3>
           {/* Render chat component here */}
-          <Bar />
           <Chat />
         </div>
       )}
