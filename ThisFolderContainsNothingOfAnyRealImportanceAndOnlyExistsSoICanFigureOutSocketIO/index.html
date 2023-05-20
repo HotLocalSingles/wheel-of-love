@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>EXHAUSTED</title>
+      <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+   </head>
+   <body>
+    Connecting and implementing Socket.io
+    <input type="text" class="message"/>
+    <button onclick="sendMessage()">Click me</button>
+    <h1></h1>
+    <script type="text/babel" src="/home/useradd/Senior/wheel-of-love/Cynthia/chatboxreciever.jsx"></script>
+    <script>
+      const socket = io('localhost:3000');
+      socket.on('connection', () => {
+        console.log('Client connected to socket.io on server');
+      })
+
+      //create socket.on to change h1 innerHTML
+      socket.on('message', (data) => {
+        document.querySelector('h1').innerHTML = data;
+      })
+
+      const sendMessage = () => {
+        const input = document.querySelector('.message');
+        const message = input.value;
+        // console.log('sendMessage function works. Check server terminal for socket.emit message');
+        socket.emit('message', message);
+      };
+    </script>
+   </body>
+</html>

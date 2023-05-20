@@ -6,7 +6,17 @@ const { sequelize } = require('../server/db/index');
 
 const initializePassport = require('../server/routes/auth');
 
+
 const app = express();
+//Parses incoming JSON requests
+app.use(express.json());
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, { cors: { origin: '*' } });
+
+//Shows the Google Login Page
+app.get('/', (req, res) => {
+  res.send('<h1>Sign in</h1> <a class="button google" href="/login/federated/google">Sign in with Google</a>');
+});
 
 //Session middleware
 const sessionOptions = {
@@ -30,21 +40,28 @@ app.use(passport.session());
 const middlewareRouter = require('./routes/middleware');
 app.use('/', middlewareRouter);
 
-//Parses incoming JSON requests
-app.use(express.json());
 
-//Shows the Google Login Page
-app.get('/', (req, res) => {
-  res.send('<h1>Sign in</h1> <a class="button google" href="/login/federated/google">Sign in with Google</a>');
+
+//building socket.io logic
+//event emitter to check for connection
+io.on('connection', (socket) => {
+  //socket event creation
+  console.log('socket id', socket.id);
+  //socket method
+  socket.on('message', (data) => {
+    console.log(data);
+    //emit data to everyone but self
+    // socket.emit(data);
+    socket.broadcast.emit('message', data);
+  });
 });
-
-const server = require('http').createServer(app);
 
 //Start server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
 
 module.exports = {
   app,
