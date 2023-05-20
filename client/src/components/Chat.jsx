@@ -3,7 +3,7 @@ import { FormControl, Container, Divider, TextField, Button, Box, Grid, Typograp
 import MessageObj from './model/MessageObj.js';
 // import Bar from './TestingFilesForChat/bar/Bar.jsx';
 
-export default Chat = () => {
+const Chat = () => {
   //states for user and messages
   const [user, setUser] = useState('');
   const [message, setMessage] = useState('');
@@ -96,3 +96,5 @@ export default Chat = () => {
     </Fragment>
   );
 };
+
+export default Chat;
