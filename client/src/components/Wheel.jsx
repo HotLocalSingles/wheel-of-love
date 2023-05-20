@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Wheel = ({ onUserSelected }) => {
-  const [users, setUsers] = useState(['User1', 'User2', 'User3', 'User4']);
+  const [users, setUsers] = useState(['User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7']);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const spinWheel = () => {
