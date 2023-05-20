@@ -15,7 +15,7 @@ export default ChatBoxSender = () => {
         padding: '10px',
         backgroundColor: '#FFF0F5',
         marginBottom: '10px',
-        textAlign: 'right'
+        textAlign: 'left'
       }}>
       <input
         type="text"

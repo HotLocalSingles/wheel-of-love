@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import io from 'socket.io-client';
 const socket = io('localhost:3000');
-
+//in order to keep all messages in box, put them in an array
 export default ChatBoxReceiver = () => {
   return (
     <Box
