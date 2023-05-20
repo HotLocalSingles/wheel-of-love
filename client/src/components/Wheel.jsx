@@ -19,7 +19,7 @@ const Wheel = ({ onUserSelected }) => {
       <h3>Spin the Wheel to Pick a Date</h3>
       {selectedUser ? (
         <div>
-          <button>Spin Again</button>
+          <button onClick={spinWheel}>Spin Again</button>
         <p>Selected User: {selectedUser}</p>
         </div>
       ) : (
