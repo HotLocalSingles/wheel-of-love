@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -10,13 +11,12 @@ const initializePassport = require('../server/routes/auth');
 const app = express();
 //Parses incoming JSON requests
 app.use(express.json());
+//Tells server where to serve static assets
+app.use(express.static(path.resolve(__dirname, '../client/dist')));
+
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, { cors: { origin: '*' } });
 
-//Shows the Google Login Page
-app.get('/', (req, res) => {
-  res.send('<h1>Sign in</h1> <a class="button google" href="/login/federated/google">Sign in with Google</a>');
-});
 
 //Session middleware
 const sessionOptions = {
