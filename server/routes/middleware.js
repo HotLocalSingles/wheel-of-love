@@ -1,4 +1,5 @@
 //GOOGLE AUTH MIDDLEWARE
+//This file is defining the routes for the google auth middleware specifically
 
 const express = require('express');
 const router = express.Router();
@@ -13,11 +14,12 @@ router.get('/login', function(req, res, next) {
 router.get('/login/federated/google',
   passport.authenticate('google'));
 
+//When the user clicks "sign in" button, this is triggered
+//The user needs to then authenticate with passport using google, if it fails then it goes back to the login page
 router.get('/oauth20/redirect/google',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    //Success, logged in, so redirect home
-    console.log('Signed in');
+    //Logged in, so redirect home
     res.redirect('/');
   });
 
