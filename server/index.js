@@ -41,18 +41,15 @@ const middlewareRouter = require('./routes/middleware');
 app.use('/', middlewareRouter);
 
 
-
 //building socket.io logic
 //event emitter to check for connection
 io.on('connection', (socket) => {
   //socket event creation
   console.log('socket id', socket.id);
   //socket method
-  socket.on('message', (data) => {
-    console.log(data);
-    //emit data to everyone but self
-    // socket.emit(data);
-    socket.broadcast.emit('message', data);
+  socket.emit('chat-message', 'io connection socket emit index.js server working');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   });
 });
 
@@ -61,6 +58,7 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
 
 
 module.exports = {

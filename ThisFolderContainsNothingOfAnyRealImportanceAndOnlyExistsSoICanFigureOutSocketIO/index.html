@@ -6,9 +6,11 @@
    </head>
    <body>
     Connecting and implementing Socket.io
-    <input type="text" class="message"/>
-    <button onclick="sendMessage()">Click me</button>
-    <h1></h1>
+    <div class="chatbox">
+      <input type="text" class="message"/>
+      <button onclick="sendMessage()">Click me</button>
+      <h1></h1>
+    </div>
     <script type="text/babel" src="/home/useradd/Senior/wheel-of-love/Cynthia/chatboxreciever.jsx"></script>
     <script>
       const socket = io('localhost:3000');
