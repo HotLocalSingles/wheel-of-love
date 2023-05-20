@@ -1,20 +1,24 @@
 //GOOGLE AUTH MIDDLEWARE
 
+const express = require('express');
+const router = express.Router();
 const passport = require('passport');
 
-const express = require('express');
-const app = require('../index');
-const router = express.Router();
+//Creates a route that will render the sign-in page.
+router.get('/login', function(req, res, next) {
+  res.render('login');
+});
 
-
-// router.get('/login/federated/google',
-//   passport.authenticate('google', { scope: ['profile'] }));
+//Will redirect the user when they click "Sign in with Google"
+router.get('/login/federated/google',
+  passport.authenticate('google'));
 
 router.get('/oauth20/redirect/google',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    // Successful authentication, redirect home.
+    //Success, logged in, so redirect home
     res.redirect('/');
   });
+
 
 module.exports = router;

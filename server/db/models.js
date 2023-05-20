@@ -1,5 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../db/index')
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../db/index');
 
 //Defining the Models for the Database
 const User = sequelize.define('User', {
@@ -37,9 +37,10 @@ const FederatedCredential = sequelize.define('FederatedCredential', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  //Also has user_id associated, look below
 });
 
-//Associated the credentials to the User Table
+//Tying the two models together
 User.hasMany(FederatedCredential, { foreignKey: 'user_id' });
 FederatedCredential.belongsTo(User, { foreignKey: 'user_id' });
 
@@ -52,3 +53,8 @@ sequelize
   .catch((error) => {
     console.error('Error synchronizing tables:', error);
   });
+
+module.exports = {
+  User,
+  FederatedCredential
+};
