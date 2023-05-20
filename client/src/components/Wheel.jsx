@@ -13,9 +13,15 @@ const Wheel = ({ onUserSelected }) => {
 
   return (
     <div>
-      <h3>Spin the Wheel to Select a User</h3>
+      {users.map((user) => {
+        <div>{user}</div>      
+      })}
+      <h3>Spin the Wheel to Pick a Date</h3>
       {selectedUser ? (
+        <div>
+          <button>Spin Again</button>
         <p>Selected User: {selectedUser}</p>
+        </div>
       ) : (
         <button onClick={spinWheel}>Spin</button>
       )}
