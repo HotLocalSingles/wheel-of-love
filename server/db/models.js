@@ -23,6 +23,7 @@ const User = sequelize.define('User', {
   },
 });
 
+//Credentials from an external identity provider, in this case it's google
 const FederatedCredential = sequelize.define('FederatedCredential', {
   id: {
     type: DataTypes.INTEGER,
@@ -46,7 +47,7 @@ FederatedCredential.belongsTo(User, { foreignKey: 'user_id' });
 
 //Creates the tables if they aren't already created
 sequelize
-  .sync({ force: false })
+  .sync({ force: false }) //Doesn't drop the tables and recreate them
   .then(() => {
     console.log('Tables created or synchronized');
   })

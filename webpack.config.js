@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 
 const SRC_DIR = path.join(__dirname, '/client/src');
 const DIST_DIR = path.join(__dirname, '/client/dist');
@@ -12,7 +13,24 @@ module.exports = {
     filename: 'bundle.js',
     path: DIST_DIR,
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [new HtmlWebpackPlugin({
+    title: 'Wheel of Love',
+    templateContent: `
+    <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Wheel of Love</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></head>
+  <body>
+  <div id="root"></div>
+  </body>
+</html>
+    `
+  }),
+  new Dotenv({
+    path: './.env'
+  })],
   module: {
     rules: [
       {
