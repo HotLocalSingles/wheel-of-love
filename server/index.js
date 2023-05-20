@@ -1,10 +1,15 @@
+//Express Requirements
 const express = require('express');
-const path = require('path');
 const session = require('express-session');
-const passport = require('passport');
+
+//Importing path so that we can use the static files from client side
+const path = require('path');
+
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { sequelize } = require('../server/db/index');
 
+
+const passport = require('passport');
 const initializePassport = require('../server/routes/auth');
 
 

@@ -13,7 +13,22 @@ module.exports = {
     filename: 'bundle.js',
     path: DIST_DIR,
   },
-  plugins: [new HtmlWebpackPlugin(), new Dotenv({
+  plugins: [new HtmlWebpackPlugin({
+    title: 'Wheel of Love',
+    templateContent: `
+    <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Wheel of Love</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></head>
+  <body>
+  <div id="root"></div>
+  </body>
+</html>
+    `
+  }),
+  new Dotenv({
     path: './.env'
   })],
   module: {
