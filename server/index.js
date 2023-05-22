@@ -58,7 +58,14 @@ app.use('/', middlewareRouter);
 io.on('connection', (socket) => {
   //socket event creation
   console.log('user connected. socket id: ', socket.id);
-  //socket method
+  //socket method to connect user to chat
+  socket.on('connect', ({ user }, callback) => {
+    //associate the socket with the authenticated user
+    socket.user = user;
+    console.log('user connected:', user);
+    if (error) { callback(error); }
+  });
+  //to broadcast message just to one user and not to sender
   socket.emit('chat-message', (message) => {
     console.log('server got the message', message);
     socket.broadcast.emit('chat-message', message);

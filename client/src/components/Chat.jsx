@@ -9,10 +9,7 @@ const Chat = () => {
   //states for user and messages
   const [user, setUser] = useState('');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
-    //testing
-    new MessageObj(user, message)
-  ]);
+  const [messages, setMessages] = useState([]);
 
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
@@ -26,9 +23,6 @@ const Chat = () => {
   });
 
   const sendMessage = () => {
-    //the first message is registering as blank because that's what is initially
-    //the value of state. When I console log state that's why that shows up
-
     //check if user and message are not empty
     if (user && message) {
       //create a new message object
@@ -39,10 +33,8 @@ const Chat = () => {
       setMessages([...messages, newMessage]);
       //clear the message input
       setMessage('');
-      console.log('message sent');
-      console.log(user, message);
       //emit the message with socket
-      socket.emit('chat-message', newMessage); //potentially works
+      socket.emit('chat-message', newMessage);
     }
   };
 
@@ -52,6 +44,21 @@ const Chat = () => {
       sendMessage();
     }
   };
+
+  //establish a useEffect function to connect the user to the chat
+  //when they agree to chat with selected user
+  /* useEffect(() => {
+    socket.emit('connect', { user, message }, (error) => {
+      if (error) {
+        console.error('Failed to connect to chat', error);
+      }
+    })
+    return () => {
+     socket.emit('disconnect');
+      socket.off();
+    }
+  }, [user]);
+*/
 
   /*
   The Fragment will allow us to combine multiple elements into one 'div'
