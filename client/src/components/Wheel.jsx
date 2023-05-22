@@ -6,7 +6,6 @@ const Wheel = ({ onUserSelected }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
 
-
   const spinWheel = () => {
     // Generate a random index to select a user from the list
     const randomIndex = Math.floor(Math.random() * users.length);
@@ -25,7 +24,7 @@ const Wheel = ({ onUserSelected }) => {
       <div
         style={{
           // Wheel Container
-          backgroundColor: "lightblue",
+          backgroundColor: 'lightblue',
           position: 'relative',
           width: '100%',
           height: '0',
@@ -36,8 +35,8 @@ const Wheel = ({ onUserSelected }) => {
         <div
           style={{
             // Actual wheel
-            backgroundColor: "lightgreen",
-            borderRadius: "50%",
+            backgroundColor: 'lightgreen',
+            borderRadius: '50%',
             position: 'absolute',
             top: '0',
             left: '0',
@@ -47,23 +46,32 @@ const Wheel = ({ onUserSelected }) => {
             transition: 'transform 1s',
           }}
         >
-          {users.map((user, index) => (
-            //User Divs on wheel
-            
-            <div
-              key={index}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: `translate(-50%, -50%) rotate(${index * (360 / users.length)}deg)`,
-                transformOrigin: 'center center',
-                color: 'lightyellow',
-              }}
-            >
-              {user}
-            </div>
-          ))}
+          {users.map((user, index) => {
+            // Calculate the rotation angle of each user div
+            const userRotationAngle = index * (360 / users.length);
+
+            // Calculate the translation values to move the user div up
+            const radius = 200; // Adjust this value to control the distance from the center
+            const translationY = -radius;
+
+            return (
+              <div
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${userRotationAngle}deg) translateY(${translationY}px)`,
+                  transformOrigin: 'center',
+                  color: 'white',
+                  textShadow: 'black 0px 0px 2px',
+                  fontSize: '40px',
+                }}
+              >
+                {user}
+              </div>
+            );
+          })}
         </div>
       </div>
       <h3>Have Fate Pick your Date</h3>
