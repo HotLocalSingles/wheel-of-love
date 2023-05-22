@@ -5,7 +5,7 @@ import { Avatar} from '@mui/material';
 
 const UserProfile = ({ profile }) => {
 //user is the logged in user
-
+console.log(profile);
 
   return (
     <div>

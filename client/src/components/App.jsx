@@ -17,7 +17,6 @@ const App = () => {
     setSelectedUser(user);
   };
 
-  /////////////////LOGAN LOGIN CODE/////////
   //useGoogleLogin hook gives the login functionality
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),

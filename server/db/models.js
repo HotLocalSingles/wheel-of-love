@@ -12,10 +12,10 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     unique: true,
   },
-  hashed_password: {
+  hashed_password: { //Null if you're using google to sign in, these would be good for traditional sign-ups
     type: DataTypes.BLOB,
   },
-  salt: {
+  salt: { //Null if you're using google to sign in, these would be good for traditional sign-ups
     type: DataTypes.BLOB,
   },
   name: {

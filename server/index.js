@@ -15,6 +15,8 @@ const { sequelize } = require('../server/db/index');
 const passport = require('passport');
 const initializePassport = require('../server/routes/auth');
 
+const users = require('../server/routes/userData');
+
 //Setting up server
 const app = express();
 //Parses incoming JSON requests
@@ -48,9 +50,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Routes from middleware and auth, when we go to the '/' it automatically uses the middleware set up in the middleware file
-const middlewareRouter = require('./routes/middleware');
-app.use('/', middlewareRouter);
+const googleRouter = require('./routes/middleware');
+app.use('/', googleRouter);
 
+//Including other routers
+app.use('/users', users);
 
 
 //building socket.io logic
