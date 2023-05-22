@@ -12,10 +12,10 @@ const Wheel = ({ onUserSelected }) => {
   };
 
   return (
-    <div>
-      <div>
+    <div style={{}}>
+      <div style={{backgroundColor: "lightblue", borderRadius: "50%", width: "50%",  aspectRatio : "1 / 1", margin: "auto"}}>
       {users.map((user) => (
-        <div>{user}</div>      
+        <div >{user}</div>      
       ))}
       </div>
       <h3>Spin the Wheel to Pick a Date</h3>
