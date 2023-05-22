@@ -74,7 +74,7 @@
         const input = document.querySelector('.message');
         const message = input.value;
         // console.log('sendMessage function works. Check server terminal for socket.emit message');
-        socket.emit('message', message);
+        socket.emit('chat-message', message);
       };
     </script>
    </body>

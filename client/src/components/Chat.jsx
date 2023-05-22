@@ -1,7 +1,6 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { IconButton, FormControl, Container, Divider, TextField, Button, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, AppBar, Toolbar, Paper } from '@mui/material';
+import React, { Fragment, useState } from 'react';
+import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, Paper } from '@mui/material';
 import MessageObj from './model/MessageObj.js';
-// import Bar from './TestingFilesForChat/bar/Bar.jsx';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
@@ -19,49 +18,40 @@ const Chat = () => {
   //and create a listItem from each message obj
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
-    <ListItem key={index}>
-      <ListItemText primary={`${messageObj.user}: ${messageObj.message}`} />
-    </ListItem>;
+    return (
+      <ListItem key={index}>
+        <ListItemText primary={`${messageObj.user}: ${messageObj.message}`} />
+      </ListItem>
+    );
   });
 
-  //display the user's nickname
-  const handleUserChange = (e) => {
-    setUser(e.target.value);
-  };
-
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
-  };
-
   const sendMessage = () => {
+    //the first message is registering as blank because that's what is initially
+    //the value of state. When I console log state that's why that shows up
+
     //check if user and message are not empty
     if (user && message) {
       //create a new message object
-      const newMessage = new MessageObj(user, message); //works
+      const newMessage = new MessageObj(user, message);
+      //update the current message on state
+      setMessage(newMessage);
       //update the state with the new message
-      setMessages([...messages, newMessage]); //don't know yet
+      setMessages([...messages, newMessage]);
       //clear the message input
-      setMessage(''); //works
-      console.log('message sent'); //works
-      console.log(messages); //works
+      setMessage('');
+      console.log('message sent');
+      console.log(user, message);
       //emit the message with socket
       socket.emit('chat-message', newMessage); //potentially works
     }
   };
 
-  const handleSendMessage = () => {
-    sendMessage(user, message);
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
   };
-
-  //subscribe to the 'chat-message' event when the component mounts
-  useEffect(() => {
-    socket.on('chat-message', message);
-    //clean up the event listener when the component unmounts
-    return () => {
-      socket.off('chat-message', message);
-    };
-  }, [messages]); //re-subscribe when 'messages' state changes
-
 
   /*
   The Fragment will allow us to combine multiple elements into one 'div'
@@ -75,7 +65,6 @@ const Chat = () => {
   return (
     <Fragment>
       <Container>
-        {/* <Bar /> */}
         <Paper elevation={6}>
           <Box padding={3}>
             <Typography>
@@ -92,7 +81,7 @@ const Chat = () => {
               <Grid item xs={2}>
                 <FormControl fullWidth>
                   <TextField
-                    onChange={ (e) => handleUserChange(e) }
+                    onChange={ (e) => setUser(e.target.value) }
                     value={ user }
                     label="add a nickname"
                     variant="outlined"/>
@@ -101,7 +90,8 @@ const Chat = () => {
               <Grid xs={6} item>
                 <FormControl fullWidth>
                   <TextField
-                    onChange={ (e) => handleMessageChange(e) }
+                    onKeyPress={ handleKeyPress }
+                    onChange={ (e) => setMessage(e.target.value) }
                     value={ message }
                     label="What would you like to say?"
                     variant="outlined"/>
@@ -109,7 +99,7 @@ const Chat = () => {
               </Grid>
               <Grid item xs={1}>
                 <IconButton
-                  onClick={ handleSendMessage }
+                  onClick={ sendMessage }
                   sx={{ 'color': 'pink'[500] }}
                   fontSize='large'>Send
                 </IconButton>
