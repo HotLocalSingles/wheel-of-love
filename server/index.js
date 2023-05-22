@@ -56,9 +56,12 @@ app.use('/', middlewareRouter);
 //event emitter to check for connection
 io.on('connection', (socket) => {
   //socket event creation
-  console.log('socket id', socket.id);
+  console.log('user connected. socket id: ', socket.id);
   //socket method
-  socket.emit('chat-message', 'io connection socket emit index.js server working');
+  socket.emit('chat-message', (message) => {
+    console.log('server got the message', message);
+    socket.broadcast.emit('chat-message', message);
+  });
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
