@@ -58,7 +58,7 @@ const App = () => {
       {profile ? (
         <div>
           <div>
-            <h1>Gettin' Around</h1>
+            <h1>Just Love Gettin' Around</h1>
             <h2>A Dating Site</h2>
             <Wheel onUserSelected={handleUserSelected} />
             {selectedUser && (
