@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const Wheel = ({ onUserSelected }) => {
   // State for the list of users, selected user, rotation angle
@@ -6,17 +6,41 @@ const Wheel = ({ onUserSelected }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
 
-  const spinWheel = () => {
-    // Generate a random index to select a user from the list
-    const randomIndex = Math.floor(Math.random() * users.length);
-    const user = users[randomIndex];
-    setSelectedUser(user);
-    onUserSelected(user);
+  const userRefs = useRef([]);
+  
 
+  useEffect(() => {
+    userRefs.current = userRefs.current.slice(0, users.length);
+  }, [users.length]);
+  
+
+  const spinWheel = () => {
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / users.length;
-    const newRotationAngle = rotationAngle + (randomIndex * rotationIncrement);
-    setRotationAngle(newRotationAngle);
+    const randomIndex = Math.floor(Math.random() * users.length);
+
+    const targetRotationAngle = rotationIncrement * randomIndex;
+
+    // Calculate the rotation duration (ms)
+    const rotationDuration = 1000;
+
+    // Update the rotation angle with a delay to simulate spinning
+    setRotationAngle(rotationAngle + 360 * 5 + targetRotationAngle); // extra rotations
+
+    // After the rotation duration, set the selected user and invoke the callback
+    setTimeout(() => {
+    // Get the y-coordinate of each user div
+    const userYCoordinates = userRefs.current.map(ref => {
+      const rect = ref.getBoundingClientRect();
+      return rect.top;
+    });
+
+    // Find the index of the user div closest to the top border, thats the user we select
+    const closestIndex = userYCoordinates.indexOf(Math.min(...userYCoordinates));
+    const user = users[closestIndex];
+    setSelectedUser(user);
+    onUserSelected(user);
+    }, rotationDuration);
   };
 
   return (
@@ -56,6 +80,7 @@ const Wheel = ({ onUserSelected }) => {
 
             return (
               <div
+              ref={ref => (userRefs.current[index] = ref)}
                 key={index}
                 style={{
                   position: 'absolute',
