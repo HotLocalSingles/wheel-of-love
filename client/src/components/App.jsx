@@ -19,7 +19,10 @@ const App = () => {
 
   //useGoogleLogin hook gives the login functionality
   const login = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
+    onSuccess: (codeResponse) => {
+      console.log(codeResponse);
+      setUser(codeResponse);
+    },
     onError: (error) => console.log('Login Failed:', error)
   });
 
@@ -77,7 +80,7 @@ const App = () => {
       ) : (
         <div>
           <><h2>Wheel of Love Login</h2><br /><br />
-            <Button variant="contained" size="medium" onClick={() => login()}>Sign in with Google</Button></>
+            <Button variant="contained" size="medium" href="/login/google" >Sign in with Google</Button></>
         </div>
       )}
     </div>

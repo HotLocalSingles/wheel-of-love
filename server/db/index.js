@@ -7,5 +7,17 @@ const sequelize = new Sequelize('wheel', 'root', '', {
   logging: false,
 });
 
+sequelize.sync();
 
-module.exports = { sequelize };
+const testDatabaseConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connected to Database");
+  } catch (error) {
+    console.error("Can not connect to database", error);
+  }
+};
+
+testDatabaseConnection();
+
+module.exports = sequelize;

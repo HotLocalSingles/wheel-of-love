@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { User } = require('../db/models');
+const { User, FederatedCredential } = require('../db/models');
 
 //GET all users
 router.get('/', async (req, res) => {
@@ -14,6 +14,10 @@ router.get('/', async (req, res) => {
     res.status(500).send('Internal Server Error for GET All Users', error);
   }
 });
+
+//Get one user
+
+
 
 // DELETE a user
 router.delete('/:id', async (req, res) => {
