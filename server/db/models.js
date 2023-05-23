@@ -23,12 +23,15 @@ const User = sequelize.define('User', {
   picture: {
     type: DataTypes.STRING,
   },
-
+  icebreaker: {
+    type: DataTypes.STRING,
+  },
 });
+
 
 //Creates the tables if they aren't already created
 sequelize
-  .sync({ force: false }) //Doesn't drop the tables and recreate them
+  .sync({ alter: true }) //Doesn't drop the tables and recreate them
   .then(() => {
     console.log('Tables created or synchronized');
   })
