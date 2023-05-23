@@ -1,32 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+// import { User } from './server/db/models';
 
 const Wheel = ({ onUserSelected, setChatStarted }) => {
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState(['User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7']);
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
+  //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected. 
+  const userRefs = useRef([]);
 
-
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers = await User.findAll();
+        const userNames = fetchedUsers.map(user => user.name);
+        setUsers(userNames);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+  
+    fetchUsers();
+  }, []);
+  
+  useEffect(() => {
+    userRefs.current = userRefs.current.slice(0, users.length);
+  }, [users.length]);
+  
   const spinWheel = () => {
-    // Generate a random index to select a user from the list
-    const randomIndex = Math.floor(Math.random() * users.length);
-    const user = users[randomIndex];
-    setSelectedUser(user);
-    onUserSelected(user);
-    
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / users.length;
-    const newRotationAngle = rotationAngle + (randomIndex * rotationIncrement);
-    setRotationAngle(newRotationAngle);
+    const randomIndex = Math.floor(Math.random() * users.length);
 
-    //delay the confirm by 1 second (equal to the transition time on the wheel)
+    const targetRotationAngle = rotationIncrement * randomIndex;
+
+    // Calculate the rotation duration (ms)
+    const rotationDuration = 1000;
+
+    // Update the rotation angle with a delay to simulate spinning
+    setRotationAngle(rotationAngle + 360 * 5 + targetRotationAngle); // extra rotations
+
+    // After the rotation duration, set the selected user and invoke the callback
     setTimeout(() => {
-    //confirm user wants to start chat
+    // Get the y-coordinate of each user div. rect is for rectangle
+      const userYCoordinates = userRefs.current.map(ref => {
+      const rect = ref.getBoundingClientRect();
+      return rect.top;
+      });
+      // Find the index of the user div closest to the top border, thats the user we select
+      const closestIndex = userYCoordinates.indexOf(Math.min(...userYCoordinates));
+      const user = users[closestIndex];
+      setSelectedUser(user);
+      onUserSelected(user);
+
+    //Cythia addition
       const shouldChat = window.confirm(`Do you want to chat with ${user}?`);
-      if (shouldChat) {
-        setChatStarted(true);
-      }
-    }, 1000);
+        if (shouldChat) {
+          setChatStarted(true);
+        }
+
+    }, rotationDuration);
   };
 
   return (
@@ -66,6 +99,7 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
 
             return (
               <div
+              ref={ref => (userRefs.current[index] = ref)}
                 key={index}
                 style={{
                   position: 'absolute',
