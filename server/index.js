@@ -36,7 +36,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { }
-  // cookie: { secure: true }
 }));
 
 
@@ -44,11 +43,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use(cors({
-//   // origin: "http://localhost:3000",
-//   methods: ['GET', 'PUT', 'POST'],
-//   credentials: true
-// }));
 
 //Including other routers
 app.use("/auth", googleRouter);

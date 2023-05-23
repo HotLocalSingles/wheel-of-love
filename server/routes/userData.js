@@ -31,7 +31,24 @@ router.get('/', verifySession, async (req, res) => {
   }
 });
 
-//Get one user
+//GET One User
+router.get('/:id', verifySession, async (req, res) => {
+
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).send('User not found :(');
+    }
+
+    res.status(200).send(user);
+
+  } catch (error) {
+    res.status(500).send('Internal Server Error for finding user', error);
+  }
+});
 
 
 
@@ -58,25 +75,6 @@ router.delete('/:id', verifySession, async (req, res) => {
   }
 });
 
-
-//GET One User
-router.get('/:id', verifySession, async (req, res) => {
-
-  const userId = req.params.id;
-
-  try {
-    const user = await User.findByPk(userId);
-
-    if (!user) {
-      return res.status(404).send('User not found :(');
-    }
-
-    res.status(200).send(user);
-
-  } catch (error) {
-    res.status(500).send('Internal Server Error for finding user', error);
-  }
-});
 
 
 

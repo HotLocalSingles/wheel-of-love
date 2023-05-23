@@ -2,8 +2,8 @@ import React from 'react';
 
 const Login = () => {
 
-  const google = () => {
-    window.open("http://localhost:3000/auth/login/google", "_self");
+  const login = async function () {
+    window.location.href = 'http://localhost:3000/auth/login/google';
   };
 
   return (
@@ -11,7 +11,7 @@ const Login = () => {
       <h1 className="loginTitle">Login</h1>
       <div className="wrapper">
         <div className="left">
-          <div className="loginButton google" onClick={ google }>
+          <div className="loginButton google" onClick={ login }>
             Google
           </div>
 

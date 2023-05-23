@@ -21,7 +21,7 @@ module.exports = {
   <head>
     <meta charset="utf-8">
     <title>Wheel of Love</title>
-    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <meta name="referrer" content="no-referrer" />
   <meta name="viewport" content="width=device-width, initial-scale=1"></head>
   <body>
   <div id="root"></div>

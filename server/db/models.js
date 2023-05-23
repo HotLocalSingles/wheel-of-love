@@ -18,6 +18,10 @@ const User = sequelize.define('User', {
   },
   name: {
     type: DataTypes.STRING,
+    require: true
+  },
+  picture: {
+    type: DataTypes.STRING,
   },
 
 });

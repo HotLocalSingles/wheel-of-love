@@ -3,7 +3,7 @@ import React from 'react';
 // Material UI:
 import { Avatar} from '@mui/material';
 
-const UserProfile = ({ profile }) => {
+const UserProfile = ({ user }) => {
 //user is the logged in user
 
   return (
@@ -11,11 +11,10 @@ const UserProfile = ({ profile }) => {
       <h1>User Profile</h1>
       <Avatar
         alt="User Profile Image"
-        src={ profile.picture }
+        src={ user.picture }
         sx={{ width: 80, height: 80 }}
-      />
-      <p>Name: { profile.name }</p>
-      <p>Email Address: { profile.email }</p>
+        referrerPolicy="no-referrer"/>
+      <p>Name: { user.name }</p>
     </div>
   );
 };

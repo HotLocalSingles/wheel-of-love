@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useGoogleLogin } from '@react-oauth/google';
+
+import UserProfile from './UserProfile.jsx';
 
 const App = () => {
-  const [user, setUser] = useState(null);
 
+  const [user, setUser] = useState(null);
 
   const login = async function () {
     window.location.href = 'http://localhost:3000/auth/login/google';
   };
 
+  const getUserById = async (userId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/users/${userId}`);
+
+      const user = response.data;
+      setUser(user);
+      
+
+    } catch (error) {
+      console.error('Error retrieving user:', error);
+    }
+  };
 
 
   const checkAuth = async () => {
@@ -18,9 +31,10 @@ const App = () => {
       const response = await axios.get('http://localhost:3000/auth/login/success', {
         withCredentials: true,
       });
-      // const { user } = response.data;
-      console.log(response.data)
-      setUser(user);
+      console.log(response.data.id)
+      const userId = response.data.id;
+
+      getUserById(userId);
     } catch (error) {
       console.log('Authentication check failed:', error);
     }
@@ -46,7 +60,7 @@ const App = () => {
     <div>
       {user ? (
         <div>
-          <p>Welcome, {user.username}!</p>
+          <UserProfile user={ user } />
           <button onClick={handleLogout}>Logout</button>
           {/* Render your authenticated user components */}
         </div>

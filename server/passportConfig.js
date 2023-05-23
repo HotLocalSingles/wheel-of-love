@@ -22,14 +22,15 @@ passport.use(
     },
     //This function is called when the user is authenticating with Google
     async (req, accessToken, refreshToken, profile, cb) => {
-
+      console.log(profile)
       try {
         const [user, created] = await User.findOrCreate({
           where: { googleId: profile.id },
           defaults: {
             googleId: profile.id,
             username: profile.id,
-            name: profile.name.givenName
+            name: profile.name.givenName,
+            picture: profile.photos[0].value,
           } // Set the default values for the new record
         });
 
