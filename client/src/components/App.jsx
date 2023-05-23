@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const App = () => {
   const [user, setUser] = useState(null);
 
   const onSuccess = async (response) => {
     try {
-      // Send the response to your server for further authentication
       const serverResponse = await axios.get('http://localhost:3000/auth/login/google', {
         withCredentials: true,
         params: {
@@ -14,7 +14,6 @@ const App = () => {
         },
       });
 
-      // Assuming your server returns the authenticated user data
       const { user } = serverResponse.data;
       setUser(user);
     } catch (error) {
@@ -22,8 +21,12 @@ const App = () => {
     }
   };
 
+  const login = useGoogleLogin({
+    onSuccess: onSuccess,
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
   useEffect(() => {
-    // Check if the user is already authenticated
     const checkAuth = async () => {
       try {
         const response = await axios.get('http://localhost:3000/auth/login/success', {
@@ -59,7 +62,7 @@ const App = () => {
           {/* Render your authenticated user components */}
         </div>
       ) : (
-        <button onClick={onSuccess}>Login with Google</button>
+        <button onClick={login}>Login with Google</button>
       )}
     </div>
   );
