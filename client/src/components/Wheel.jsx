@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User } from './server/db/models';
+// import { User } from './server/db/models';
 
-const Wheel = ({ onUserSelected }) => {
+const Wheel = ({ onUserSelected, setChatStarted }) => {
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState(['User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7']);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -43,15 +43,22 @@ const Wheel = ({ onUserSelected }) => {
     // After the rotation duration, set the selected user and invoke the callback
     setTimeout(() => {
     // Get the y-coordinate of each user div. rect is for rectangle
-    const userYCoordinates = userRefs.current.map(ref => {
+      const userYCoordinates = userRefs.current.map(ref => {
       const rect = ref.getBoundingClientRect();
       return rect.top;
-    });
-    // Find the index of the user div closest to the top border, thats the user we select
-    const closestIndex = userYCoordinates.indexOf(Math.min(...userYCoordinates));
-    const user = users[closestIndex];
-    setSelectedUser(user);
-    onUserSelected(user);
+      });
+      // Find the index of the user div closest to the top border, thats the user we select
+      const closestIndex = userYCoordinates.indexOf(Math.min(...userYCoordinates));
+      const user = users[closestIndex];
+      setSelectedUser(user);
+      onUserSelected(user);
+
+    //Cythia addition
+      const shouldChat = window.confirm(`Do you want to chat with ${user}?`);
+        if (shouldChat) {
+          setChatStarted(true);
+        }
+
     }, rotationDuration);
   };
 
