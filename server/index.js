@@ -1,7 +1,7 @@
 //Express Requirements
 const express = require('express');
 const session = require('express-session');
-
+const { User } = require('../server/db/models.js');
 //Importing path so that we can use the static files from client side
 const path = require('path');
 
@@ -15,6 +15,9 @@ const { sequelize } = require('../server/db/index');
 const passport = require('passport');
 const initializePassport = require('../server/routes/auth');
 
+//Importing Axios helper functions for icebreaker API
+const { getIcebreaker } = require('../server/helpers/icebreakers.js');
+const { getVibe } = require('../server/helpers/vibe.js');
 //Setting up server
 const app = express();
 //Parses incoming JSON requests
@@ -74,6 +77,47 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
+});
+
+// Icebreaker API request
+app.get('/api', async (req, res) => {
+  try {
+    const response = await getIcebreaker();
+    res.status(201).send(response.data.question);
+  } catch (err) {
+    console.error('Failed to log POST from API', err);
+    res.sendStatus(500);
+  }
+});
+
+// Save Icebreaker to DB
+app.post('/api', async (req, res) => {
+  const { icebreaker, name } = req.body;
+  try {
+    const user = await User.findOne({ where: { name }});
+    if (user) {
+      user.icebreaker = icebreaker;
+      await user.save();
+      res.sendStatus(201);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    console.error('Failed to log POST from API', err);
+    res.sendStatus(500);
+  }
+});
+
+// Post bio to API for vibe check
+app.post('/api/vibe', async (req, res) => {
+  const { bio } = req.body;
+  try {
+    const response = await getVibe(bio);
+    res.status(201).send(response.data);
+  } catch (err) {
+    console.error('Failed to POST vibe from API');
+    res.sendStatus(500);
+  }
 });
 
 //Start server
