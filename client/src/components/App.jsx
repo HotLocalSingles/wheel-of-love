@@ -4,6 +4,7 @@ import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 import Wheel from '../components/Wheel.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
+import Vibe from '../components/Vibe.jsx';
 
 const App = () => {
 
@@ -50,6 +51,8 @@ const App = () => {
     googleLogout();
     setProfile(null);
   };
+  //Fake bio text to be swapped later
+  const fakeBio = 'Real howling at the moon hours, who up? #Arf #DefinitelyNotADog';
 
   //Conditional statement for profile, when there is no profile, that means no one is logged in and it shows the login button
   //If the user is logged in, they see the 'Gettin' Around' Info, created by Cynthia in the original code
@@ -73,6 +76,9 @@ const App = () => {
           <h3>User Logged in</h3>
           <p>Name: { profile.name }</p>
           <p>Email Address: { profile.email }</p>
+          <p>Fake Bio: { fakeBio }</p>
+          <br />
+          <Vibe bio={ fakeBio }/>
           <br />
           <Icebreaker name={ profile.name }/>
           <br />
