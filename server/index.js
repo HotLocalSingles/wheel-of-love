@@ -52,18 +52,29 @@ const middlewareRouter = require('./routes/middleware');
 app.use('/', middlewareRouter);
 
 
-
 //building socket.io logic
 //event emitter to check for connection
+//create new socket/user on connection
 io.on('connection', (socket) => {
   //socket event creation
-  console.log('socket id', socket.id);
-  //socket method
-  socket.on('message', (data) => {
-    console.log(data);
-    //emit data to everyone but self
-    // socket.emit(data);
-    socket.broadcast.emit('message', data);
+  console.log('user connected. socket id: ', socket.id);
+  //socket method to connect user to chat
+  socket.on('user-joined', ({ user }, callback) => {
+    //associate the socket with the authenticated user
+    socket.user = user;
+    console.log('user connected:', user);
+    if (error) { callback(error); }
+  });
+  //to broadcast message just to one user and not to sender
+  socket.on('chat-message', (message) => {
+    console.log('server got the message', message);
+    if (message !== undefined) {
+      socket.broadcast.emit('chat-message', message);
+    }
+  });
+  //when the socket/user disconnects
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   });
 });
 
@@ -72,6 +83,7 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
 
 
 module.exports = {

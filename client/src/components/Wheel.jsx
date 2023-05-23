@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
-const Wheel = ({ onUserSelected }) => {
+const Wheel = ({ onUserSelected, setChatStarted }) => {
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState(['User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7']);
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
+
 
   const spinWheel = () => {
     // Generate a random index to select a user from the list
@@ -12,11 +13,20 @@ const Wheel = ({ onUserSelected }) => {
     const user = users[randomIndex];
     setSelectedUser(user);
     onUserSelected(user);
-
+    
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / users.length;
     const newRotationAngle = rotationAngle + (randomIndex * rotationIncrement);
     setRotationAngle(newRotationAngle);
+
+    //delay the confirm by 1 second (equal to the transition time on the wheel)
+    setTimeout(() => {
+    //confirm user wants to start chat
+      const shouldChat = window.confirm(`Do you want to chat with ${user}?`);
+      if (shouldChat) {
+        setChatStarted(true);
+      }
+    }, 1000);
   };
 
   return (
