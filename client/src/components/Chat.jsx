@@ -5,9 +5,9 @@ import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
 
-const Chat = () => {
+const Chat = ({ initialUser }) => {
   //states for user and messages
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState(initialUser ? initialUser : '');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   //listChatMessages will display all the messages in the state array 'messages'
@@ -35,6 +35,21 @@ const Chat = () => {
       setMessages([...messages, newMessage]);
       //clear the message input
       setMessage('');
+      //set the initial user
+    } else if (!user) {
+      //set the initial user
+      setUser(initialUser);
+      //create a new message object
+      const newMessage = new MessageObj(initialUser, message);
+      //emit the message with socket
+      socket.emit('chat-message', newMessage);
+      console.log(message, initialUser);
+      //update the current message on state
+      // setMessage(newMessage);
+      //update the state with the new message
+      setMessages([...messages, newMessage]);
+      //clear the message input
+      setMessage('');
     }
   };
 
@@ -49,11 +64,14 @@ const Chat = () => {
     socket.on('chat-message', (incomingMessage) => {
       setMessages((prevMessages) => [...prevMessages, incomingMessage]);
     });
-    return () => {
-      socket.disconnect();
-    };
   }, []);
 
+  //function to set username if no user set
+  const updateUser = (e) => {
+    return user
+      ? user
+      : e.target.value;
+  };
   /*
   The Fragment will allow us to combine multiple elements into one 'div'
   Paper is the styling that makes it look like paper
@@ -82,8 +100,8 @@ const Chat = () => {
               <Grid item xs={2}>
                 <FormControl fullWidth>
                   <TextField
-                    onChange={ (e) => setUser(e.target.value) }
-                    value={ user }
+                    onChange={ updateUser }
+                    value={ initialUser }
                     label="add a nickname"
                     variant="outlined"/>
                 </FormControl>
@@ -101,7 +119,6 @@ const Chat = () => {
               <Grid item xs={1}>
                 <IconButton
                   onClick={ sendMessage }
-                  sx={{ 'color': 'pink'[500] }}
                   fontSize='large'>Send
                 </IconButton>
               </Grid>

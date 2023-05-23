@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
     if (error) { callback(error); }
   });
   //to broadcast message just to one user and not to sender
-  socket.emit('chat-message', (message) => {
+  socket.on('chat-message', (message) => {
     console.log('server got the message', message);
     if (message !== undefined) {
       socket.broadcast.emit('chat-message', message);
