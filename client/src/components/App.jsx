@@ -58,15 +58,6 @@ const App = () => {
   //Fake bio text to be swapped later
   const fakeBio = 'Real howling at the moon hours, who up? #Arf #DefinitelyNotADog';
 
-  //function to render he chat if the user
-  //confirms they want to chat with other
-  const handleChat = () => {
-    const shouldChat = window.confirm("Do you want to chat with user?");
-    if (shouldChat) {
-      setChatStarted(true);
-    }
-  };
-
   //Conditional statement for profile, when there is no profile, that means no one is logged in and it shows the login button
   //If the user is logged in, they see the 'Gettin' Around' Info, created by Cynthia in the original code
   //I added a div below it to display the google profile info to confirm that it had worked but we can edit it when needed

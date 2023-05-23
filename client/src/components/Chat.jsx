@@ -47,9 +47,14 @@ const Chat = ({ initialUser }) => {
   };
 
   useEffect(() => {
+
     socket.on('chat-message', (incomingMessage) => {
+      console.log('chat received');
       setMessages((prevMessages) => [...prevMessages, incomingMessage]);
     });
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, []);
 
   const handleNicknameChange = (event) => {
