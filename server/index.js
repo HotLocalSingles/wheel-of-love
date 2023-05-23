@@ -59,18 +59,16 @@ io.on('connection', (socket) => {
   //socket event creation
   console.log('user connected. socket id: ', socket.id);
   //socket method to connect user to chat
-  socket.on('user-joined', ({ user }, callback) => {
-    //associate the socket with the authenticated user
-    socket.user = user;
-    console.log('user connected:', user);
-    if (error) { callback(error); }
-  });
+  // socket.on('user-joined', ({ user }, callback) => {
+  //   //associate the socket with the authenticated user
+  //   socket.user = user;
+  //   console.log('user connected:', user);
+  //   if (error) { callback(error); }
+  // });
   //to broadcast message just to one user and not to sender
   socket.on('chat-message', (message) => {
     console.log('server got the message', message);
-    if (message !== undefined) {
-      socket.broadcast.emit('chat-message', message);
-    }
+    socket.broadcast.emit('chat-message', message);
   });
   //when the socket/user disconnects
   socket.on('disconnect', () => {

@@ -7,7 +7,6 @@ import Chat from './Chat.jsx';
 
 const App = () => {
 
-  /////////CYNTHIA CODE, LOGAN DID NOT EDIT ////////
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleUserSelected = (user) => {
@@ -53,15 +52,6 @@ const App = () => {
     googleLogout();
     setProfile(null);
   };
-  
-  //function to render he chat if the user
-  //confirms they want to chat with other
-  const handleChat = () => {
-    const shouldChat = window.confirm("Do you want to chat with user?");
-    if (shouldChat) {
-      setChatStarted(true);
-    }
-  };
 
   //Conditional statement for profile, when there is no profile, that means no one is logged in and it shows the login button
   //If the user is logged in, they see the 'Gettin' Around' Info, created by Cynthia in the original code
@@ -73,11 +63,11 @@ const App = () => {
           <div>
             <h1>Just Love Gettin' Around</h1>
             <h2>A Dating Site</h2>
-            <Wheel onUserSelected={handleUserSelected} setChatStarted={setChatStarted} />
+            <Wheel onUserSelected={ handleUserSelected } setChatStarted={ setChatStarted } />
             {selectedUser && (
               <div>
-                <h3>Chat with {selectedUser}</h3>
-                {chatStarted && <Chat initialUser={selectedUser} />}
+                <h3>Chat with { selectedUser }</h3>
+                {chatStarted && <Chat initialUser={ profile.name } />}
               </div>
             )}
           </div>

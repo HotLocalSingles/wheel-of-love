@@ -16,7 +16,6 @@ root.render(
   <GoogleOAuthProvider clientId={ process.env.GOOGLE_CLIENT_ID }>
     <React.StrictMode>
       <App />
-      <Chat />
     </React.StrictMode>
   </GoogleOAuthProvider>
 );
