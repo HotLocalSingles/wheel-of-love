@@ -3,7 +3,7 @@ import axios from 'axios';
 import Wheel from './Wheel.jsx';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 // import Bar from './bar/Bar.jsx';
-// import Chat from './Chat.jsx';
+import Chat from './Chat.jsx';
 
 const App = () => {
 
@@ -66,6 +66,7 @@ const App = () => {
               <div>
                 <h3>Chat with {selectedUser}</h3>
                 {/* Render chat component here */}
+                <Chat />
               </div>
             )}
           </div>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, Paper } from '@mui/material';
 import MessageObj from './model/MessageObj.js';
 import { io } from 'socket.io-client';
@@ -10,7 +10,6 @@ const Chat = () => {
   const [user, setUser] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
   //add styling later
@@ -27,14 +26,15 @@ const Chat = () => {
     if (user && message) {
       //create a new message object
       const newMessage = new MessageObj(user, message);
+      //emit the message with socket
+      socket.emit('chat-message', newMessage);
+      console.log(message, user);
       //update the current message on state
-      setMessage(newMessage);
+      // setMessage(newMessage);
       //update the state with the new message
       setMessages([...messages, newMessage]);
       //clear the message input
       setMessage('');
-      //emit the message with socket
-      socket.emit('chat-message', newMessage);
     }
   };
 
@@ -45,20 +45,14 @@ const Chat = () => {
     }
   };
 
-  //establish a useEffect function to connect the user to the chat
-  //when they agree to chat with selected user
-  /* useEffect(() => {
-    socket.emit('connect', { user, message }, (error) => {
-      if (error) {
-        console.error('Failed to connect to chat', error);
-      }
-    })
+  useEffect(() => {
+    socket.on('chat-message', (incomingMessage) => {
+      setMessages((prevMessages) => [...prevMessages, incomingMessage]);
+    });
     return () => {
-     socket.emit('disconnect');
-      socket.off();
-    }
-  }, [user]);
-*/
+      socket.disconnect();
+    };
+  }, []);
 
   /*
   The Fragment will allow us to combine multiple elements into one 'div'
