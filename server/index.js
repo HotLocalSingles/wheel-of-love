@@ -1,7 +1,7 @@
 //Express Requirements
 const express = require('express');
 const session = require('express-session');
-
+const { User } = require('../server/db/models.js');
 //Importing path so that we can use the static files from client side
 const path = require('path');
 
@@ -14,6 +14,9 @@ const { sequelize } = require('../server/db/index');
 //Also importing the initializePassport function created in auth
 const passport = require('passport');
 const initializePassport = require('../server/routes/auth');
+
+//Importing Axios helper function for icebreaker API
+const { getIcebreaker } = require('../server/helpers/icebreakers.js');
 
 //Setting up server
 const app = express();
@@ -65,6 +68,35 @@ io.on('connection', (socket) => {
     // socket.emit(data);
     socket.broadcast.emit('message', data);
   });
+});
+
+// Icebreaker API request
+app.get('/api', async (req, res) => {
+  try {
+    const response = await getIcebreaker();
+    res.status(201).send(response.data.question);
+  } catch (err) {
+    console.error('Could not log POST from API', err);
+    res.sendStatus(500);
+  }
+});
+
+app.post('/api', async (req, res) => {
+  const { icebreaker, name } = req.body;
+  try {
+    // console.log(icebreaker, name);
+    const user = await User.findOne({ where: { name }});
+    if (user) {
+      user.icebreaker = icebreaker;
+      await user.save();
+      res.sendStatus(201);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    console.error('Could not log POST from API', err);
+    res.sendStatus(500);
+  }
 });
 
 //Start server
