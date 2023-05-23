@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Wheel from './Wheel.jsx';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+
+import Wheel from '../components/Wheel.jsx';
+import Icebreaker from '../components/Icebreaker.jsx';
+import Vibe from '../components/Vibe.jsx';
 // import Bar from './bar/Bar.jsx';
 import Chat from './Chat.jsx';
 
@@ -53,7 +56,9 @@ const App = () => {
     googleLogout();
     setProfile(null);
   };
-  
+  //Fake bio text to be swapped later
+  const fakeBio = 'Real howling at the moon hours, who up? #Arf #DefinitelyNotADog';
+
   //function to render he chat if the user
   //confirms they want to chat with other
   const handleChat = () => {
@@ -85,7 +90,11 @@ const App = () => {
           <h3>User Logged in</h3>
           <p>Name: { profile.name }</p>
           <p>Email Address: { profile.email }</p>
+          <p>Fake Bio: { fakeBio }</p>
           <br />
+          <Vibe bio={ fakeBio }/>
+          <br />
+          <Icebreaker name={ profile.name }/>
           <br />
           <button onClick={ logOut }>Log out</button>
         </div>
