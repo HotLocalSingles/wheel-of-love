@@ -9,6 +9,7 @@ const CLIENT_URL = "http://localhost:3000/";
 
 router.get("/login/success", (req, res) => {
   const user = req.user;
+  console.log("login success user", user);
   res.status(200).send(user);
 });
 
@@ -27,8 +28,9 @@ router.get("/login/google", passport.authenticate("google", { scope: ["profile"]
 
 router.get("/google/callback",
   passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: CLIENT_URL + "/login",
+    //would want to redirect to /profile or something
+    successRedirect: "http://localhost:3000/auth/login/success",
+    failureRedirect: "http://localhost:3000/auth/login/failed",
   }));
 
 

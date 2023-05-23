@@ -36,6 +36,7 @@
     "@react-oauth/google": "^0.11.0",
     "axios": "^1.4.0",
     "connect-session-sequelize": "^7.1.6",
+    "cookie-parser": "^1.4.6",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

@@ -37,6 +37,7 @@ passport.use(
           console.log('User created:', user.username);
         } else {
           console.log('User already exists:', user.username);
+
         }
 
         return cb(null, user);
@@ -52,19 +53,18 @@ passport.use(
 //These improve performance because the session only needs to store the user id instead of the entire user object,
 //as well as security because it isn't transferring all the user information every request, just the id
 
-passport.serializeUser(function(user, cb) {
-  process.nextTick(function() {
-    return cb(null, {
-      id: user.id,
-      username: user.username,
-      picture: user.picture
-    });
+passport.serializeUser(function(user, done) {
+  console.log('serialized baybeee', user);
+  return done(null, {
+    id: user.id,
+    username: user.username,
+    picture: user.picture
   });
 });
 
 passport.deserializeUser(function(user, cb) {
-  process.nextTick(function() {
-    return cb(null, user);
-  });
+  console.log('deserialized baybeee', user);
+
+  return cb(null, user);
 });
 

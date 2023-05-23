@@ -1,10 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
-const { User, FederatedCredential } = require('../db/models');
+const { User } = require('../db/models');
+
+//User for anything for an active user
+const verifySession = (req, res, next) => {
+
+  const user = req.user;
+
+  if (!user) {
+    //could also redirect
+    res.status(403).send('User not logged in');
+  }
+
+  // res.status(200).send(user);
+
+  //Invoking next should be enough
+  next();
+};
 
 //GET all users
-router.get('/', async (req, res) => {
+router.get('/', verifySession, async (req, res) => {
 
   try {
     const users = await User.findAll();
@@ -20,7 +36,7 @@ router.get('/', async (req, res) => {
 
 
 // DELETE a user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifySession, async (req, res) => {
   const userId = req.params.id;
 
   try {
@@ -44,7 +60,7 @@ router.delete('/:id', async (req, res) => {
 
 
 //GET One User
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifySession, async (req, res) => {
 
   const userId = req.params.id;
 

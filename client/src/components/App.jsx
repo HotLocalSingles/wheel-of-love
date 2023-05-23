@@ -5,42 +5,31 @@ import { useGoogleLogin } from '@react-oauth/google';
 const App = () => {
   const [user, setUser] = useState(null);
 
-  const onSuccess = async (response) => {
-    try {
-      const serverResponse = await axios.get('http://localhost:3000/auth/login/google', {
-        withCredentials: true,
-        params: {
-          codeResponse: response.code,
-        },
-      });
 
-      const { user } = serverResponse.data;
+  const login = async function () {
+    window.location.href = 'http://localhost:3000/auth/login/google';
+  };
+
+
+
+  const checkAuth = async () => {
+    //GRAB THE USER DATA FROM THE DATABASE USING THE RESPONSE INFO
+    try {
+      const response = await axios.get('http://localhost:3000/auth/login/success', {
+        withCredentials: true,
+      });
+      // const { user } = response.data;
+      console.log(response.data)
       setUser(user);
     } catch (error) {
-      console.log('Login Failed:', error);
+      console.log('Authentication check failed:', error);
     }
   };
 
-  const login = useGoogleLogin({
-    onSuccess: onSuccess,
-    onError: (error) => console.log('Login Failed:', error)
-  });
-
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/auth/login/success', {
-          withCredentials: true,
-        });
-        const { user } = response.data;
-        setUser(user);
-      } catch (error) {
-        console.log('Authentication check failed:', error);
-      }
-    };
-
     checkAuth();
   }, []);
+
 
   const handleLogout = async () => {
     try {
@@ -57,7 +46,7 @@ const App = () => {
     <div>
       {user ? (
         <div>
-          <p>Welcome, {user.name}!</p>
+          <p>Welcome, {user.username}!</p>
           <button onClick={handleLogout}>Logout</button>
           {/* Render your authenticated user components */}
         </div>

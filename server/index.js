@@ -1,8 +1,8 @@
 //Express Requirements
 const express = require('express');
 const app = express();
-const cors = require('cors');
-app.use(cors());
+// const cors = require('cors');
+
 
 require('dotenv').config();
 
@@ -30,17 +30,25 @@ const io = require('socket.io')(server, { cors: { origin: '*' } });
 //Parses incoming JSON requests
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../client/dist')));
+
 app.use(session({
   secret: [process.env.COOKIE_KEY],
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true }
+  cookie: { }
+  // cookie: { secure: true }
 }));
 
 
 //Initialize Passport middleware and have the express server use it, makes it so the user doesn't have to keep logging in to authenticate requests
 app.use(passport.initialize());
 app.use(passport.session());
+
+// app.use(cors({
+//   // origin: "http://localhost:3000",
+//   methods: ['GET', 'PUT', 'POST'],
+//   credentials: true
+// }));
 
 //Including other routers
 app.use("/auth", googleRouter);
@@ -49,17 +57,17 @@ app.use('/users', users);
 
 //building socket.io logic
 //event emitter to check for connection
-io.on('connection', (socket) => {
-  //socket event creation
-  console.log('socket id', socket.id);
-  //socket method
-  socket.on('message', (data) => {
-    console.log(data);
-    //emit data to everyone but self
-    // socket.emit(data);
-    socket.broadcast.emit('message', data);
-  });
-});
+// io.on('connection', (socket) => {
+//   //socket event creation
+//   console.log('socket id', socket.id);
+//   //socket method
+//   socket.on('message', (data) => {
+//     console.log(data);
+//     //emit data to everyone but self
+//     // socket.emit(data);
+//     socket.broadcast.emit('message', data);
+//   });
+// });
 
 
 //Start server
