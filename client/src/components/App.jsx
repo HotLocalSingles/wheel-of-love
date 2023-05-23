@@ -3,6 +3,7 @@ import axios from 'axios';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 import Wheel from '../components/Wheel.jsx';
+import Icebreaker from '../components/Icebreaker.jsx';
 
 const App = () => {
 
@@ -73,6 +74,7 @@ const App = () => {
           <p>Name: { profile.name }</p>
           <p>Email Address: { profile.email }</p>
           <br />
+          <Icebreaker name={ profile.name }/>
           <br />
           <button onClick={ logOut }>Log out</button>
         </div>
