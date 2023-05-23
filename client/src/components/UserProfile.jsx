@@ -4,7 +4,8 @@ import React from 'react';
 import { Avatar } from '@mui/material';
 
 const UserProfile = ({ user }) => {
-//user is the logged in user
+//User is the logged in user
+//The referrerPolicy allows us to print the image that google gives us
 
   return (
     <div>

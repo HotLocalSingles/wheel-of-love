@@ -4,6 +4,8 @@ import { Button } from '@mui/material';
 
 const Login = ({ login }) => {
   
+  //The login function is from the App.jsx and changes the state there. Using the material UI Button
+
   return (
     <div>
       <h1>Login with Google</h1>

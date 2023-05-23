@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
+//Wrapping App in these divs so that it has security and is known as the router for the client side's react router
 
 root.render(
   <React.StrictMode>
