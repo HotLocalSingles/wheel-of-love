@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Home from '../pages/Home.jsx';
+import Login from '../pages/Login.jsx';
 
-import UserProfile from './UserProfile.jsx';
+import { Route, Routes, Navigate } from 'react-router-dom';
+
 
 const App = () => {
 
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const login = async function () {
     window.location.href = 'http://localhost:3000/auth/login/google';
@@ -17,10 +21,12 @@ const App = () => {
 
       const user = response.data;
       setUser(user);
-      
+
 
     } catch (error) {
       console.error('Error retrieving user:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,12 +43,15 @@ const App = () => {
       getUserById(userId);
     } catch (error) {
       console.log('Authentication check failed:', error);
+      setIsLoading(false);
     }
   };
+
 
   useEffect(() => {
     checkAuth();
   }, []);
+
 
 
   const handleLogout = async () => {
@@ -56,19 +65,25 @@ const App = () => {
     }
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
-      {user ? (
-        <div>
-          <UserProfile user={ user } />
-          <button onClick={handleLogout}>Logout</button>
-          {/* Render your authenticated user components */}
-        </div>
-      ) : (
-        <button onClick={login}>Login with Google</button>
-      )}
+      <Routes>
+        <Route
+          path="/"
+          element={user ? <Home user={ user } handleLogout={ handleLogout }/> : <Navigate to="/login" />}
+        />
+        <Route path="/login" element={<Login login={login} />} />
+      </Routes>
     </div>
   );
+
 };
+
+
+
 
 export default App;

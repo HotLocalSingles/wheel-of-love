@@ -1,21 +1,17 @@
 import React from 'react';
-import { Avatar} from '@mui/material';
+import { Button } from '@mui/material';
+import UserProfile from '../components/UserProfile.jsx';
 
+const Home = ({ user, handleLogout }) => {
 
-const Home = ({ user }) => {
   return (
-    <div className="home">
-      <h1>User Profile</h1>
-      <Avatar
-        alt="User Profile Image"
-        src={ user.picture }
-        sx={{ width: 80, height: 80 }}
-      />
-      <p>Name: { user.name }</p>
-      <p>Email Address: { user.email }</p>
+    <div>
+      <h1>Home</h1>
+      <UserProfile user={ user }/>
+      <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>Logout</Button>
+
     </div>
-  )
-}
+  );
+};
 
 export default Home;
-

@@ -22,7 +22,6 @@ passport.use(
     },
     //This function is called when the user is authenticating with Google
     async (req, accessToken, refreshToken, profile, cb) => {
-      console.log(profile)
       try {
         const [user, created] = await User.findOrCreate({
           where: { googleId: profile.id },
@@ -55,7 +54,7 @@ passport.use(
 //as well as security because it isn't transferring all the user information every request, just the id
 
 passport.serializeUser(function(user, done) {
-  console.log('serialized baybeee', user);
+  // console.log('serialized baybeee', user);
   return done(null, {
     id: user.id,
     username: user.username,
@@ -64,7 +63,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(user, cb) {
-  console.log('deserialized baybeee', user);
+  // console.log('deserialized baybeee', user);
 
   return cb(null, user);
 });

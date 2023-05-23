@@ -7,6 +7,9 @@ const DIST_DIR = path.join(__dirname, '/client/dist');
 
 module.exports = {
   devtool: 'eval-source-map',
+  devServer: {
+    historyApiFallback: true,
+  },
   mode: 'development',
   entry: `${SRC_DIR}/index.jsx`,
   output: {

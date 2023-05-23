@@ -1,22 +1,13 @@
 import React from 'react';
+import { Button } from '@mui/material';
 
-const Login = () => {
 
-  const login = async function () {
-    window.location.href = 'http://localhost:3000/auth/login/google';
-  };
-
+const Login = ({ login }) => {
+  
   return (
-    <div className="login">
-      <h1 className="loginTitle">Login</h1>
-      <div className="wrapper">
-        <div className="left">
-          <div className="loginButton google" onClick={ login }>
-            Google
-          </div>
-
-        </div>
-      </div>
+    <div>
+      <h1>Login with Google</h1>
+      <Button variant="contained" size="medium" onClick={login}>Login with Google</Button>
     </div>
   );
 };

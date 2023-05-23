@@ -28,7 +28,6 @@ router.get("/login/google", passport.authenticate("google", { scope: ["profile"]
 
 router.get("/google/callback",
   passport.authenticate("google", {
-    //would want to redirect to /profile or something
     successRedirect: "http://localhost:3000/",
     failureRedirect: "http://localhost:3000/auth/login/failed",
   }));

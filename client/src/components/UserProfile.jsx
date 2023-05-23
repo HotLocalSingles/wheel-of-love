@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Material UI:
-import { Avatar} from '@mui/material';
+import { Avatar } from '@mui/material';
 
 const UserProfile = ({ user }) => {
 //user is the logged in user
@@ -15,8 +15,11 @@ const UserProfile = ({ user }) => {
         sx={{ width: 80, height: 80 }}
         referrerPolicy="no-referrer"/>
       <p>Name: { user.name }</p>
+
     </div>
   );
 };
 
 export default UserProfile;
+
+
