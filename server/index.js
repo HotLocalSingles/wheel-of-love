@@ -1,6 +1,8 @@
 //Express Requirements
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors());
 
 require('dotenv').config();
 
@@ -41,7 +43,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Including other routers
-app.use('/', googleRouter);
+app.use("/auth", googleRouter);
 app.use('/users', users);
 
 
@@ -57,10 +59,6 @@ io.on('connection', (socket) => {
     // socket.emit(data);
     socket.broadcast.emit('message', data);
   });
-});
-
-app.get('/', function(req, res) {
-  res.send('Hello, world!');
 });
 
 
