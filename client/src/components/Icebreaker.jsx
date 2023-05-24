@@ -3,8 +3,7 @@ import axios from 'axios';
 
 
 const Icebreaker = ({ user }) => {
-  // console.log('icebrak uer', user)
-  // const googleId = user.googleId;
+  const googleId = user.googleId;
 
   const [icebreaker, setIcebreaker] = useState(null);
 

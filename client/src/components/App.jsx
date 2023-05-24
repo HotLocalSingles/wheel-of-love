@@ -43,10 +43,16 @@ const App = () => {
       const response = await axios.get('http://localhost:3000/auth/login/success', {
         withCredentials: true,
       });
+
       // console.log(response.data.id)
       const userId = response.data.id;
 
-      getUserById(userId);
+      if (userId) {
+        await getUserById(userId);
+      } else {
+        setIsLoading(false);
+      }
+
     } catch (error) {
       console.log('Authentication check failed:', error);
       setIsLoading(false);
@@ -97,33 +103,17 @@ const App = () => {
 
 };
 
-//The user object looks like this:
+// The user object looks like this:
 /*
- createdAt
-: 
-"2023-05-23T19:16:16.000Z"
-googleId
-: 
-"111257409594314222098"
-icebreaker
-: 
-null
-id
-: 
-1
-name
-: 
-"Logan"
-picture
-: 
-"https://lh3.googleusercontent.com/a/AGNmyxaoXKwitEWSM_q4nhGdHM1coSwDjON490cnthRx8A=s96-c"
-updatedAt
-: 
-"2023-05-23T19:16:16.000Z"
-username
-: 
-"111257409594314222098"
- */
+createdAt: "2023-05-23T19:16:16.000Z",
+googleId: "111257409594314222098",
+icebreaker: null,
+id: 1,
+name: "Logan",
+picture: "https://lh3.googleusercontent.com/a/AGNmyxaoXKwitEWSM_q4nhGdHM1coSwDjON490cnthRx8A=s96-c",
+updatedAt: "2023-05-23T19:16:16.000Z",
+username: "111257409594314222098"
+*/
 
 
 export default App;

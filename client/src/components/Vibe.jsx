@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Vibe = ({ bio }) => {
+const Vibe = () => {
   const [vibe, setVibe] = useState(null);
+
+  const bio = 'This is a fake bio to test the vibe!';
 
   const vibeCalculator = (data) => {
     const {emotion_scores} = data;
@@ -15,7 +17,7 @@ const Vibe = ({ bio }) => {
   };
 
   const handleGetVibeClick = () => {
-    axios.post('/api/vibe', { bio })
+    axios.post('/api/vibe', bio)
       .then(response => {
         const { data } = response;
         const emotion = vibeCalculator(data);

@@ -5,7 +5,6 @@ const app = express();
 require('dotenv').config();
 
 const session = require('express-session');
-const { User } = require('../server/db/models.js');
 //Importing path so that we can use the static files from client side
 const path = require('path');
 
@@ -18,10 +17,8 @@ require('./passportConfig');
 //Importing other routes
 const googleRouter = require('./routes/google');
 const users = require('../server/routes/userData');
-
-//Importing Axios helper functions for icebreaker API
-const { getIcebreaker } = require('../server/helpers/icebreakers.js');
-const { getVibe } = require('../server/helpers/vibe.js');
+const vibe = require('../server/routes/vibeRoute.js');
+const icebreaker = require('../server/routes/icebreakerRoute.js');
 
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
@@ -49,6 +46,8 @@ app.use(passport.session());
 //Including other routers
 app.use("/auth", googleRouter);
 app.use('/users', users);
+app.use('/', vibe);
+app.use('/', icebreaker);
 
 //building socket.io logic
 //event emitter to check for connection
@@ -72,46 +71,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Icebreaker API request
-app.get('/api', async (req, res) => {
-  try {
-    const response = await getIcebreaker();
-    res.status(201).send(response.data.question);
-  } catch (err) {
-    console.error('Failed to log POST from API', err);
-    res.sendStatus(500);
-  }
-});
-
-// Save Icebreaker to DB
-app.post('/api', async (req, res) => {
-  const { icebreaker, googleId } = req.body;
-  try {
-    const user = await User.findOne({ where: { googleId }});
-    if (user) {
-      user.icebreaker = icebreaker;
-      await user.save();
-      res.sendStatus(201);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (err) {
-    console.error('Failed to log POST from API', err);
-    res.sendStatus(500);
-  }
-});
-
-// Post bio to API for vibe check
-app.post('/api/vibe', async (req, res) => {
-  const { bio } = req.body;
-  try {
-    const response = await getVibe(bio);
-    res.status(201).send(response.data);
-  } catch (err) {
-    console.error('Failed to POST vibe from API');
-    res.sendStatus(500);
-  }
-});
 
 //Start server
 const PORT = process.env.PORT || 3000;
