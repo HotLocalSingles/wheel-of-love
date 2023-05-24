@@ -73,9 +73,26 @@ router.put('/:name', async (req, res) => {
       return res.status(404).send('User not found :(');
     }
 
-    const newName = user.name;
+    res.status(200).send(user);
 
-    res.status(200).send(newName);
+  } catch (error) {
+    res.status(500).send('Internal Server Error for finding user', error);
+  }
+});
+
+//Get one user by name
+router.get('/:name', verifySession, async (req, res) => {
+
+  const name = req.params.name;
+
+  try {
+    const user = await User.findOne({ where: { name: name } });
+
+    if (!user) {
+      return res.status(404).send('User not found :(');
+    }
+
+    res.status(200).send(user);
 
   } catch (error) {
     res.status(500).send('Internal Server Error for finding user', error);

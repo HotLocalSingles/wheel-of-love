@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 // Material UI:
-import { Avatar, Button, Box, TextField } from '@mui/material';
+import { Avatar, Box, TextField } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const UserProfile = ({ user, setUser }) => {
-//User is the logged in user
-//The referrerPolicy allows us to print the image that google gives us
+
   const [isEditing, setEditState] = useState(false);
   const [editedName, setEditedName] = useState(user.name);
 
@@ -19,7 +17,6 @@ const UserProfile = ({ user, setUser }) => {
   };
 
   const handleSubmitClick = async () => {
-    setEditState((prevState) => !prevState);
 
     try {
       const response = await axios.put(`/users/${ user.name }`, { name: editedName });
@@ -27,11 +24,13 @@ const UserProfile = ({ user, setUser }) => {
       if (!response.data) {
         throw response;
       }
-
+      setUser(response.data);
 
     } catch (error) {
-      console.log('put request did not work')
+      console.log('Client Side Update of User Name Did Not Work', error);
     }
+
+    setEditState((prevState) => !prevState);
 
   };
 
