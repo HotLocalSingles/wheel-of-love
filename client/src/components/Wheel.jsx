@@ -3,10 +3,9 @@ import axios from 'axios';
 
 import Chat from '../components/Chat.jsx';
 
-
 const Wheel = ({ user }) => {
   // State for the list of users, selected user, rotation angle
-  const [users, setUsers] = useState(['User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7']);
+  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [chatStarted, setChatStarted] = useState(false);
@@ -14,21 +13,23 @@ const Wheel = ({ user }) => {
   //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected.
   const userRefs = useRef([]);
 
+  //fetches user data from backend
   const fetchUsers = async () => {
     try {
       const returnedResponse = await axios.get('/users');
+      const insertUsers = returnedResponse.data;
 
       if (!insertUsers) {
         throw new Error(insertUsers);
       }
-      const insertUsers = returnedResponse.data;
-
       console.log("Backend call for all users:", insertUsers)
       setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
     }
   };
+ 
+  
 
   useEffect(() => {
     fetchUsers();
@@ -64,11 +65,11 @@ const Wheel = ({ user }) => {
       const closestIndex = userYCoordinates.indexOf(Math.min(...userYCoordinates));
       const user = users[closestIndex];
 
-      setSelectedUser(user);
+      setSelectedUser(user.name);
       // onUserSelected(user);
 
       //Cynthia addition
-      const shouldChat = window.confirm(`Do you want to chat with ${user}?`);
+      const shouldChat = window.confirm(`Do you want to chat with ${user.name}?`);
       if (shouldChat) {
         setChatStarted(true);
       }
@@ -126,7 +127,7 @@ const Wheel = ({ user }) => {
                   fontSize: '40px',
                 }}
               >
-                {user}
+                {user.name}
               </div>
             );
           })}
