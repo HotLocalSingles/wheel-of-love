@@ -52,9 +52,9 @@ const Chat = ({ initialUser }) => {
       console.log('chat received');
       setMessages((prevMessages) => [...prevMessages, incomingMessage]);
     });
-    // return () => {
-    //   socket.disconnect();
-    // };
+    return () => {
+      socket.off('GoodBye');
+    };
   }, []);
 
   const handleNicknameChange = (event) => {
