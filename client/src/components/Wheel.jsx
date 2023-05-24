@@ -1,32 +1,45 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import { User } from './db/models.js';
+import axios from 'axios';
 
-const Wheel = ({ onUserSelected, setChatStarted }) => {
+import Chat from '../components/Chat.jsx';
+
+
+const Wheel = ({ user }) => {
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState(['User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7']);
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
-  //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected. 
+  const [chatStarted, setChatStarted] = useState(false);
+
+  //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected.
   const userRefs = useRef([]);
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const fetchedUsers = await User.findAll();
-  //       const userNames = fetchedUsers.map(user => user.name);
-  //       setUsers(userNames);
-  //     } catch (error) {
-  //       console.error('Error fetching users:', error);
-  //     }
-  //   };
-  
-  //   fetchUsers();
-  // }, []);
-  
+  const fetchUsers = async () => {
+    try {
+      const returnedResponse = await axios.get('/users');
+
+      if (!insertUsers) {
+        throw new Error(insertUsers);
+      }
+      const insertUsers = returnedResponse.data;
+
+      console.log("Backend call for all users:", insertUsers)
+      setUsers(insertUsers);
+    } catch (error) {
+      console.error('Error fetching all users on client side wheel:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  //Getting the length of the array so it can create the position values
   useEffect(() => {
     userRefs.current = userRefs.current.slice(0, users.length);
   }, [users.length]);
-  
+
+
   const spinWheel = () => {
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / users.length;
@@ -50,8 +63,9 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
       // Find the index of the user div closest to the top border, thats the user we select
       const closestIndex = userYCoordinates.indexOf(Math.min(...userYCoordinates));
       const user = users[closestIndex];
+
       setSelectedUser(user);
-      onUserSelected(user);
+      // onUserSelected(user);
 
       //Cynthia addition
       const shouldChat = window.confirm(`Do you want to chat with ${user}?`);
@@ -123,6 +137,7 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
         <div>
           <button onClick={spinWheel}>Spin Again</button>
           <p>Selected User: {selectedUser}</p>
+          { chatStarted && <Chat initialUser={ user.name } />}
         </div>
       ) : (
         <div>

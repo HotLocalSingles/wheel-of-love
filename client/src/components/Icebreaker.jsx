@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-const Icebreaker = ({ name }) => {
+const Icebreaker = ({ user }) => {
+  // console.log('icebrak uer', user)
+  // const googleId = user.googleId;
+
   const [icebreaker, setIcebreaker] = useState(null);
 
   const fetchIcebreaker = () => {
@@ -16,7 +19,7 @@ const Icebreaker = ({ name }) => {
     fetchIcebreaker();
   };
   const handleSaveIcebreakerClick = () => {
-    axios.post('/api', { name, icebreaker })
+    axios.post('/api', { googleId, icebreaker })
       .then(user => user)
       .catch(err => {
         console.error('Failed to POST icebreaker to DB', err);

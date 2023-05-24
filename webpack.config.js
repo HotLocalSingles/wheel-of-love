@@ -7,6 +7,9 @@ const DIST_DIR = path.join(__dirname, '/client/dist');
 
 module.exports = {
   devtool: 'eval-source-map',
+  devServer: {
+    historyApiFallback: true,
+  },
   mode: 'development',
   entry: `${SRC_DIR}/index.jsx`,
   output: {
@@ -21,6 +24,7 @@ module.exports = {
   <head>
     <meta charset="utf-8">
     <title>Wheel of Love</title>
+    <meta name="referrer" content="no-referrer" />
   <meta name="viewport" content="width=device-width, initial-scale=1"></head>
   <body>
   <div id="root"></div>
