@@ -17,9 +17,7 @@ const Home = ({ user, handleLogout }) => {
       <Vibe />
       <Icebreaker user={ user } />
       <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>Logout</Button>
-
       <br/>
-
       <br />
       <Wheel user={ user }/>
     </div>

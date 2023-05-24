@@ -31,7 +31,7 @@ const Wheel = ({ user }) => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    // fetchUsers();
   }, []);
 
   //Getting the length of the array so it can create the position values
