@@ -16,11 +16,12 @@ const Home = ({ user, handleLogout }) => {
       <h1>Home</h1>
       <UserProfile user={ user }/>
       <Vibe />
+      <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>Logout</Button>
+
       <br/>
 
       <br />
       <Wheel />
-      <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>Logout</Button>
     </div>
   );
 };

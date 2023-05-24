@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
+import Chat from '../components/Chat.jsx';
+
 
 const Wheel = ({ onUserSelected, setChatStarted }) => {
   // State for the list of users, selected user, rotation angle
@@ -132,6 +134,7 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
         <div>
           <button onClick={spinWheel}>Spin Again</button>
           <p>Selected User: {selectedUser}</p>
+          <Chat />
         </div>
       ) : (
         <div>
