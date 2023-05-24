@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import { User } from './server/db/models';
+// import { User } from './db/models.js';
 
 const Wheel = ({ onUserSelected, setChatStarted }) => {
   // State for the list of users, selected user, rotation angle
@@ -9,19 +9,19 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
   //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected. 
   const userRefs = useRef([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const fetchedUsers = await User.findAll();
-        const userNames = fetchedUsers.map(user => user.name);
-        setUsers(userNames);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const fetchedUsers = await User.findAll();
+  //       const userNames = fetchedUsers.map(user => user.name);
+  //       setUsers(userNames);
+  //     } catch (error) {
+  //       console.error('Error fetching users:', error);
+  //     }
+  //   };
   
-    fetchUsers();
-  }, []);
+  //   fetchUsers();
+  // }, []);
   
   useEffect(() => {
     userRefs.current = userRefs.current.slice(0, users.length);
@@ -44,8 +44,8 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
     setTimeout(() => {
     // Get the y-coordinate of each user div. rect is for rectangle
       const userYCoordinates = userRefs.current.map(ref => {
-      const rect = ref.getBoundingClientRect();
-      return rect.top;
+        const rect = ref.getBoundingClientRect();
+        return rect.top;
       });
       // Find the index of the user div closest to the top border, thats the user we select
       const closestIndex = userYCoordinates.indexOf(Math.min(...userYCoordinates));
@@ -53,11 +53,11 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
       setSelectedUser(user);
       onUserSelected(user);
 
-    //Cythia addition
+      //Cynthia addition
       const shouldChat = window.confirm(`Do you want to chat with ${user}?`);
-        if (shouldChat) {
-          setChatStarted(true);
-        }
+      if (shouldChat) {
+        setChatStarted(true);
+      }
 
     }, rotationDuration);
   };
@@ -99,7 +99,7 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
 
             return (
               <div
-              ref={ref => (userRefs.current[index] = ref)}
+                ref={ref => (userRefs.current[index] = ref)}
                 key={index}
                 style={{
                   position: 'absolute',
