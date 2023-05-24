@@ -48,9 +48,9 @@ const App = () => {
       const userId = response.data.id;
 
       if (userId) {
-        getUserById(userId);
+        await getUserById(userId);
       } else {
-        console.error('no user', res.data);
+        setIsLoading(false);
       }
 
     } catch (error) {
