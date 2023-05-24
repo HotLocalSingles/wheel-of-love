@@ -6,14 +6,14 @@ import Vibe from '../components/Vibe.jsx';
 
 import Wheel from '../components/Wheel.jsx';
 
-const Home = ({ user, handleLogout }) => {
+const Home = ({ user, handleLogout, setUser }) => {
   //The handleLogout is referring to the function in App.jsx and is changing the state in there
   //Button is from the material ui
 
   return (
     <div>
       <h1>Home</h1>
-      <UserProfile user={ user }/>
+      <UserProfile user={ user } setUser={ setUser }/>
       <Vibe />
       <Icebreaker user={ user } />
       <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>Logout</Button>

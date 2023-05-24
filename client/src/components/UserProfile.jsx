@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Navigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 // Material UI:
@@ -7,19 +7,37 @@ import { Avatar, Button, Box, TextField } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
-const UserProfile = ({ user }) => {
+const UserProfile = ({ user, setUser }) => {
 //User is the logged in user
 //The referrerPolicy allows us to print the image that google gives us
   const [isEditing, setEditState] = useState(false);
+  const [editedName, setEditedName] = useState(user.name);
+
 
   const handleEditClick = () => {
     setEditState((prevState) => !prevState);
   };
 
+  const handleSubmitClick = async () => {
+    setEditState((prevState) => !prevState);
+
+    try {
+      const response = await axios.put(`/users/${ user.name }`, { name: editedName });
+
+      if (!response.data) {
+        throw response;
+      }
+
+
+    } catch (error) {
+      console.log('put request did not work')
+    }
+
+  };
+
   return (
     <div>
       <div>
-        <h1>User Profile</h1>
         <Avatar alt="User Profile Image" src={ user.picture } sx={{ width: 80, height: 80 }} referrerPolicy="no-referrer"/>
         { isEditing ? <> </> : <EditOutlinedIcon onClick={ handleEditClick } size="small"></EditOutlinedIcon>}
         {isEditing ? (
@@ -39,8 +57,9 @@ const UserProfile = ({ user }) => {
                   id="outlined-basic"
                   label="Edit Name"
                   defaultValue={ user.name }
+                  onChange={(event) => setEditedName(event.target.value)}
                 />
-                <SaveAltIcon onClick={ handleEditClick } size="large"></SaveAltIcon>
+                <SaveAltIcon onClick={ handleSubmitClick } size="large"></SaveAltIcon>
               </div>
             </Box>
           </div>) : ( user.name )}

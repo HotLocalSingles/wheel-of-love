@@ -78,6 +78,7 @@ const App = () => {
     }
   };
 
+
   //If isLoading is true, show only this div. I had to add this so that the render didn't try and render based on the user state
   //while the server requests are sending to update the state
   if (isLoading) {
@@ -93,7 +94,7 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={user ? <Home user={ user } handleLogout={ handleLogout }/> : <Navigate to="/login" />}
+          element={user ? <Home user={ user } handleLogout={ handleLogout } setUser={ setUser }/> : <Navigate to="/login" />}
         />
         <Route path="/login" element={<Login login={ login } />} />
       </Routes>
