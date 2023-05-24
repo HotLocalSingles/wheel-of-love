@@ -7,9 +7,12 @@ const socket = io('http://localhost:3000');
 
 const Chat = ({ initialUser }) => {
   //states for user and messages
-  const [user, setUser] = useState(initialUser ? initialUser : '');
+  // const [user, setUser] = useState(initialUser ? initialUser : '');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [nickname, setNickname] = useState(initialUser);
+
+
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
   //add styling later
@@ -22,33 +25,16 @@ const Chat = ({ initialUser }) => {
   });
 
   const sendMessage = () => {
-    //check if user and message are not empty
-    if (user && message) {
-      //create a new message object
-      const newMessage = new MessageObj(user, message);
-      //emit the message with socket
+    // Check if nickname and message are not empty
+    if (nickname && message) {
+      // Create a new message object
+      const newMessage = new MessageObj(nickname, message);
+      // Emit the message with socket
       socket.emit('chat-message', newMessage);
-      console.log(message, user);
-      //update the current message on state
-      // setMessage(newMessage);
-      //update the state with the new message
+      console.log(message, nickname);
+      // Update the state with the new message
       setMessages([...messages, newMessage]);
-      //clear the message input
-      setMessage('');
-      //set the initial user
-    } else if (!user) {
-      //set the initial user
-      setUser(initialUser);
-      //create a new message object
-      const newMessage = new MessageObj(initialUser, message);
-      //emit the message with socket
-      socket.emit('chat-message', newMessage);
-      console.log(message, initialUser);
-      //update the current message on state
-      // setMessage(newMessage);
-      //update the state with the new message
-      setMessages([...messages, newMessage]);
-      //clear the message input
+      // Clear the message input
       setMessage('');
     }
   };
@@ -61,17 +47,24 @@ const Chat = ({ initialUser }) => {
   };
 
   useEffect(() => {
+
     socket.on('chat-message', (incomingMessage) => {
+      console.log('chat received');
       setMessages((prevMessages) => [...prevMessages, incomingMessage]);
     });
+    return () => {
+      socket.off('GoodBye');
+    };
   }, []);
 
-  //function to set username if no user set
-  const updateUser = (e) => {
-    return user
-      ? user
-      : e.target.value;
+  const handleNicknameChange = (event) => {
+    setNickname(event.target.value);
   };
+
+  // Use useEffect to initialize tempNickname with initialUser when the component mounts
+  useEffect(() => {
+    setNickname(initialUser);
+  }, [initialUser]);
   /*
   The Fragment will allow us to combine multiple elements into one 'div'
   Paper is the styling that makes it look like paper
@@ -100,8 +93,8 @@ const Chat = ({ initialUser }) => {
               <Grid item xs={2}>
                 <FormControl fullWidth>
                   <TextField
-                    onChange={ updateUser }
-                    value={ initialUser }
+                    onChange={ (e) => handleNicknameChange(e) }
+                    value={ nickname }
                     label="add a nickname"
                     variant="outlined"/>
                 </FormControl>

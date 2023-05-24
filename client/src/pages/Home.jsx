@@ -21,7 +21,7 @@ const Home = ({ user, handleLogout }) => {
       <br/>
 
       <br />
-      <Wheel />
+      <Wheel user={ user }/>
     </div>
   );
 };
