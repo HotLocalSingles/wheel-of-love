@@ -51,7 +51,7 @@ router.get('/:id', verifySession, async (req, res) => {
 });
 
 //Edit User Name
-router.put('/:name', async (req, res) => {
+router.put('/:name', verifySession, async (req, res) => {
 
   const name = req.params.name;
   const insertName = req.body.name;
