@@ -90,9 +90,9 @@ app.get('/api', async (req, res) => {
 
 // Save Icebreaker to DB
 app.post('/api', async (req, res) => {
-  const { icebreaker, name } = req.body;
+  const { icebreaker, googleId } = req.body;
   try {
-    const user = await User.findOne({ where: { name }});
+    const user = await User.findOne({ where: { googleId }});
     if (user) {
       user.icebreaker = icebreaker;
       await user.save();

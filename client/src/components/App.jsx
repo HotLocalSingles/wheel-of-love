@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Route, Routes, Navigate } from 'react-router-dom';
+
+//Page Imports
 import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
 
-import { Route, Routes, Navigate } from 'react-router-dom';
-
-// import Wheel from '../components/Wheel.jsx';
-// import Icebreaker from '../components/Icebreaker.jsx';
-// import Vibe from '../components/Vibe.jsx';
-// // import Bar from './bar/Bar.jsx';
-// import Chat from './Chat.jsx';
 
 const App = () => {
 
@@ -20,43 +16,8 @@ const App = () => {
   //Redirects the user to the google login page
   const login = async function () {
     window.location.href = 'http://localhost:3000/auth/login/google';
-
-  }
-
-  const [profile, setProfile] = useState(null);
-  const [chatStarted, setChatStarted] = useState(false);
-
-
-  //Hook that is used to fetch user profile data when the 'user' state is changed
-  //Calling an axios get request
-  useEffect(() => {
-    if (user) {
-      axios
-        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: 'application/json'
-          }
-        })
-        .then((res) => {
-          setProfile(res.data);
-
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [user]);
-
-  //Fake bio text to be swapped later
-  const fakeBio = 'Real howling at the moon hours, who up? #Arf #DefinitelyNotADog';
-
-  //function to render he chat if the user
-  //confirms they want to chat with other
-  const handleChat = () => {
-    const shouldChat = window.confirm("Do you want to chat with user?");
-    if (shouldChat) {
-      setChatStarted(true);
-    }
   };
+
 
   //Getting the user that is logging in from the database by calling a GET request to our backend server
   //Then it's setting the user received as the user in the state
@@ -136,7 +97,33 @@ const App = () => {
 
 };
 
-
+//The user object looks like this:
+/*
+ createdAt
+: 
+"2023-05-23T19:16:16.000Z"
+googleId
+: 
+"111257409594314222098"
+icebreaker
+: 
+null
+id
+: 
+1
+name
+: 
+"Logan"
+picture
+: 
+"https://lh3.googleusercontent.com/a/AGNmyxaoXKwitEWSM_q4nhGdHM1coSwDjON490cnthRx8A=s96-c"
+updatedAt
+: 
+"2023-05-23T19:16:16.000Z"
+username
+: 
+"111257409594314222098"
+ */
 
 
 export default App;

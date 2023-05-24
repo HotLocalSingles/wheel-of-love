@@ -15,7 +15,6 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
-      <Chat />
     </BrowserRouter>
   </React.StrictMode>
 );

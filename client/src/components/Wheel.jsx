@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import { User } from './server/db/models';
+import axios from 'axios';
+
 
 const Wheel = ({ onUserSelected, setChatStarted }) => {
   // State for the list of users, selected user, rotation angle
@@ -9,24 +10,32 @@ const Wheel = ({ onUserSelected, setChatStarted }) => {
   //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected. 
   const userRefs = useRef([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const fetchedUsers = await User.findAll();
-        const userNames = fetchedUsers.map(user => user.name);
-        setUsers(userNames);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+  const fetchUsers = async () => {
+    try {
+      const returnedResponse = await axios.get('/users');
+
+      if (!insertUsers) {
+        throw new Error(insertUsers);
       }
-    };
-  
+      const insertUsers = returnedResponse.data;
+
+      console.log("Backend call for all users:", insertUsers)
+      setUsers(insertUsers);
+    } catch (error) {
+      console.error('Error fetching all users on client side wheel:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchUsers();
   }, []);
-  
+
+  //Call within the fetchUsers after getting the users from the database maybe ?
   useEffect(() => {
+    console.log('users array length:', users.length)
     userRefs.current = userRefs.current.slice(0, users.length);
   }, [users.length]);
-  
+
   const spinWheel = () => {
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / users.length;
