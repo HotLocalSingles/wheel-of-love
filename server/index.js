@@ -7,7 +7,10 @@ require('dotenv').config();
 const session = require('express-session');
 //Importing path so that we can use the static files from client side
 const path = require('path');
-
+//import Messages model
+const { Messages } = require('./db/models');
+const { User } = require('./db/models');
+const { id, username, name } = User;
 
 //Importing passport for auth
 //Also importing the initializePassport function created in auth
@@ -49,6 +52,7 @@ app.use('/users', users);
 app.use('/', vibe);
 app.use('/', icebreaker);
 
+
 //building socket.io logic
 //event emitter to check for connection
 //create new socket/user on connection
@@ -63,7 +67,15 @@ io.on('connection', (socket) => {
   //to broadcast message just to one user and not to sender
   socket.on('chat-message', (message) => {
     console.log('server got the message', message);
-    socket.broadcast.emit('chat-message', message);
+    //create a new message instance
+    Messages.create({
+      senderUsername: message.username,
+      receiverUsername: 'CryingMyEyesOut',
+      message: message.message
+    })
+      .then(() => console.log('Message saved successfully.', message))
+      .catch(err => console.log(err));
+    socket.broadcast.emit('chat-message', message.message);
   });
   //when the socket/user disconnects
   socket.on('disconnect', () => {

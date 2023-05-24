@@ -6,11 +6,12 @@ import { io } from 'socket.io-client';
 const socket = io('http://localhost:3000');
 
 const Chat = ({ initialUser }) => {
+  console.log(initialUser);
   //states for user and messages
-  // const [user, setUser] = useState(initialUser ? initialUser : '');
+  const [user, setUser] = useState(initialUser ? initialUser.name : '');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [nickname, setNickname] = useState(initialUser);
+  const [nickname, setNickname] = useState(initialUser.name);
 
 
   //listChatMessages will display all the messages in the state array 'messages'
@@ -28,10 +29,9 @@ const Chat = ({ initialUser }) => {
     // Check if nickname and message are not empty
     if (nickname && message) {
       // Create a new message object
-      const newMessage = new MessageObj(nickname, message);
+      const newMessage = new MessageObj(nickname, message, initialUser.username);
       // Emit the message with socket
       socket.emit('chat-message', newMessage);
-      console.log(message, nickname);
       // Update the state with the new message
       setMessages([...messages, newMessage]);
       // Clear the message input
@@ -63,8 +63,8 @@ const Chat = ({ initialUser }) => {
 
   // Use useEffect to initialize tempNickname with initialUser when the component mounts
   useEffect(() => {
-    setNickname(initialUser);
-  }, [initialUser]);
+    setNickname(initialUser.name);
+  }, [initialUser.name]);
   /*
   The Fragment will allow us to combine multiple elements into one 'div'
   Paper is the styling that makes it look like paper
@@ -85,7 +85,7 @@ const Chat = ({ initialUser }) => {
             </Typography>
             <Divider />
             <Grid container spacing={4} alignItems="center">
-              <Grid item id='chatBox' xs={11}>
+              <Grid item id='chatBox' xs={20}>
                 <List id='chatBoxMessages'>
                   { listChatMessages }
                 </List>

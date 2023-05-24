@@ -28,6 +28,23 @@ const User = sequelize.define('User', {
   },
 });
 
+const Messages = sequelize.define('Messages', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  senderUsername: {
+    type: DataTypes.STRING
+  },
+  receiverUsername: {
+    type: DataTypes.STRING
+  },
+  message: {
+    type: DataTypes.STRING
+  }
+});
+
 
 //Creates the tables if they aren't already created
 sequelize
@@ -41,4 +58,5 @@ sequelize
 
 module.exports = {
   User,
+  Messages
 };

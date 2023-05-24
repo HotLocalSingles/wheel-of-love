@@ -23,7 +23,7 @@ const Wheel = ({ user }) => {
       }
       const insertUsers = returnedResponse.data;
 
-      console.log("Backend call for all users:", insertUsers)
+      console.log("Backend call for all users:", insertUsers);
       setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
@@ -67,7 +67,7 @@ const Wheel = ({ user }) => {
       setSelectedUser(user);
       // onUserSelected(user);
 
-      //Cynthia addition
+      //Cynthia addition. confirm to chat with selected user
       const shouldChat = window.confirm(`Do you want to chat with ${user}?`);
       if (shouldChat) {
         setChatStarted(true);
@@ -137,7 +137,7 @@ const Wheel = ({ user }) => {
         <div>
           <button onClick={spinWheel}>Spin Again</button>
           <p>Selected User: {selectedUser}</p>
-          { chatStarted && <Chat initialUser={ user.name } />}
+          { chatStarted && <Chat initialUser={ user } />}
         </div>
       ) : (
         <div>
