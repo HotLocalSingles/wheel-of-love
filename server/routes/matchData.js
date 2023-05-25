@@ -16,7 +16,7 @@ router.get('/matches/:userId', async (req, res) => {
       return res.sendStatus(404);
     }
 
-    // Retrieve all matches for the user
+    // Retrieve all matches for the user and include the associated users
     const matches = await Match.findAll({
       where: {
         [Op.or]: [
@@ -24,6 +24,9 @@ router.get('/matches/:userId', async (req, res) => {
           { userId2: userId },
         ],
       },
+      include: [
+        { model: User, as: 'User2', attributes: ['id', 'name', 'picture'] },
+      ],
     });
 
     res.status(200).send(matches);

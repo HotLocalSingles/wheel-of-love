@@ -24,6 +24,18 @@ const User = sequelize.define('User', {
   icebreaker: {
     type: DataTypes.STRING,
   },
+  location: {
+    type: DataTypes.STRING,
+  },
+  gender: {
+    type: DataTypes.STRING,
+  },
+  age: {
+    type: DataTypes.INTEGER,
+  },
+  bio: {
+    type: DataTypes.STRING,
+  },
 });
 
 const Match = sequelize.define('Match', {
