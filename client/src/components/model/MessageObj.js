@@ -4,6 +4,7 @@ export default class MessageObj {
     this.user = user;
     this.message = message;
     this.username = username;
+    this.receiverUsername = receiverUsername;
   }
 }
 

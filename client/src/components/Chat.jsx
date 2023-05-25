@@ -5,10 +5,9 @@ import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
 
-const Chat = ({ initialUser }) => {
-  console.log(initialUser);
+const Chat = ({ initialUser, selectedUser }) => {
   //states for user and messages
-  const [user, setUser] = useState(initialUser ? initialUser.name : '');
+  // const [user, setUser] = useState(initialUser ? initialUser.name : '');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [nickname, setNickname] = useState(initialUser.name);
@@ -29,9 +28,10 @@ const Chat = ({ initialUser }) => {
     // Check if nickname and message are not empty
     if (nickname && message) {
       // Create a new message object
-      const newMessage = new MessageObj(nickname, message, initialUser.username);
+      const newMessage = new MessageObj(nickname, message, initialUser.username, selectedUser.username);
       // Emit the message with socket
       socket.emit('chat-message', newMessage);
+      console.log(nickname, message, selectedUser.username);
       // Update the state with the new message
       setMessages([...messages, newMessage]);
       // Clear the message input
@@ -90,15 +90,6 @@ const Chat = ({ initialUser }) => {
                   { listChatMessages }
                 </List>
               </Grid>
-              <Grid item xs={2}>
-                <FormControl fullWidth>
-                  <TextField
-                    onChange={ (e) => handleNicknameChange(e) }
-                    value={ nickname }
-                    label="add a nickname"
-                    variant="outlined"/>
-                </FormControl>
-              </Grid>
               <Grid xs={6} item>
                 <FormControl fullWidth>
                   <TextField
@@ -117,6 +108,15 @@ const Chat = ({ initialUser }) => {
               </Grid>
             </Grid>
           </Box>
+          <Grid item xs={2}>
+            <FormControl fullWidth>
+              <TextField
+                onChange={ (e) => handleNicknameChange(e) }
+                value={ nickname }
+                label="add a nickname"
+                variant="outlined"/>
+            </FormControl>
+          </Grid>
         </Paper>
       </Container>
     </Fragment>

@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
     //create a new message instance
     Messages.create({
       senderUsername: message.username,
-      receiverUsername: 'CryingMyEyesOut',
+      receiverUsername: message.receiverUsername,
       message: message.message
     })
       .then(() => console.log('Message saved successfully.', message))
