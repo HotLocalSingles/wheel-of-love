@@ -21,6 +21,7 @@ const MatchPage = () => {
       setStateMatchInfo(matchInfo.data);
     } catch (error) {
       console.error('Could not retrieve match info:', error);
+      navigateToHome();
     }
 
   };

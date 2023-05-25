@@ -81,10 +81,9 @@ router.put('/:name', verifySession, async (req, res) => {
 });
 
 //Get one user by name
-router.get('/:name', async (req, res) => {
+router.get('/:name', verifySession, async (req, res) => {
 
   const name = req.params.name;
-  console.log(name)
 
   try {
     const user = await User.findOne({ where: { name: name } });
@@ -101,7 +100,7 @@ router.get('/:name', async (req, res) => {
 });
 
 //Get one match by name
-router.get('/match/:name', async (req, res) => {
+router.get('/match/:name', verifySession, async (req, res) => {
 
   const name = req.params.name;
 

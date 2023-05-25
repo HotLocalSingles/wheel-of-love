@@ -14,6 +14,10 @@ const exampleData = [
     name: 'Cynthia',
     location: 'New Orleans',
   },
+  {
+    name: 'Alex',
+    location: 'New Orleans',
+  },
 ];
 
 const MatchSelect = () => {
