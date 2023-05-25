@@ -6,6 +6,7 @@ import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
 import Matches from '../components/Matches.jsx';
+import NewUser from './NewUser.jsx';
 
 import Wheel from '../components/Wheel.jsx';
 
@@ -27,6 +28,7 @@ const Home = ({ user, handleLogout, setUser }) => {
       <UserProfile user={ user } setUser={ setUser }/>
       <Vibe />
       <Icebreaker user={ user } />
+      <NewUser />
       <Matches user={ user }/>
       <br />
       <br />
