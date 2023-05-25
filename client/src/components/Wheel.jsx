@@ -24,6 +24,9 @@ const Wheel = ({ user }) => {
       }
       console.log('Backend call for all users:', insertUsers);
       //adding filtering (by location) directly, because I want it done automagically.
+      // currently checking if i can filter by ID since users dont yet have properties.
+      //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
+      // something like: const usersInLocation = users.filter(dater => dater.loc === selectedUser.loc);
       const usersInMyLoc = insertUsers.filter(x => x.id !== user.id);
       setUsers(usersInMyLoc);
     } catch (error) {
@@ -37,14 +40,17 @@ const Wheel = ({ user }) => {
   }, []);
 
 
-  // const filterUsers = () => {
-  //   //fetchUsers() to reset?
-  //   //.filter creates shallow copy
-  //   // currently checking if i can filter by ID since users dont yet have properties.
-  //   // something like: const usersInLocation = users.filter(user => user.loc === selectedUser.loc);
-  //   const usersInMyLoc = users.filter(user => user.id === selectedUser.id);
-  //   users.setUsers(usersInMyLoc);
-  // }
+  const ageFilter = (min, max) => {
+    //.filter creates shallow copy
+    const usersInAgeRange = users.filter(dater => dater.age > min && dater.age < max);
+    setUsers(usersInAgeRange);
+  }
+
+  const genderFilter = (min, max) => {
+    // this doesnt make sense unless genders a number.
+    const usersInGenderRange = users.filter(dater => dater.gender > min && dater.gender < max);
+    setUsers(usersInGenderRange);
+  }
 
 
 
