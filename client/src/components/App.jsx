@@ -5,6 +5,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 //Page Imports
 import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
+import MatchPage from '../pages/MatchPage.jsx';
 
 const App = () => {
 
@@ -96,6 +97,7 @@ const App = () => {
           path="/"
           element={user ? <Home user={ user } handleLogout={ handleLogout } setUser={ setUser }/> : <Navigate to="/login" />}
         />
+        <Route path="/matchPage/:matchName" element={<MatchPage />} />
         <Route path="/login" element={<Login login={ login } />} />
       </Routes>
     </div>
