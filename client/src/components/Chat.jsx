@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, Paper } from '@mui/material';
-import MessageObj from './model/MessageObj.js';
+import MessageObj from './MessageObj.jsx';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
@@ -17,6 +17,7 @@ const Chat = ({ initialUser, selectedUser }) => {
   //and create a listItem from each message obj
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
+    // console.log(messages);
     return (
       <ListItem key={index}>
         <ListItemText primary={`${messageObj.user}: ${messageObj.message}`} />
@@ -28,10 +29,11 @@ const Chat = ({ initialUser, selectedUser }) => {
     // Check if nickname and message are not empty
     if (nickname && message) {
       // Create a new message object
-      const newMessage = new MessageObj(nickname, message, initialUser.username, selectedUser.username);
+      const newMessage = MessageObj(nickname, message, initialUser.username, selectedUser.username);
       // Emit the message with socket
+      console.log(newMessage);
       socket.emit('chat-message', newMessage);
-      console.log(nickname, message, selectedUser.username);
+      // console.log(nickname, message, selectedUser.username);
       // Update the state with the new message
       setMessages([...messages, newMessage]);
       // Clear the message input
@@ -46,10 +48,16 @@ const Chat = ({ initialUser, selectedUser }) => {
     }
   };
 
+  //create the use effect to join two users
+  useEffect(() => {
+    //on join-chat, connect the usernames
+    socket.emit('join-chat', (initialUser.username, selectedUser.username));
+  }, [initialUser.username]);
+
   useEffect(() => {
 
     socket.on('chat-message', (incomingMessage) => {
-      console.log('chat received');
+      console.log('chat received', incomingMessage);
       setMessages((prevMessages) => [...prevMessages, incomingMessage]);
     });
     return () => {

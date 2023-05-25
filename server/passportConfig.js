@@ -35,9 +35,9 @@ passport.use(
         });
 
         if (created) {
-          console.log('User created:', user.username);
+          console.log('User created:', user.name);
         } else {
-          console.log('User already exists:', user.username);
+          console.log('User already exists:', user.name);
 
         }
 

@@ -69,7 +69,7 @@ const Wheel = ({ user }) => {
 
       //Cynthia addition
       const shouldChat = window.confirm(
-        `Do you want to chat with ${user.name}?`,
+        `Do you want to chat with ${user.name}? you are now connected to ${user.username}`,
       );
       if (shouldChat) {
         setChatStarted(true);

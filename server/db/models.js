@@ -9,12 +9,10 @@ const User = sequelize.define('User', {
     autoIncrement: true,
   },
   googleId: {
-    type: DataTypes.STRING,
-    unique: true,
+    type: DataTypes.STRING(25),
   },
   username: {
     type: DataTypes.STRING,
-    unique: true,
   },
   name: {
     type: DataTypes.STRING,
@@ -45,16 +43,6 @@ const Messages = sequelize.define('Messages', {
   }
 });
 
-
-//Creates the tables if they aren't already created
-sequelize
-  .sync({ alter: true }) //Doesn't drop the tables and recreate them
-  .then(() => {
-    console.log('Tables created or synchronized');
-  })
-  .catch((error) => {
-    console.error('Error synchronizing tables:', error);
-  });
 
 module.exports = {
   User,

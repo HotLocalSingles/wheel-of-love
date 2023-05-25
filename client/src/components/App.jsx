@@ -5,7 +5,9 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 //Page Imports
 import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
-
+import MatchPage from '../pages/MatchPage.jsx';
+import NewUser from '../pages/NewUser.jsx';
+import ChatsPage from '../pages/ChatsPage.jsx';
 
 const App = () => {
 
@@ -79,6 +81,7 @@ const App = () => {
     }
   };
 
+
   //If isLoading is true, show only this div. I had to add this so that the render didn't try and render based on the user state
   //while the server requests are sending to update the state
   if (isLoading) {
@@ -94,9 +97,12 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={user ? <Home user={ user } handleLogout={ handleLogout }/> : <Navigate to="/login" />}
+          element={user ? <Home user={ user } handleLogout={ handleLogout } setUser={ setUser }/> : <Navigate to="/login" />}
         />
+        <Route path="/matchPage/:matchName" element={<MatchPage />} />
         <Route path="/login" element={<Login login={ login } />} />
+        <Route path="/newUser" element={<NewUser user={ user }/>} />
+
       </Routes>
     </div>
   );

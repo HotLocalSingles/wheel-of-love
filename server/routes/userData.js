@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { User } = require('../db/models');
-const { Messages } = require('../db/models');
+
 
 //User for anything for an active user
 const verifySession = (req, res, next) => {
@@ -42,6 +42,74 @@ router.get('/:id', verifySession, async (req, res) => {
 
     if (!user) {
       return res.status(404).send('User not found :(');
+    }
+
+    res.status(200).send(user);
+
+  } catch (error) {
+    res.status(500).send('Internal Server Error for finding user', error);
+  }
+});
+
+//Edit User Name
+router.put('/:name', verifySession, async (req, res) => {
+
+  const name = req.params.name;
+  const insertName = req.body.name;
+
+  try {
+    const [nullReturn, updated] = await User.update({ name: insertName }, {
+      where: { name: name },
+      returning: true,
+      plain: true
+    });
+
+    if (!updated) {
+      return res.status(404).send('User not updated :(');
+    }
+
+    const user = await User.findOne({ where: { name: insertName } });
+
+    if (!user) {
+      return res.status(404).send('User not found :(');
+    }
+
+    res.status(200).send(user);
+
+  } catch (error) {
+    res.status(500).send('Internal Server Error for finding user', error);
+  }
+});
+
+//Get one user by name
+router.get('/:name', verifySession, async (req, res) => {
+
+  const name = req.params.name;
+
+  try {
+    const user = await User.findOne({ where: { name: name } });
+
+    if (!user) {
+      return res.status(404).send('User not found, can not get them :(');
+    }
+
+    res.status(200).send(user);
+
+  } catch (error) {
+    res.status(500).send('Internal Server Error for finding user', error);
+  }
+});
+
+//Get one match by name
+router.get('/match/:name', verifySession, async (req, res) => {
+
+  const name = req.params.name;
+
+  try {
+    const user = await User.findOne({ where: { name: name } });
+
+    if (!user) {
+      return res.status(404).send('User not found, can not get them :(');
     }
 
     res.status(200).send(user);

@@ -9,8 +9,7 @@ const session = require('express-session');
 const path = require('path');
 //import Messages model
 const { Messages } = require('./db/models');
-const { User } = require('./db/models');
-const { id, username, name } = User;
+const { senderUsername, receiverUsername } = Messages;
 
 //Importing passport for auth
 //Also importing the initializePassport function created in auth
@@ -22,6 +21,7 @@ const googleRouter = require('./routes/google');
 const users = require('../server/routes/userData');
 const vibe = require('../server/routes/vibeRoute.js');
 const icebreaker = require('../server/routes/icebreakerRoute.js');
+const messages = require('../server/routes/messages.js');
 
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
@@ -51,6 +51,7 @@ app.use("/auth", googleRouter);
 app.use('/users', users);
 app.use('/', vibe);
 app.use('/', icebreaker);
+app.use('/chats/:username', messages);
 
 
 //building socket.io logic
@@ -58,24 +59,27 @@ app.use('/', icebreaker);
 //create new socket/user on connection
 
 io.on('connection', (socket) => {
+  const { senderUsername, receiverUsername, message } = Messages;
   //socket event creation
   console.log('user connected. socket id: ', socket.id);
   //socket join method to add 2 users to a room to chat
-  socket.join('room');
-  //io.to('room').emit('user-joined');
+  socket.on('join-chat', ( senderUsername, receiverUsername ) => {
+    socket.join('chat-room');
+  });
 
   //to broadcast message just to one user and not to sender
-  socket.on('chat-message', (message) => {
-    console.log('server got the message', message);
+  socket.on('chat-message', ({ user, senderUsername, receiverUsername, message }) => {
+    // Emit the message to the specified room
+    socket.to('chat-room').emit('chat-message', { user, message });
     //create a new message instance
     Messages.create({
-      senderUsername: message.username,
-      receiverUsername: message.receiverUsername,
-      message: message.message
+      senderUsername: senderUsername,
+      receiverUsername: receiverUsername,
+      message: message
     })
-      .then(() => console.log('Message saved successfully.', message))
+      .then(() => console.log('Message saved successfully.', senderUsername, message, receiverUsername))
       .catch(err => console.log(err));
-    socket.broadcast.emit('chat-message', message.message);
+    // socket.broadcast.emit('chat-message', message.message);
   });
   //when the socket/user disconnects
   socket.on('disconnect', () => {
