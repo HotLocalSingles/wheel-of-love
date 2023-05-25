@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Chat from '../components/Chat.jsx';
-import { FormControlLabel, Checkbox, Button } from '@mui/material';
+import { Slider, Button, Box } from '@mui/material';
 
 const Wheel = ({ user }) => {
   // State for the list of users, selected user, rotation angle
@@ -9,6 +9,7 @@ const Wheel = ({ user }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [chatStarted, setChatStarted] = useState(false);
+  const [sliderValue, setSliderValue] = useState([0, 1]);
 
   //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected.
   const userRefs = useRef([]);
@@ -27,33 +28,39 @@ const Wheel = ({ user }) => {
       // currently checking if i can filter by ID since users dont yet have properties.
       //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
       // something like: const usersInLocation = users.filter(dater => dater.loc === selectedUser.loc);
-      const usersInMyLoc = insertUsers.filter(x => x.id !== user.id);
-      setUsers(usersInMyLoc);
+      // const usersInMyLoc = insertUsers.filter((x) => x.id !== user.id);
+      // setUsers(usersInMyLoc);
+       setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
     }
   };
 
-  //use effect or nah?
+  //use effect saves us from rerendering loop from fetchUsers.
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  //For MUI slider
+  const handleSliderChange = (event, newValues) => {
+    setSliderValue(newValues);
+  };
 
-  const ageFilter = (min, max) => {
-    //.filter creates shallow copy
-    const usersInAgeRange = users.filter(dater => dater.age > min && dater.age < max);
-    setUsers(usersInAgeRange);
-  }
+  // const ageFilter = (min, max) => {
+  //   //.filter creates shallow copy
+  //   const usersInAgeRange = users.filter(
+  //     (dater) => dater.age > min && dater.age < max,
+  //   );
+  //   setUsers(usersInAgeRange);
+  // };
 
   const genderFilter = (min, max) => {
     // this doesnt make sense unless genders a number.
-    const usersInGenderRange = users.filter(dater => dater.gender > min && dater.gender < max);
+    const usersInGenderRange = users.filter(
+      (dater) => dater.gender > min && dater.gender < max,
+    );
     setUsers(usersInGenderRange);
-  }
-
-
-
+  };
 
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
@@ -100,90 +107,103 @@ const Wheel = ({ user }) => {
   };
 
   return (
-    <div style={{ width: '50%', margin: 'auto', textAlign: 'center' }}>
-      <h3>Have Fate Pick your Date</h3>
-      <div
-        style={{
-          // Wheel Container
-          backgroundColor: 'lightblue',
-          position: 'relative',
-          width: '100%',
-          height: '0',
-          paddingBottom: '100%',
-          overflow: 'hidden',
-        }}
-      >
+    <div
+      className='wheelContainerContainer'
+      style={{
+        width: '50%',
+        margin: 'auto',
+        textAlign: 'center',
+        color: 'lightpink',
+      }}
+    >
+      <h3 style={{ marginBottom: '20px' }}>Have Fate Pick your Date</h3>
+
+      <div style={{ display: 'flex' }}>
+        <div style={{ marginRight: '20px' }}>
+          <Slider 
+          orientation="vertical"
+          min={0}
+          max={1}
+          step={0.1}
+          value={sliderValue}
+          onChange={handleSliderChange}
+           />
+           
+        </div>
+
         <div
+         className="wheelContainer"
           style={{
-            // Actual wheel
-            backgroundColor: 'lightgreen',
-            borderRadius: '50%',
-            position: 'absolute',
-            top: '0',
-            left: '0',
+            // Wheel Container
+            backgroundColor: 'lightblue',
+            position: 'relative',
             width: '100%',
             height: '100%',
-            transform: `rotate(${rotationAngle}deg)`,
-            transition: 'transform 1s',
+            paddingBottom: '100%',
+            overflow: 'hidden',
           }}
         >
-          {users.map((user, index) => {
-            // Calculate the rotation angle of each user div
-            const userRotationAngle = index * (360 / users.length);
+          <div
+            className="wheel"
+            style={{
+              // Actual wheel
+              backgroundColor: 'lightgreen',
+              borderRadius: '50%',
+              position: 'absolute',
+              width: '95%',
+              height: '87%',
+              marginLeft: '12px',
+              marginTop: '12px',
+              transform: `rotate(${rotationAngle}deg)`,
+              transition: 'transform 1s',
+            }}
+          >
+            {users.map((user, index) => {
+              // Calculate the rotation angle of each user div
+              const userRotationAngle = index * (360 / users.length);
 
-            // Calculate the translation values to move the user divs vertically.
-            const radius = 200; // Adjust this value to control the distance of names from the center of wheel.
-            const translationY = -radius;
+              // Calculate the translation values to move the user divs vertically.
+              const radius = 200; // Adjust this value to control the distance of names from the center of wheel.
+              const translationY = -radius;
 
-            return (
-              <div
-                ref={(ref) => (userRefs.current[index] = ref)}
-                key={index}
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: `translate(-50%, -50%) rotate(${userRotationAngle}deg) translateY(${translationY}px)`,
-                  transformOrigin: 'center',
-                  color: 'white',
-                  textShadow: 'black 0px 0px 2px',
-                  fontSize: '40px',
-                }}
-              >
-                {user.name}
-              </div>
-            );
-          })}
-        </div>
-        <div
-          style={{
-            // Checkboxes container
-            position: 'absolute',
-            bottom: '0',
-            left: '5px',
-            padding: '0px',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            color: 'white',
-            textShadow: 'black 0px 0px 2px',
-            fontSize: '10px',
-          }}
-        >
-          <FormControlLabel control={<Checkbox />} label='girls' />
-          <FormControlLabel control={<Checkbox />} label='boys' />
+              return (
+                <div
+                  ref={(ref) => (userRefs.current[index] = ref)}
+                  key={index}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: `translate(-50%, -50%) rotate(${userRotationAngle}deg) translateY(${translationY}px)`,
+                    transformOrigin: 'center',
+                    color: 'white',
+                    textShadow: 'black 0px 0px 2px',
+                    fontSize: '40px',
+                  }}
+                >
+                  {user.name}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {selectedUser ? (
         <div>
-          <Button variant="contained" onClick={spinWheel}>Spin Again</Button>
+          <Button variant='contained' onClick={spinWheel}>
+            Spin Again
+          </Button>
           <p>Selected User: {selectedUser.name}</p>
-          {chatStarted && <Chat initialUser={user} selectedUser={selectedUser} />}
+          {chatStarted && (
+            <Chat initialUser={user} selectedUser={selectedUser} />
+          )}
         </div>
       ) : (
         <div>
-          <Button variant="contained" onClick={spinWheel}>Spin the Wheel</Button>
+          <Button variant='contained' onClick={spinWheel}>
+            Spin the Wheel
+          </Button>
         </div>
       )}
     </div>
