@@ -23,15 +23,31 @@ const Wheel = ({ user }) => {
         throw new Error(insertUsers);
       }
       console.log('Backend call for all users:', insertUsers);
-      setUsers(insertUsers);
+      //adding filtering (by location) directly, because I want it done automagically.
+      const usersInMyLoc = insertUsers.filter(x => x.id !== user.id);
+      setUsers(usersInMyLoc);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
     }
   };
 
+  //use effect or nah?
   useEffect(() => {
-    // fetchUsers();
+    fetchUsers();
   }, []);
+
+
+  // const filterUsers = () => {
+  //   //fetchUsers() to reset?
+  //   //.filter creates shallow copy
+  //   // currently checking if i can filter by ID since users dont yet have properties.
+  //   // something like: const usersInLocation = users.filter(user => user.loc === selectedUser.loc);
+  //   const usersInMyLoc = users.filter(user => user.id === selectedUser.id);
+  //   users.setUsers(usersInMyLoc);
+  // }
+
+
+
 
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
