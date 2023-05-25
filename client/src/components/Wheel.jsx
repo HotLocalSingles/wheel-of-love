@@ -30,7 +30,7 @@ const Wheel = ({ user }) => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    // fetchUsers();
   }, []);
 
   // This keeps the (positional) reference array and users array the same length,

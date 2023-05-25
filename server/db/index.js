@@ -7,7 +7,15 @@ const sequelize = new Sequelize('wheel', 'root', '', {
   logging: false,
 });
 
-sequelize.sync();
+//Creates the tables if they aren't already created
+sequelize
+  .sync({ alter: true }) //Doesn't drop the tables and recreate them
+  .then(() => {
+    console.log('Tables created or synchronized');
+  })
+  .catch((error) => {
+    console.error('Error synchronizing tables:', error);
+  });
 
 const testDatabaseConnection = async () => {
   try {
