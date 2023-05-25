@@ -7,10 +7,6 @@ import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 
 const exampleData = [
   {
-    name: 'Alex',
-    location: 'New Orleans',
-  },
-  {
     name: 'Bryan',
     location: 'New Orleans',
   },
@@ -18,14 +14,10 @@ const exampleData = [
     name: 'Cynthia',
     location: 'New Orleans',
   },
-  {
-    name: 'Logan',
-    location: 'New Orleans',
-  }
 ];
 
 const MatchSelect = () => {
-  const [matchName, setMatchName] = useState(null);
+  const [matchName, setMatchName] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (event) => {

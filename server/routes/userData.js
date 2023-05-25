@@ -81,7 +81,27 @@ router.put('/:name', verifySession, async (req, res) => {
 });
 
 //Get one user by name
-router.get('/:name', verifySession, async (req, res) => {
+router.get('/:name', async (req, res) => {
+
+  const name = req.params.name;
+  console.log(name)
+
+  try {
+    const user = await User.findOne({ where: { name: name } });
+
+    if (!user) {
+      return res.status(404).send('User not found, can not get them :(');
+    }
+
+    res.status(200).send(user);
+
+  } catch (error) {
+    res.status(500).send('Internal Server Error for finding user', error);
+  }
+});
+
+//Get one match by name
+router.get('/match/:name', async (req, res) => {
 
   const name = req.params.name;
 
@@ -89,7 +109,7 @@ router.get('/:name', verifySession, async (req, res) => {
     const user = await User.findOne({ where: { name: name } });
 
     if (!user) {
-      return res.status(404).send('User not found :(');
+      return res.status(404).send('User not found, can not get them :(');
     }
 
     res.status(200).send(user);
