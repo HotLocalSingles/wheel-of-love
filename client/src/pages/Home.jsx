@@ -5,7 +5,6 @@ import { Button } from '@mui/material';
 import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
-import MatchSelect from '../components/MatchSelect.jsx';
 import Matches from '../components/Matches.jsx';
 
 import Wheel from '../components/Wheel.jsx';

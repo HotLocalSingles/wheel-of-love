@@ -19,7 +19,6 @@ const Matches = ({ user }) => {
       }
 
       const filteredMatches = allMatches.data.map((match) => match.User2);
-      console.log(filteredMatches);
 
       setMatches(filteredMatches);
 
