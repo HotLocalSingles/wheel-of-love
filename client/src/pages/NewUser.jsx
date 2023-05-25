@@ -1,10 +1,111 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Stack, TextField, Slider, Box } from '@mui/material';
+import { Stack, TextField, Slider, Box, FormControlLabel, FormGroup, Radio, Typography, Button } from '@mui/material';
 
 
 const NewUser = () => {
-  const marks = [
+  const [selectedGender, setSelectedGender] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [age, setAge] = useState(18);
+  const [bio, setBio] = useState('');
+  const [showBio, setShowBio] = useState(true);
+  const [editUsername, setEditUsername] = useState(true);
+  const [editGender, setEditGender] = useState(true);
+  const [confirmedAge, setConfirmedAge] = useState(false);
+
+  const handleGenderChange = (event) => {
+    setSelectedGender(event.target.value);
+  };
+
+  const handleAgeChange = (event, value) => {
+    setAge(value);
+  };
+
+  const handleBioChange = (event) => {
+    setBio(event.target.value);
+  };
+
+
+  // const areAllSaved = () => {
+  //   if(1) {
+  //     console.log('All are saved');
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   areAllSaved();
+  // }, []);
+
+  return (
+    <div>
+      <Typography variant="h5" gutterBottom>Looks Like You're a New User.</Typography>
+      <Typography variant="h5" gutterBottom>Time to Add Some Information so the Local Singles Know What They're Getting Into!</Typography>
+
+      {editUsername ? (
+        <div>
+          <Typography id="username-textbox" gutterBottom>Username:</Typography>
+          <TextField required size="small" id="outlined-basic" label="Username" onChange={ (event) => setUsername(event.target.value) } />
+          <Button variant="contained" onClick={ () => setEditUsername(false) }>Save</Button>
+        </div>
+      ) : (
+        <div>
+          <Typography id="username-textbox" gutterBottom>Username: { username }</Typography>
+          <Button variant="contained" onClick={ () => setEditUsername(true) }>Edit Username</Button>
+        </div>
+      )}
+
+      <Typography id="gender-checkbox" gutterBottom>Gender Selected: { selectedGender }</Typography>
+      {editGender ? (
+        <div>
+          <FormGroup>
+            <FormControlLabel value="Male" control={ <Radio /> } label="Male" checked={ selectedGender === 'Male' } onChange={ handleGenderChange } />
+            <FormControlLabel value="Female" control={ <Radio /> } label="Female" checked={ selectedGender === 'Female' } onChange={ handleGenderChange } />
+            <FormControlLabel value="Queer" control={ <Radio /> } label="Queer" checked={ selectedGender === 'Queer' } onChange={ handleGenderChange } />
+          </FormGroup>
+          <Button variant="contained" onClick={ () => setEditGender(false) }>Set Gender</Button>
+        </div>
+      ) : (
+        <div>
+          <Button variant="contained" onClick={ () => setEditGender(true) }>Edit Gender</Button>
+        </div>
+      )}
+
+      <Typography id="age-slider" gutterBottom> Age: { age } </Typography>
+      {confirmedAge ? (
+        <div>
+          <Button variant="contained" onClick={ () => setConfirmedAge(false) }>Edit Age</Button>
+        </div>
+      ) : (
+        <div>
+          <Slider id="age-slider" value={ age } min={ 18 } max={ 95 } step={ 1 } onChange={ handleAgeChange } aria-labelledby="age-slider" />
+          <Button variant="contained" onClick={ () => setConfirmedAge(true) }>Set Age</Button>
+
+        </div>
+      )}
+
+      { showBio ? (
+        <TextField id="outlined-textarea" label="Bio" multiline rows={ 4 } value={ bio } onChange={ handleBioChange } />
+      ) : (
+        <div>
+          <Typography id="bio-typography" gutterBottom>Bio:</Typography>
+          <Typography>{ bio }</Typography>
+          <Button variant="contained" onClick={ () => setShowBio(true) }>Edit Bio</Button>
+        </div>
+      ) }
+      { showBio && (
+        <Button variant="contained" onClick={ () => setShowBio(false) }>Set Bio</Button>
+      ) }
+      <div>
+
+      </div>
+    </div>
+  );
+};
+
+/**
+ SLIDER IF NEEDED
+
+   const marks = [
     {
       value: 0,
       label: 'Gender 1',
@@ -27,28 +128,18 @@ const NewUser = () => {
     return marks.findIndex((mark) => mark.value === value) + 1;
   };
 
-  return (
-    <div>
-      <h1>Looks Like You're a New User. Time to Add Some Information so the Local Singles Know What They're Getting Into!</h1>
-      <Box sx={{ width: 300 }}>
-        <Slider
-          aria-label="Restricted values"
-          defaultValue={20}
-          valueLabelFormat={valueLabelFormat}
-          getAriaValueText={valuetext}
-          step={null}
-          valueLabelDisplay="auto"
-          marks={marks}
-        />
-      </Box>
-      <TextField
-        id="outlined-textarea"
-        label="Introduce Yourself"
-        multiline
-        rows={4}
-      />
-    </div>
-  );
-};
+  <Slider
+  aria-label="Restricted values"
+  defaultValue={20}
+  valueLabelFormat={valueLabelFormat}
+  getAriaValueText={valuetext}
+  step={null}
+  valueLabelDisplay="auto"
+  marks={marks}
+  />
+          <Typography variant="h7" gutterBottom>Your New Profile Information</Typography>
+        <Typography id="username-test" gutterBottom>Username: { username }</Typography>
+        <Typography id="gender-test" gutterBottom>Gender: { selectedGender }</Typography>
+ */
 
 export default NewUser;

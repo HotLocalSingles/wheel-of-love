@@ -24,6 +24,7 @@ const Matches = ({ user }) => {
 
     } catch (error) {
       console.error('Could not retrieve all matches:', error);
+      navigate('/login');
     }
   };
 

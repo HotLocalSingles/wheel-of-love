@@ -66,6 +66,7 @@ const UserProfile = ({ user, setUser }) => {
                   size="small"
                   id="outlined-basic"
                   label="Edit Name"
+                  helperText="Please enter your new name"
                   defaultValue={ user.name }
                   onChange={(event) => setEditedName(event.target.value)}
                 />
