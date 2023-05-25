@@ -1,0 +1,36 @@
+const express = require('express');
+const router = express.Router();
+// const sequelize = require('../db/index.js');
+const { Op } = require('sequelize');
+
+const { User, Match } = require('../db/models');
+
+//Get matches for a specific user
+router.get('/matches/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.sendStatus(404);
+    }
+
+    // Retrieve all matches for the user
+    const matches = await Match.findAll({
+      where: {
+        [Op.or]: [
+          { userId1: userId },
+          { userId2: userId },
+        ],
+      },
+    });
+
+    res.status(200).send(matches);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+module.exports = router;
