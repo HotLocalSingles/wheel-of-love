@@ -24,6 +24,9 @@ const User = sequelize.define('User', {
   icebreaker: {
     type: DataTypes.STRING,
   },
+  location: {
+    type:DataTypes.STRING
+  }
 });
 
 

@@ -28,9 +28,10 @@ const Wheel = ({ user }) => {
       // currently checking if i can filter by ID since users dont yet have properties.
       //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
       // something like: const usersInLocation = users.filter(dater => dater.loc === selectedUser.loc);
-      // const usersInMyLoc = insertUsers.filter((x) => x.id !== user.id);
-      // setUsers(usersInMyLoc);
-       setUsers(insertUsers);
+      const usersThatArentMe = insertUsers.filter((e) => e.id !== user.id && e.location === user.location);
+      // const usersInMyLoc = usersThatArentMe.filter((e) => e.location === user.location);
+      setUsers(usersThatArentMe);
+      //  setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
     }
