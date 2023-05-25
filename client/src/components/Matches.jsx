@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import { Avatar } from '@mui/material';
 
 
 const Matches = ({ user }) => {
   const [matches, setMatches] = useState([]);
+  const navigate = useNavigate();
+
 
   const getMatches = async () => {
     try {
@@ -22,6 +26,10 @@ const Matches = ({ user }) => {
     } catch (error) {
       console.error('Could not retrieve all matches:', error);
     }
+  };
+
+  const navigateToMatchPage = (matchName) => {
+    navigate(`/matchPage/${ matchName }`);
   };
 
   useEffect(() => {
@@ -44,8 +52,8 @@ const Matches = ({ user }) => {
       <ul>
         {matches.map((match) => (
           <li key={match.name}>
-            <Avatar alt="Match Profile Image" src={ match.picture } sx={{ width: 80, height: 80 }} referrerPolicy="no-referrer"/>
-            {match.name}
+            <Avatar onClick={() => navigateToMatchPage(match.name)} alt="Match Profile Image" src={ match.picture } sx={{ width: 80, height: 80 }} referrerPolicy="no-referrer"/>
+            { match.name }
           </li>
         ))}
       </ul>

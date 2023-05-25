@@ -29,7 +29,6 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Vibe />
       <Icebreaker user={ user } />
       <Matches user={ user }/>
-      <MatchSelect />
       <br />
       <br />
       <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>Logout</Button>
