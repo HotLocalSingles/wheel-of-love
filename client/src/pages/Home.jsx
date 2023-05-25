@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Button } from '@mui/material';
 import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
@@ -10,6 +12,14 @@ import Wheel from '../components/Wheel.jsx';
 const Home = ({ user, handleLogout, setUser }) => {
   //The handleLogout is referring to the function in App.jsx and is changing the state in there
   //Button is from the material ui
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user.username === null) {
+      navigate('/newUser');
+    }
+  }, []);
+
 
   return (
     <div>

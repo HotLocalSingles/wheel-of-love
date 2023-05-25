@@ -6,6 +6,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
 import MatchPage from '../pages/MatchPage.jsx';
+import NewUser from '../pages/NewUser.jsx';
 
 const App = () => {
 
@@ -99,6 +100,8 @@ const App = () => {
         />
         <Route path="/matchPage/:matchName" element={<MatchPage />} />
         <Route path="/login" element={<Login login={ login } />} />
+        <Route path="/newUser" element={<NewUser user={ user }/>} />
+
       </Routes>
     </div>
   );
