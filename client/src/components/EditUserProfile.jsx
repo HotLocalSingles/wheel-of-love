@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import EditSpecific from '../components/EditSpecific.jsx';
+
 // Material UI:
 import { Avatar, Box, TextField, Typography, Grid } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
-const EditUserProfile = ({ user, setUser }) => {
+const EditUserProfile = ({ user, setUser, setEditing }) => {
 
   const [isEditing, setEditState] = useState(false);
-  const [editedName, setEditedName] = useState(user.name);
+  // const [editedName, setEditedName] = useState(user.name);
 
 
   //Click edit button, set state to true so conditional rendering occurs
@@ -81,6 +83,7 @@ const EditUserProfile = ({ user, setUser }) => {
           </Grid>
         </Box>
       </div>
+      <EditSpecific user={user} setUser={setUser} setEditing={ setEditing }/>
     </div>
   );
 };

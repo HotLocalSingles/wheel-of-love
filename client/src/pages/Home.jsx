@@ -47,7 +47,7 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           { editing ? (<div>
-            <EditUserProfile user={user} setUser={setUser}/>
+            <EditUserProfile user={user} setUser={setUser} setEditing={ setEditing }/>
             <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(false) }>Save Profile</Button>
           </div>) : (<div>
             <UserProfile user={user} setUser={setUser} />
@@ -64,9 +64,7 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Button variant="outlined" color="secondary" size="medium" onClick= { handleLogout }>See Messages</Button>
       <Conversations user={ user } socket={ socket }/>
       <br />
-      <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>
-        Logout
-      </Button>
+      <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
       <br />
       <Wheel user={ user } socket={socket}/>
     </div>
