@@ -65,8 +65,6 @@ useEffect(() => {
   };
   
 
-  
-
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
   useEffect(() => {
