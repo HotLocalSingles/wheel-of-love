@@ -25,7 +25,10 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
   },
   location: {
-    type:DataTypes.STRING
+    type:DataTypes.STRING,
+  },
+  gender: {
+    type:DataTypes.INTEGER,
   }
 });
 

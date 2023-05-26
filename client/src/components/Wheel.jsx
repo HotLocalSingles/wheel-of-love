@@ -6,6 +6,7 @@ import { Slider, Button, Box } from '@mui/material';
 const Wheel = ({ user }) => {
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [chatStarted, setChatStarted] = useState(false);
@@ -45,23 +46,14 @@ const Wheel = ({ user }) => {
   //For MUI slider
   const handleSliderChange = (event, newValues) => {
     setSliderValue(newValues);
+    genderFilter(newValues[0], newValues[1])
   };
-
-  // const ageFilter = (min, max) => {
-  //   //.filter creates shallow copy
-  //   const usersInAgeRange = users.filter(
-  //     (dater) => dater.age > min && dater.age < max,
-  //   );
-  //   setUsers(usersInAgeRange);
-  // };
 
   const genderFilter = (min, max) => {
-    // this doesnt make sense unless genders a number.
-    const usersInGenderRange = users.filter(
-      (dater) => dater.gender > min && dater.gender < max,
-    );
-    setUsers(usersInGenderRange);
+    const usersInGenderRange = users.filter((dater) => dater.gender >= min && dater.gender <= max);
+    setUsers([...usersInGenderRange]);
   };
+  
 
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
@@ -124,10 +116,11 @@ const Wheel = ({ user }) => {
           <Slider 
           orientation="vertical"
           min={0}
-          max={1}
-          step={0.1}
+          max={10}
+          step={1}
           value={sliderValue}
           onChange={handleSliderChange}
+          onChangeCommitted={(event, newValues) => genderFilter(newValues[0], newValues[1])}
            />
            
         </div>
