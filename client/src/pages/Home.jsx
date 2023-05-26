@@ -46,13 +46,8 @@ const Home = ({ user, handleLogout, setUser }) => {
       {/* <NewUser user={ user } setUser={ setUser }/> */}
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          { editing ? (<div>
-            <EditSpecific user={user} setUser={setUser} setEditing={ setEditing }/>
-          </div>) : (<div>
-            <UserProfile user={user} setUser={setUser} />
-            <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>
-          </div>)}
-          <Vibe />
+          <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
+          { editing ? null : <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>}
           <Icebreaker user={ user } />
         </Grid>
         <Grid item xs={6}>
