@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Material UI:
-import { Avatar, Box, TextField, Typography, Grid, Button } from '@mui/material';
+import { Avatar, Box, TextField, Typography, Grid, Button, Alert } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
@@ -30,7 +30,6 @@ const EditSpecific = ({ user, setUser, setEditing }) => {
       location: editedLocation,
       // bio: editedBio,
     };
-    console.log(newUserInfo);
 
     try {
       //Sending the object created in newUserInfo to the database to be stored
@@ -61,24 +60,29 @@ const EditSpecific = ({ user, setUser, setEditing }) => {
   //If the user clicks the edit button, show a text box where they can edit their name and submit it
   return (
     <div>
+      <Typography variant="h5" gutterBottom align="center">EDITING</Typography>
       <div>
         <Box component="form" sx={{'& .MuiTextField-root': { m: 1, width: '25ch' },}} noValidate autoComplete="off">
           <div>
-            <TextField required size="small" id="outlined-basic" label="Edit Name" defaultValue={user.name} onChange={(event) => setEditedName(event.target.value)} />
+            <TextField required size="small" id="outlined-basic" label="Edit Name" value={ editedName } onChange={(event) => setEditedName(event.target.value)} />
+            { editedName === user.name ? null : <DeleteForeverRoundedIcon size="large" onClick={ () => setEditedName(user.name) }/>}
           </div>
         </Box>
         <Box component="form" sx={{'& .MuiTextField-root': { m: 1, width: '25ch' },}} noValidate autoComplete="off">
           <div>
-            <TextField required size="small" id="outlined-basic" label="Edit Username" defaultValue={user.username} onChange={(event) => setEditedUsername(event.target.value)} />
+            <TextField required size="small" id="outlined-basic" label="Edit Username" value={ editedUsername } onChange={(event) => setEditedUsername(event.target.value)} />
+            { editedUsername === user.username ? null : <DeleteForeverRoundedIcon size="large" onClick={ () => setEditedUsername(user.username) }/>}
           </div>
         </Box>
         <Box component="form" sx={{'& .MuiTextField-root': { m: 1, width: '25ch' },}} noValidate autoComplete="off">
           <div>
-            <TextField required size="small" id="outlined-basic" label="Edit Location" defaultValue={user.location} onChange={(event) => setEditedLocation(event.target.value)} />
+            <TextField required size="small" id="outlined-basic" label="Edit Location" value={ editedLocation } onChange={(event) => setEditedLocation(event.target.value)} />
+            { editedLocation === user.location ? null : <DeleteForeverRoundedIcon size="large" onClick={ () => setEditedLocation(user.location) }/>}
+            { editedLocation === user.location ? null : <Alert severity="warning">You better be spelling that city name correctly!</Alert>}
           </div>
         </Box>
       </div>
-      <Button variant="contained" onClick={ submitNewUserInfo }>Submit</Button>
+      <Button variant="outlined" color="secondary" size="medium" onClick={ submitNewUserInfo }>Save Profile</Button>
       <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
     </div>
   );

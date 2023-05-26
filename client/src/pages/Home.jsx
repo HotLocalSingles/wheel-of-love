@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Grid } from '@mui/material';
 import UserProfile from '../components/UserProfile.jsx';
-import EditUserProfile from '../components/EditUserProfile.jsx';
+import EditSpecific from '../components/EditSpecific.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
 import MatchSelect from '../Old Components/MatchSelect.jsx';
@@ -47,8 +47,7 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           { editing ? (<div>
-            <EditUserProfile user={user} setUser={setUser} setEditing={ setEditing }/>
-            <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(false) }>Save Profile</Button>
+            <EditSpecific user={user} setUser={setUser} setEditing={ setEditing }/>
           </div>) : (<div>
             <UserProfile user={user} setUser={setUser} />
             <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>
