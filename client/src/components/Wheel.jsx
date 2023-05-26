@@ -4,11 +4,11 @@ import Chat from '../components/Chat.jsx';
 import { Checkbox, Button, Box, Typography } from '@mui/material';
 
 const Wheel = ({ user, socket }) => {
-  const thatUser = user;
-  // State for the list of users, selected user, rotation angle
+
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [chatStarted, setChatStarted] = useState(false);
   const [maleChecked, setMaleChecked] = useState(true);
@@ -36,35 +36,40 @@ const Wheel = ({ user, socket }) => {
       console.error('Error fetching all users on client side wheel:', error);
     }
   };
-  
-  
+
   // use effect saves us from rerendering loop from fetchUsers
   useEffect(() => {
     fetchUsers();
   }, []);
-  
-  // Use effect for filtering users and setting the initial filtered users
-useEffect(() => {
-  genderFilter();
-}, [users, maleChecked, femaleChecked, queerChecked]);
 
-  // For MUI checkboxes
-  // * So this also filters out the self and users who dont share the self's location. *
+  // Use effect for filtering users and setting the initial filtered users
+  useEffect(() => {
+    genderFilter();
+  }, [users, selectedUsers, maleChecked, femaleChecked, queerChecked]);
+
+  // For MUI checkboxes/ filtering
+  // * So this also  filters out the self, users who dont share the self's location, and users the wheel has chosen (this session) *
   const genderFilter = () => {
-    const filteredUsers = users.filter((dater) => {
+    const genderFilteredUsers = users.filter((dater) => {
       const isGenderMatched =
         (maleChecked && dater.gender === 'male') ||
         (femaleChecked && dater.gender === 'female') ||
         (queerChecked && dater.gender === 'queer');
       const isInUserLocation = dater.location === user.location;
       const isNotCurrentUser = dater.id !== user.id;
-      
-      return isGenderMatched && isInUserLocation && isNotCurrentUser;
+      const isNotSelectedUser = !selectedUsers.find(
+        (selectedUser) => selectedUser.id === dater.id,
+      );
+      return (
+        isGenderMatched &&
+        isInUserLocation &&
+        isNotCurrentUser &&
+        isNotSelectedUser
+      );
     });
-  
-    setFilteredUsers(filteredUsers);
+
+    setFilteredUsers(genderFilteredUsers);
   };
-  
 
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
@@ -73,7 +78,6 @@ useEffect(() => {
   }, [filteredUsers.length]);
 
   const spinWheel = () => {
-    console.log(thatUser);
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / filteredUsers.length;
     const randomIndex = Math.floor(Math.random() * filteredUsers.length);
@@ -97,20 +101,38 @@ useEffect(() => {
       const closestIndex = userYCoordinates.indexOf(
         Math.min(...userYCoordinates),
       );
+
+      //THE WHEEL HAS CHOSEN
       const user = filteredUsers[closestIndex];
 
+      //sets the user the wheel chose. (for chatbox mostly)
       setSelectedUser(user);
+      //adds the chosen user to array of previously chosen users.
+      setSelectedUsers((prevSelectedUsers) => [...prevSelectedUsers, user]);
+
+      // update matches db with the chosen user(matched w/the logged in)
+      axios
+        .post(`/matches/:${user.userId}`, { userId: user.id })
+        .then((response) => {
+          console.log('Match added to the database');
+        })
+        .catch((error) => {
+          console.error('Error adding match to the database:', error);
+        });
 
       //Cynthia addition
       const shouldChat = window.confirm(
-        `Do you want to chat with ${user.name}? you are now connected to ${user.username}`,
+        `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
       );
       if (shouldChat) {
         setChatStarted(true);
-        socket.emit('private-chat', {senderId: thatUser.username, receiverId: selectedUser.username, room: 'chat room'});
+        socket.emit('private-chat', {
+          senderId: user.username,
+          receiverId: selectedUser.username,
+          room: 'chat room',
+        });
       }
     }, rotationDuration);
-  
   };
 
   return (
@@ -137,7 +159,7 @@ useEffect(() => {
               <Checkbox
                 checked={maleChecked}
                 onChange={() => setMaleChecked((prevState) => !prevState)}
-                color='primary' // Set the color to "primary"
+                color='default' // Set the color to "primary"
               />
               <Typography variant='body1'>Male</Typography>
             </Box>
@@ -166,7 +188,7 @@ useEffect(() => {
           className='wheelContainer'
           style={{
             // Wheel Container
-            backgroundColor: 'lightblue',
+            backgroundColor: 'lightgray',
             position: 'relative',
             width: '100%',
             height: '100%',
@@ -178,7 +200,7 @@ useEffect(() => {
             className='wheel'
             style={{
               // Actual wheel
-              backgroundColor: 'lightgreen',
+              backgroundColor: 'lightpink',
               borderRadius: '50%',
               position: 'absolute',
               width: '95%',
