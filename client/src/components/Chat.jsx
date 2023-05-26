@@ -33,7 +33,7 @@ const Chat = ({ initialUser, selectedUser }) => {
     return () => {
       socket.disconnect('GoodBye');
     };
-  }, [messages]);
+  }, []);
 
 
   //listChatMessages will display all the messages in the state array 'messages'
@@ -42,7 +42,7 @@ const Chat = ({ initialUser, selectedUser }) => {
   const listChatMessages = messages.map((messageObj, index) => {
     return (
       <ListItem key={index}>
-        <ListItemText primary={`${nickname}: ${messageObj.message}`} />
+        <ListItemText primary={`${messageObj.nickname}: ${messageObj.message}`} />
       </ListItem>
     );
   });
@@ -53,6 +53,7 @@ const Chat = ({ initialUser, selectedUser }) => {
     if (socket && nickname && message && selectedUser) {
       //create a new message object
       const newMessage = {
+        nickname: nickname,
         senderId: initialUser.username,
         receiverId: selectedUser.username,
         message: message,

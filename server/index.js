@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
   });
 
   //to broadcast message just to one user and not to sender
-  socket.on('private-chat-message', ({ senderId, receiverId, message, room }) => {
+  socket.on('private-chat-message', ({ nickname, senderId, receiverId, message, room }) => {
     //emit the message to the specified person
     const receiverSocketId = connectedUsers.get(receiverId);
     if (receiverSocketId) {

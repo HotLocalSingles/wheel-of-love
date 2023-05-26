@@ -1,5 +1,6 @@
-const MessageObj = (senderId, receiverId, message, room) => {
+const MessageObj = (nickname, senderId, receiverId, message, room) => {
   return {
+    nickname,
     senderId,
     receiverId,
     message,
