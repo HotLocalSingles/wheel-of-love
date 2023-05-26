@@ -22,6 +22,7 @@ const users = require('../server/routes/userData');
 const vibe = require('../server/routes/vibeRoute.js');
 const icebreaker = require('../server/routes/icebreakerRoute.js');
 const conversations = require('../server/routes/messages.js');
+const matchRouter = require('../server/routes/matchData.js');
 
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
@@ -53,6 +54,7 @@ app.use('/', vibe);
 app.use('/', icebreaker);
 app.use('/chats/conversations', conversations);
 
+app.use('/', matchRouter);
 
 //building socket.io logic
 //event emitter to check for connection
