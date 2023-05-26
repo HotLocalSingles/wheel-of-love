@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Stack, TextField, Slider, Box, FormControlLabel, FormGroup, Radio, Typography, Button } from '@mui/material';
 
 
-const NewUser = () => {
+const NewUser = ({ user, setUser }) => {
   const [selectedGender, setSelectedGender] = useState(null);
   const [username, setUsername] = useState(null);
   const [age, setAge] = useState(18);
@@ -12,6 +12,7 @@ const NewUser = () => {
   const [editUsername, setEditUsername] = useState(true);
   const [editGender, setEditGender] = useState(true);
   const [confirmedAge, setConfirmedAge] = useState(false);
+  const [allSaved, setAllSaved] = useState(false);
 
   const handleGenderChange = (event) => {
     setSelectedGender(event.target.value);
@@ -25,16 +26,58 @@ const NewUser = () => {
     setBio(event.target.value);
   };
 
+  const handleGenderSave = () => {
+    if (selectedGender !== null) {
+      setEditGender(false);
+    }
+  };
 
-  // const areAllSaved = () => {
-  //   if(1) {
-  //     console.log('All are saved');
-  //   }
-  // };
+  const handleBioSave = () => {
+    if (bio !== '') {
+      setShowBio(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   areAllSaved();
-  // }, []);
+  const handleUsernameSave = () => {
+    if (username !== null) {
+      setEditUsername(false);
+    }
+  };
+
+
+  const areAllSaved = () => {
+    if (!showBio && !editUsername && !editGender && confirmedAge) {
+      setAllSaved(true);
+    }
+  };
+
+  const submitNewUserInfo = async () => {
+
+    const newUserInfo = {
+      username: username,
+      gender: selectedGender,
+      age: age,
+      bio: bio
+    };
+
+    try {
+      const response = await axios.put(`/users/edit/${ user.id}`, newUserInfo);
+
+      if (!response.data) {
+        throw response;
+      }
+      //THIS IS UPDATING THE APP STATE, PASSED DOWN FROM PARENT
+      setUser(response.data);
+
+    } catch (error) {
+      console.log('Client Side Update of User Name Did Not Work', error);
+    }
+
+  };
+
+  useEffect(() => {
+    areAllSaved();
+  }, [showBio, editUsername, editGender, confirmedAge]);
 
   return (
     <div>
@@ -45,7 +88,7 @@ const NewUser = () => {
         <div>
           <Typography id="username-textbox" gutterBottom>Username:</Typography>
           <TextField required size="small" id="outlined-basic" label="Username" onChange={ (event) => setUsername(event.target.value) } />
-          <Button variant="contained" onClick={ () => setEditUsername(false) }>Save</Button>
+          <Button variant="contained" onClick={ handleUsernameSave }>Save</Button>
         </div>
       ) : (
         <div>
@@ -62,7 +105,7 @@ const NewUser = () => {
             <FormControlLabel value="Female" control={ <Radio /> } label="Female" checked={ selectedGender === 'Female' } onChange={ handleGenderChange } />
             <FormControlLabel value="Queer" control={ <Radio /> } label="Queer" checked={ selectedGender === 'Queer' } onChange={ handleGenderChange } />
           </FormGroup>
-          <Button variant="contained" onClick={ () => setEditGender(false) }>Set Gender</Button>
+          <Button variant="contained" onClick={ handleGenderSave }>Set Gender</Button>
         </div>
       ) : (
         <div>
@@ -93,11 +136,16 @@ const NewUser = () => {
         </div>
       ) }
       { showBio && (
-        <Button variant="contained" onClick={ () => setShowBio(false) }>Set Bio</Button>
+        <Button variant="contained" onClick={ handleBioSave }>Set Bio</Button>
       ) }
       <div>
-
       </div>
+      {allSaved ? (
+        <div>
+          <Typography id="confirm" gutterBottom> Ready to Submit? </Typography>
+          <Button variant="contained" onClick={ submitNewUserInfo }>Submit</Button>
+        </div>
+      ) : null}
     </div>
   );
 };

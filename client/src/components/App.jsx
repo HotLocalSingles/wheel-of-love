@@ -100,7 +100,7 @@ const App = () => {
         />
         <Route path="/matchPage/:matchName" element={<MatchPage />} />
         <Route path="/login" element={<Login login={ login } />} />
-        <Route path="/newUser" element={<NewUser user={ user }/>} />
+        <Route path="/newUser" element={<NewUser user={ user } setUser={ setUser }/>} />
 
       </Routes>
     </div>
