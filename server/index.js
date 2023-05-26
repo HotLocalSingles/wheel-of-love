@@ -9,7 +9,6 @@ const session = require('express-session');
 const path = require('path');
 //import Messages model
 const { Messages } = require('./db/models');
-// const { senderUsername, receiverUsername } = Messages;
 
 //Importing passport for auth
 //Also importing the initializePassport function created in auth
@@ -27,7 +26,8 @@ const matchRouter = require('../server/routes/matchData.js');
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
 
-//Creating socket.io server instance that is attaching the server instance and enabling Cross-Origin Resource Sharing for the WebSocket Server
+//Creating socket.io server instance that is attaching the server instance
+//and enabling Cross-Origin Resource Sharing for the WebSocket Server
 const io = require('socket.io')(server, { cors: { origin: '*' } });
 
 //Parses incoming JSON requests
@@ -42,7 +42,8 @@ app.use(session({
 }));
 
 
-//Initialize Passport middleware and have the express server use it, makes it so the user doesn't have to keep logging in to authenticate requests
+//Initialize Passport middleware and have the express server use it,
+//makes it so the user doesn't have to keep logging in to authenticate requests
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -52,7 +53,7 @@ app.use("/auth", googleRouter);
 app.use('/users', users);
 app.use('/', vibe);
 app.use('/', icebreaker);
-app.use('/chats/conversations', conversations);
+app.use('/', conversations);
 
 app.use('/', matchRouter);
 

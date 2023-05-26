@@ -5,20 +5,30 @@ const { Messages } = require('../db/models');
 
 
 router.get('/chats/conversations', async (req, res) => {
+  //fetch the user from the session
+  const currentUser = req.user;
 
-  const groupByRoom = (messages) => {
-    return messages.reduce((rooms, message) => {
-      const roomName = message.room;
-      //if the room already exists, append the message to it
-      if (!rooms[roomName]) {
-        rooms[roomName] = [];
-        //else create a new array with the message
+  //if there's no user logged in
+  if (!currentUser) {
+    res.status(401).send("Please log in");
+    return;
+  }
+
+  const groupByPartnerUsername = (messages, currentUser) => {
+    return messages.reduce((partners, message) => {
+      const partnerUsername = message.senderId === currentUser.username ? message.receiverId : message.senderId;
+  
+      //if the partner already exists, append the message to it
+      if (partners[partnerUsername]) {
+        partners[partnerUsername].push(message);
       } else {
-        rooms[roomName].push(message);
+        //else create a new array with the message
+        partners[partnerUsername] = [message];
       }
-      return rooms;
+      return partners;
     }, {});
   };
+  
 
 
   try {
@@ -29,23 +39,15 @@ router.get('/chats/conversations', async (req, res) => {
       }
     });
 
-    //group messages by 'room'
-    const messagesByRoom = groupByRoom(userMessages);
+    //group messages by match
+    const messagesByPartner = groupByPartnerUsername(userMessages, currentUser);
 
-    //for each group, find the message with the latest timestamp.
-    const conversationsWithLatestMessage = await Promise.all(
-      Object.entries(messagesByRoom).map(async ([room, messages]) => {
-        //find the latest message
-        const latestMessage = messages.reduce((latest, message) =>
-          latest.createdAt > message.createdAt ? latest : message, messages[0]
-        );
-        //return conversation with latest message
-        return { room, latestMessage };
-      })
-    );
-
-    //return this data
-    res.json(conversationsWithLatestMessage);
+    //create an array of conversations
+    const conversations = Object.entries(messagesByPartner).map(([partner, messages]) => {
+      return { partner, messages };
+    });
+    //return the array
+    res.json(conversations);
   } catch (err) {
     res.status(500).send(err);
   }

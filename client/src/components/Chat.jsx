@@ -64,7 +64,7 @@ const Chat = ({ initialUser, selectedUser }) => {
         room: room
       };
       //emit the message with socket
-      console.log(newMessage);
+      // console.log(newMessage);
       socket.emit('private-chat-message', newMessage);
       //update the state with the new message
       setMessages([...messages, newMessage]);
