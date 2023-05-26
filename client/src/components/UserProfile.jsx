@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Vibe from './Vibe.jsx';
 
 // Material UI:
 import { Avatar, Box, TextField, Typography, Grid } from '@mui/material';
@@ -70,11 +71,12 @@ const UserProfile = ({ user, setUser }) => {
               <Grid container spacing={1}>
                 <Grid item xs={6}>
                   <Typography id="gender" gutterBottom>Gender: {user.gender}</Typography>
+                  <Typography id="age" gutterBottom>Age: {user.age}</Typography>
+                  <Typography id="vibe" gutterBottom><Vibe bio={user.bio} dbVibe={user.vibe}/></Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography id="age" gutterBottom>Age: {user.age}</Typography>
+                  <Typography id="bio" gutterBottom>Bio: {user.bio}</Typography>
                 </Grid>
-                <Typography id="bio" gutterBottom> Bio: {user.bio}</Typography>
               </Grid>
             </Grid>
           </Grid>
