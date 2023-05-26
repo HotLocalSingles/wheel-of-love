@@ -3,7 +3,7 @@ import axios from 'axios';
 import Chat from '../components/Chat.jsx';
 import { FormControlLabel, Checkbox, Button } from '@mui/material';
 
-const Wheel = ({ user }) => {
+const Wheel = ({ user, socket }) => {
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -73,8 +73,10 @@ const Wheel = ({ user }) => {
       );
       if (shouldChat) {
         setChatStarted(true);
+        socket.emit('private-chat', {senderId: user.username, receiverId: selectedUser.username, room: 'chat room'});
       }
     }, rotationDuration);
+  
   };
 
   return (

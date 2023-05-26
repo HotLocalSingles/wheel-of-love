@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ChatsPage = () => {
   const navigate = useNavigate();
-  navigate('/chats/:username');
+  navigate('/chats/conversations');
 
   return (
     <div>

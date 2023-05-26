@@ -1,11 +1,9 @@
-import React from 'react';
-
-const MessageObj = (user, message, senderUsername, receiverUsername) => {
+const MessageObj = (senderId, receiverId, message, room) => {
   return {
-    user,
+    senderId,
+    receiverId,
     message,
-    senderUsername,
-    receiverUsername
+    room
   };
 };
 

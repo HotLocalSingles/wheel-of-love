@@ -32,13 +32,16 @@ const Messages = sequelize.define('Messages', {
     primaryKey: true,
     autoIncrement: true,
   },
-  senderUsername: {
+  senderId: {
     type: DataTypes.STRING
   },
-  receiverUsername: {
+  receiverId: {
     type: DataTypes.STRING
   },
   message: {
+    type: DataTypes.STRING
+  },
+  room: {
     type: DataTypes.STRING
   }
 });

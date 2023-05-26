@@ -1,45 +1,73 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, Paper } from '@mui/material';
-import MessageObj from './MessageObj.jsx';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
-
 const Chat = ({ initialUser, selectedUser }) => {
+  //room
+  const room = 'randomRoomForNow';
   //states for user and messages
-  // const [user, setUser] = useState(initialUser ? initialUser.name : '');
+  // const [selectUser, setSelectUser] = useState(initialUser ? initialUser.name : '');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [nickname, setNickname] = useState(initialUser.name);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    //create the socket instance and connect to the server
+    const socket = io('http://localhost:3000');
+    setSocket(socket);
+    //join the chat room
+    socket.emit('private-chat', {
+      senderId: initialUser.username,
+      receiverId: selectedUser.username,
+      room: room
+    });
+
+
+    //listen for chat-message event
+    socket.on('private-chat-message', (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    //disconnect the socket when the component unmounts
+    return () => {
+      socket.disconnect('GoodBye');
+    };
+  }, [messages]);
 
 
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
-    // console.log(messages);
     return (
       <ListItem key={index}>
-        <ListItemText primary={`${messageObj.user}: ${messageObj.message}`} />
+        <ListItemText primary={`${nickname}: ${messageObj.message}`} />
       </ListItem>
     );
   });
 
+
   const sendMessage = () => {
-    // Check if nickname and message are not empty
-    if (nickname && message) {
-      // Create a new message object
-      const newMessage = MessageObj(nickname, message, initialUser.username, selectedUser.username);
-      // Emit the message with socket
+    //check if nickname and message are not empty
+    if (socket && nickname && message && selectedUser) {
+      //create a new message object
+      const newMessage = {
+        senderId: initialUser.username,
+        receiverId: selectedUser.username,
+        message: message,
+        room: room
+      };
+      //emit the message with socket
       console.log(newMessage);
-      socket.emit('chat-message', newMessage);
-      // console.log(nickname, message, selectedUser.username);
-      // Update the state with the new message
+      socket.emit('private-chat-message', newMessage);
+      //update the state with the new message
       setMessages([...messages, newMessage]);
-      // Clear the message input
+      //clear the message input
       setMessage('');
     }
   };
+
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -47,23 +75,6 @@ const Chat = ({ initialUser, selectedUser }) => {
       sendMessage();
     }
   };
-
-  //create the use effect to join two users
-  useEffect(() => {
-    //on join-chat, connect the usernames
-    socket.emit('join-chat', (initialUser.username, selectedUser.username));
-  }, [initialUser.username]);
-
-  useEffect(() => {
-
-    socket.on('chat-message', (incomingMessage) => {
-      console.log('chat received', incomingMessage);
-      setMessages((prevMessages) => [...prevMessages, incomingMessage]);
-    });
-    return () => {
-      socket.off('GoodBye');
-    };
-  }, []);
 
   const handleNicknameChange = (event) => {
     setNickname(event.target.value);

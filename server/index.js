@@ -9,7 +9,7 @@ const session = require('express-session');
 const path = require('path');
 //import Messages model
 const { Messages } = require('./db/models');
-const { senderUsername, receiverUsername } = Messages;
+// const { senderUsername, receiverUsername } = Messages;
 
 //Importing passport for auth
 //Also importing the initializePassport function created in auth
@@ -21,7 +21,7 @@ const googleRouter = require('./routes/google');
 const users = require('../server/routes/userData');
 const vibe = require('../server/routes/vibeRoute.js');
 const icebreaker = require('../server/routes/icebreakerRoute.js');
-const messages = require('../server/routes/messages.js');
+const conversations = require('../server/routes/messages.js');
 
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
@@ -51,42 +51,50 @@ app.use("/auth", googleRouter);
 app.use('/users', users);
 app.use('/', vibe);
 app.use('/', icebreaker);
-app.use('/chats/:username', messages);
+app.use('/chats/conversations', conversations);
 
 
 //building socket.io logic
 //event emitter to check for connection
 //create new socket/user on connection
-
+//connectedUser will store the socket ids
+const connectedUsers = new Map();
 io.on('connection', (socket) => {
-  const { senderUsername, receiverUsername, message } = Messages;
-  //socket event creation
-  console.log('user connected. socket id: ', socket.id);
-  //socket join method to add 2 users to a room to chat
-  socket.on('join-chat', ( senderUsername, receiverUsername ) => {
-    socket.join('chat-room');
+  console.log('User connected. Socket ID:', socket.id);
+  //handle private chat
+  socket.on('private-chat', async ({ senderId, receiverId, room }) => {
+    //store the socket ids in the connectedUsers map
+    connectedUsers.set(senderId, socket.id);
+    connectedUsers.set(receiverId, socket.id);
+    socket.join(room);
+    console.log('Private chat connected on server');
+    console.log(`User with ID ${socket.id} joined room ${room}`);
   });
 
   //to broadcast message just to one user and not to sender
-  socket.on('chat-message', ({ user, senderUsername, receiverUsername, message }) => {
-    // Emit the message to the specified room
-    socket.to('chat-room').emit('chat-message', { user, message });
+  socket.on('private-chat-message', ({ senderId, receiverId, message, room }) => {
+    //emit the message to the specified person
+    const receiverSocketId = connectedUsers.get(receiverId);
+    if (receiverSocketId) {
+      socket.to(receiverSocketId).emit('private-chat-message', { senderId, message });
+      console.log('message from other: ', message);
+    }
     //create a new message instance
     Messages.create({
-      senderUsername: senderUsername,
-      receiverUsername: receiverUsername,
-      message: message
+      senderId: senderId,
+      receiverId: receiverId,
+      message: message,
+      room: room
     })
-      .then(() => console.log('Message saved successfully.', senderUsername, message, receiverUsername))
+      .then(() => console.log('Message saved successfully.', senderId, message, receiverId, room))
       .catch(err => console.log(err));
-    // socket.broadcast.emit('chat-message', message.message);
   });
-  //when the socket/user disconnects
+
+  //handle disconnect event
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 });
-
 
 //Start server
 const PORT = process.env.PORT || 3000;
@@ -99,3 +107,4 @@ server.listen(PORT, () => {
 module.exports = {
   app,
 };
+
