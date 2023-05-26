@@ -36,18 +36,19 @@ const Wheel = ({ user }) => {
     }
   };
   
-  // const usersThatArentMe = users.filter((e) => e.id !== user.id);
-  // const usersInMyLoc = usersThatArentMe.filter((e) => e.location === user.location);
-  // setFilteredUsers(usersInMyLoc);
   
-  //use effect saves us from rerendering loop from fetchUsers
+  // use effect saves us from rerendering loop from fetchUsers
   useEffect(() => {
     fetchUsers();
-    genderFilter();
-  }, [maleChecked, femaleChecked, queerChecked]);
+  }, []);
   
+  // Use effect for filtering users and setting the initial filtered users
+useEffect(() => {
+  genderFilter();
+}, [users, maleChecked, femaleChecked, queerChecked]);
 
-  //For MUI chcekboxes
+  // For MUI checkboxes
+  // * So this also filters out the self and users who dont share the self's location. *
   const genderFilter = () => {
     const filteredUsers = users.filter((dater) => {
       const isGenderMatched =
