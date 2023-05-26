@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Chat from '../components/Chat.jsx';
-import { Slider, Button, Box } from '@mui/material';
+import { Checkbox, Button, Box, Typography } from '@mui/material';
 
 const Wheel = ({ user }) => {
   // State for the list of users, selected user, rotation angle
@@ -10,7 +10,9 @@ const Wheel = ({ user }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [rotationAngle, setRotationAngle] = useState(0);
   const [chatStarted, setChatStarted] = useState(false);
-  const [sliderValue, setSliderValue] = useState([0, 1]);
+  const [maleChecked, setMaleChecked] = useState(true);
+  const [femaleChecked, setFemaleChecked] = useState(true);
+  const [queerChecked, setQueerChecked] = useState(true);
 
   //useRef hook to get the positional data of user divs after the wheel spins, in order to determine who was selected.
   const userRefs = useRef([]);
@@ -28,43 +30,52 @@ const Wheel = ({ user }) => {
       //adding filtering (by location) directly, because I want it done automagically.
       // currently checking if i can filter by ID since users dont yet have properties.
       //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
-      // something like: const usersInLocation = users.filter(dater => dater.loc === selectedUser.loc);
-      const usersThatArentMe = insertUsers.filter((e) => e.id !== user.id && e.location === user.location);
-      // const usersInMyLoc = usersThatArentMe.filter((e) => e.location === user.location);
-      setUsers(usersThatArentMe);
-      //  setUsers(insertUsers);
+      setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
     }
   };
-
-  //use effect saves us from rerendering loop from fetchUsers.
+  
+  // const usersThatArentMe = users.filter((e) => e.id !== user.id);
+  // const usersInMyLoc = usersThatArentMe.filter((e) => e.location === user.location);
+  // setFilteredUsers(usersInMyLoc);
+  
+  //use effect saves us from rerendering loop from fetchUsers
   useEffect(() => {
     fetchUsers();
-  }, []);
+    genderFilter();
+  }, [maleChecked, femaleChecked, queerChecked]);
+  
 
-  //For MUI slider
-  const handleSliderChange = (event, newValues) => {
-    setSliderValue(newValues);
-    genderFilter(newValues[0], newValues[1])
+  //For MUI chcekboxes
+  const genderFilter = () => {
+    const filteredUsers = users.filter((dater) => {
+      const isGenderMatched =
+        (maleChecked && dater.gender === 'male') ||
+        (femaleChecked && dater.gender === 'female') ||
+        (queerChecked && dater.gender === 'queer');
+      const isInUserLocation = dater.location === user.location;
+      const isNotCurrentUser = dater.id !== user.id;
+      
+      return isGenderMatched && isInUserLocation && isNotCurrentUser;
+    });
+  
+    setFilteredUsers(filteredUsers);
   };
+  
 
-  const genderFilter = (min, max) => {
-    const usersInGenderRange = users.filter((dater) => dater.gender >= min && dater.gender <= max);
-    setUsers([...usersInGenderRange]);
-  };
   
 
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
   useEffect(() => {
-    userRefs.current = userRefs.current.slice(0, users.length);
-  }, [users.length]);
+    userRefs.current = userRefs.current.slice(0, filteredUsers.length);
+  }, [filteredUsers.length]);
 
   const spinWheel = () => {
     // Calculate the rotation increment and update the rotation angle
-    const rotationIncrement = 360 / users.length;
-    const randomIndex = Math.floor(Math.random() * users.length);
+    const rotationIncrement = 360 / filteredUsers.length;
+    const randomIndex = Math.floor(Math.random() * filteredUsers.length);
 
     const targetRotationAngle = rotationIncrement * randomIndex;
 
@@ -85,7 +96,7 @@ const Wheel = ({ user }) => {
       const closestIndex = userYCoordinates.indexOf(
         Math.min(...userYCoordinates),
       );
-      const user = users[closestIndex];
+      const user = filteredUsers[closestIndex];
 
       setSelectedUser(user);
 
@@ -113,20 +124,43 @@ const Wheel = ({ user }) => {
 
       <div style={{ display: 'flex' }}>
         <div style={{ marginRight: '20px' }}>
-          <Slider 
-          orientation="vertical"
-          min={0}
-          max={10}
-          step={1}
-          value={sliderValue}
-          onChange={handleSliderChange}
-          onChangeCommitted={(event, newValues) => genderFilter(newValues[0], newValues[1])}
-           />
-           
+          <Box
+            display='flex'
+            flexDirection='column'
+            alignItems='flex-start'
+            marginRight='20px'
+          >
+            <Box display='flex' alignItems='center'>
+              <Checkbox
+                checked={maleChecked}
+                onChange={() => setMaleChecked((prevState) => !prevState)}
+                color='primary' // Set the color to "primary"
+              />
+              <Typography variant='body1'>Male</Typography>
+            </Box>
+            <Box display='flex' alignItems='center'>
+              <Checkbox
+                checked={femaleChecked}
+                onChange={() => setFemaleChecked((prevState) => !prevState)}
+                label='Female'
+                color='default'
+              />
+              <Typography variant='body1'>Female</Typography>
+            </Box>
+            <Box display='flex' alignItems='center'>
+              <Checkbox
+                checked={queerChecked}
+                onChange={() => setQueerChecked((prevState) => !prevState)}
+                label='Queer'
+                color='default'
+              />
+              <Typography variant='body1'>Queer</Typography>
+            </Box>
+          </Box>
         </div>
 
         <div
-         className="wheelContainer"
+          className='wheelContainer'
           style={{
             // Wheel Container
             backgroundColor: 'lightblue',
@@ -138,7 +172,7 @@ const Wheel = ({ user }) => {
           }}
         >
           <div
-            className="wheel"
+            className='wheel'
             style={{
               // Actual wheel
               backgroundColor: 'lightgreen',
@@ -152,9 +186,9 @@ const Wheel = ({ user }) => {
               transition: 'transform 1s',
             }}
           >
-            {users.map((user, index) => {
+            {filteredUsers.map((user, index) => {
               // Calculate the rotation angle of each user div
-              const userRotationAngle = index * (360 / users.length);
+              const userRotationAngle = index * (360 / filteredUsers.length);
 
               // Calculate the translation values to move the user divs vertically.
               const radius = 200; // Adjust this value to control the distance of names from the center of wheel.
