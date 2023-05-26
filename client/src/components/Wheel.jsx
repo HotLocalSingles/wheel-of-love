@@ -27,8 +27,8 @@ const Wheel = ({ user, socket }) => {
       }
       console.log('Backend call for all users:', insertUsers);
       //adding filtering (by location) directly, because I want it done automagically.
-      // currently checking if i can filter by ID since users dont yet have properties.
-      //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
+      // currently checking if i can filter by ID since users don't yet have properties.
+      //this could probably be done on backend, idk if that would mess anyone up, so its here for now.
       // something like: const usersInLocation = users.filter(dater => dater.loc === selectedUser.loc);
       const usersThatArentMe = insertUsers.filter((e) => e.id !== user.id && e.location === user.location);
       // const usersInMyLoc = usersThatArentMe.filter((e) => e.location === user.location);
@@ -47,7 +47,7 @@ const Wheel = ({ user, socket }) => {
   //For MUI slider
   const handleSliderChange = (event, newValues) => {
     setSliderValue(newValues);
-    genderFilter(newValues[0], newValues[1])
+    genderFilter(newValues[0], newValues[1]);
   };
 
   const genderFilter = (min, max) => {
@@ -63,7 +63,8 @@ const Wheel = ({ user, socket }) => {
   }, [users.length]);
 
   const spinWheel = () => {
-    console.log(thatUser);
+    console.log('thatUser', thatUser);
+
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / users.length;
     const randomIndex = Math.floor(Math.random() * users.length);
@@ -117,20 +118,19 @@ const Wheel = ({ user, socket }) => {
 
       <div style={{ display: 'flex' }}>
         <div style={{ marginRight: '20px' }}>
-          <Slider 
-          orientation="vertical"
-          min={0}
-          max={10}
-          step={1}
-          value={sliderValue}
-          onChange={handleSliderChange}
-          onChangeCommitted={(event, newValues) => genderFilter(newValues[0], newValues[1])}
-           />
-           
+          <Slider
+            orientation="vertical"
+            min={0}
+            max={10}
+            step={1}
+            value={sliderValue}
+            onChange={handleSliderChange}
+            onChangeCommitted={(event, newValues) => genderFilter(newValues[0], newValues[1])}
+          />
         </div>
 
         <div
-         className="wheelContainer"
+          className="wheelContainer"
           style={{
             // Wheel Container
             backgroundColor: 'lightblue',
