@@ -24,7 +24,6 @@ const Home = ({ user, handleLogout, setUser }) => {
 
   return (
     <div>
-      <h1>Home</h1>
       <UserProfile user={ user } setUser={ setUser }/>
       <Vibe />
       <Icebreaker user={ user } />
