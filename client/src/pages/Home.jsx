@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Grid } from '@mui/material';
 import UserProfile from '../components/UserProfile.jsx';
-import EditSpecific from '../components/EditSpecific.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
-import MatchSelect from '../Old Components/MatchSelect.jsx';
 // import Chat from '../components/Chat.jsx';
 import io from 'socket.io-client';
 import Matches from '../components/Matches.jsx';
