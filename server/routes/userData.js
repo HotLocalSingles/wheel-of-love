@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { User } = require('../db/models');
 
+
 //User for anything for an active user
 const verifySession = (req, res, next) => {
 
@@ -32,7 +33,7 @@ router.get('/', async (req, res) => {
 });
 
 //GET One User
-router.get('/:id', verifySession, async (req, res) => {
+router.get('/:id', async (req, res) => {
 
   const userId = req.params.id;
 
@@ -76,7 +77,7 @@ router.put('/:name', verifySession, async (req, res) => {
     res.status(200).send(user);
 
   } catch (error) {
-    res.status(500).send('Internal Server Error for finding user', error);
+    res.status(500).send(error);
   }
 });
 
@@ -143,6 +144,37 @@ router.delete('/:id', verifySession, async (req, res) => {
   }
 });
 
+//Edit User info when new user:
+router.put('/edit/:id', async (req, res) => {
+
+  const userId = req.params.id;
+  const newInfo = req.body;
+
+  console.log(userId, newInfo);
+
+  try {
+    const [nullReturn, updated] = await User.update(newInfo, {
+      where: { id: userId },
+      returning: true,
+      plain: true
+    });
+
+    if (!updated) {
+      return res.status(404).send('User not updated :(');
+    }
+
+    const user = await User.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(404).send('User not found :(');
+    }
+
+    res.status(200).send(user);
+
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 
 

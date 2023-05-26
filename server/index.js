@@ -7,7 +7,9 @@ require('dotenv').config();
 const session = require('express-session');
 //Importing path so that we can use the static files from client side
 const path = require('path');
-
+//import Messages model
+const { Messages } = require('./db/models');
+// const { senderUsername, receiverUsername } = Messages;
 
 //Importing passport for auth
 //Also importing the initializePassport function created in auth
@@ -19,6 +21,8 @@ const googleRouter = require('./routes/google');
 const users = require('../server/routes/userData');
 const vibe = require('../server/routes/vibeRoute.js');
 const icebreaker = require('../server/routes/icebreakerRoute.js');
+const conversations = require('../server/routes/messages.js');
+const matchRouter = require('../server/routes/matchData.js');
 
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
@@ -48,29 +52,51 @@ app.use("/auth", googleRouter);
 app.use('/users', users);
 app.use('/', vibe);
 app.use('/', icebreaker);
+app.use('/chats/conversations', conversations);
+
+app.use('/', matchRouter);
 
 //building socket.io logic
 //event emitter to check for connection
 //create new socket/user on connection
-
+//connectedUser will store the socket ids
+const connectedUsers = new Map();
 io.on('connection', (socket) => {
-  //socket event creation
-  console.log('user connected. socket id: ', socket.id);
-  //socket join method to add 2 users to a room to chat
-  socket.join('room');
-  //io.to('room').emit('user-joined');
+  console.log('User connected. Socket ID:', socket.id);
+  //handle private chat
+  socket.on('private-chat', async ({ senderId, receiverId, room }) => {
+    //store the socket ids in the connectedUsers map
+    connectedUsers.set(senderId, socket.id);
+    connectedUsers.set(receiverId, socket.id);
+    socket.join(room);
+    console.log('Private chat connected on server');
+    console.log(`User with ID ${socket.id} joined room ${room}`);
+  });
 
   //to broadcast message just to one user and not to sender
-  socket.on('chat-message', (message) => {
-    console.log('server got the message', message);
-    socket.broadcast.emit('chat-message', message);
+  socket.on('private-chat-message', ({ nickname, senderId, receiverId, message, room }) => {
+    //emit the message to the specified person
+    const receiverSocketId = connectedUsers.get(receiverId);
+    if (receiverSocketId) {
+      socket.to(receiverSocketId).emit('private-chat-message', { nickname, message });
+      console.log('message from other: ', message);
+    }
+    //create a new message instance
+    Messages.create({
+      senderId: senderId,
+      receiverId: receiverId,
+      message: message,
+      room: room
+    })
+      .then(() => console.log('Message saved successfully.', senderId, message, receiverId, room))
+      .catch(err => console.log(err));
   });
-  //when the socket/user disconnects
+
+  //handle disconnect event
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 });
-
 
 //Start server
 const PORT = process.env.PORT || 3000;
@@ -83,3 +109,4 @@ server.listen(PORT, () => {
 module.exports = {
   app,
 };
+

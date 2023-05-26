@@ -5,6 +5,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 //Importing the models created for the sequelize database
 const { User } = require('./db/models');
+const { Messages } = require('./db/models');
 
 //Allowing the use of the secret ids in the .env file
 require('dotenv').config();
@@ -27,7 +28,7 @@ passport.use(
           where: { googleId: profile.id },
           defaults: {
             googleId: profile.id,
-            username: profile.id,
+            username: null,
             name: profile.name.givenName,
             picture: profile.photos[0].value,
           } // Set the default values for the new record

@@ -3,7 +3,8 @@ import axios from 'axios';
 import Chat from '../components/Chat.jsx';
 import { Checkbox, Button, Box, Typography } from '@mui/material';
 
-const Wheel = ({ user }) => {
+const Wheel = ({ user, socket }) => {
+  const thatUser = user;
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -72,6 +73,7 @@ useEffect(() => {
   }, [filteredUsers.length]);
 
   const spinWheel = () => {
+    console.log(thatUser);
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / filteredUsers.length;
     const randomIndex = Math.floor(Math.random() * filteredUsers.length);
@@ -101,12 +103,14 @@ useEffect(() => {
 
       //Cynthia addition
       const shouldChat = window.confirm(
-        `Do you want to chat with ${user.name}?`,
+        `Do you want to chat with ${user.name}? you are now connected to ${user.username}`,
       );
       if (shouldChat) {
         setChatStarted(true);
+        socket.emit('private-chat', {senderId: thatUser.username, receiverId: selectedUser.username, room: 'chat room'});
       }
     }, rotationDuration);
+  
   };
 
   return (

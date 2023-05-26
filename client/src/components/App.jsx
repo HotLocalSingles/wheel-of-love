@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
+import Navbar from './NavBar.jsx';
+
+
 //Page Imports
 import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
 import MatchPage from '../pages/MatchPage.jsx';
 import NewUser from '../pages/NewUser.jsx';
+import ChatsPage from '../pages/ChatsPage.jsx';
 
 const App = () => {
 
@@ -100,7 +104,7 @@ const App = () => {
         />
         <Route path="/matchPage/:matchName" element={<MatchPage />} />
         <Route path="/login" element={<Login login={ login } />} />
-        <Route path="/newUser" element={<NewUser user={ user }/>} />
+        <Route path="/newUser" element={<NewUser user={ user } setUser={ setUser }/>} />
 
       </Routes>
     </div>
