@@ -1,16 +1,39 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, Paper } from '@mui/material';
-import MessageObj from './model/MessageObj.js';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
-
-const Chat = ({ initialUser }) => {
+const Chat = ({ initialUser, selectedUser }) => {
+  //room
+  const room = 'chat room';
   //states for user and messages
-  // const [user, setUser] = useState(initialUser ? initialUser : '');
+  // const [selectUser, setSelectUser] = useState(initialUser ? initialUser.name : '');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [nickname, setNickname] = useState(initialUser);
+  const [nickname, setNickname] = useState(initialUser.name);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    //create the socket instance and connect to the server
+    const socket = io('http://localhost:3000');
+    setSocket(socket);
+    //join the chat room
+    socket.emit('private-chat', {
+      senderId: initialUser.username,
+      receiverId: selectedUser.username,
+      room: room
+    });
+
+
+    //listen for chat-message event
+    socket.on('private-chat-message', (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    //disconnect the socket when the component unmounts
+    return () => {
+      socket.disconnect('GoodBye');
+    };
+  }, []);
 
 
   //listChatMessages will display all the messages in the state array 'messages'
@@ -19,25 +42,33 @@ const Chat = ({ initialUser }) => {
   const listChatMessages = messages.map((messageObj, index) => {
     return (
       <ListItem key={index}>
-        <ListItemText primary={`${messageObj.user}: ${messageObj.message}`} />
+        <ListItemText primary={`${messageObj.nickname}: ${messageObj.message}`} />
       </ListItem>
     );
   });
 
+
   const sendMessage = () => {
-    // Check if nickname and message are not empty
-    if (nickname && message) {
-      // Create a new message object
-      const newMessage = new MessageObj(nickname, message);
-      // Emit the message with socket
-      socket.emit('chat-message', newMessage);
-      console.log(message, nickname);
-      // Update the state with the new message
+    //check if nickname and message are not empty
+    if (socket && nickname && message && selectedUser) {
+      //create a new message object
+      const newMessage = {
+        nickname: nickname,
+        senderId: initialUser.username,
+        receiverId: selectedUser.username,
+        message: message,
+        room: room
+      };
+      //emit the message with socket
+      console.log(newMessage);
+      socket.emit('private-chat-message', newMessage);
+      //update the state with the new message
       setMessages([...messages, newMessage]);
-      // Clear the message input
+      //clear the message input
       setMessage('');
     }
   };
+
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -46,25 +77,14 @@ const Chat = ({ initialUser }) => {
     }
   };
 
-  useEffect(() => {
-
-    socket.on('chat-message', (incomingMessage) => {
-      console.log('chat received');
-      setMessages((prevMessages) => [...prevMessages, incomingMessage]);
-    });
-    return () => {
-      socket.off('GoodBye');
-    };
-  }, []);
-
   const handleNicknameChange = (event) => {
     setNickname(event.target.value);
   };
 
   // Use useEffect to initialize tempNickname with initialUser when the component mounts
   useEffect(() => {
-    setNickname(initialUser);
-  }, [initialUser]);
+    setNickname(initialUser.name);
+  }, [initialUser.name]);
   /*
   The Fragment will allow us to combine multiple elements into one 'div'
   Paper is the styling that makes it look like paper
@@ -85,19 +105,10 @@ const Chat = ({ initialUser }) => {
             </Typography>
             <Divider />
             <Grid container spacing={4} alignItems="center">
-              <Grid item id='chatBox' xs={11}>
+              <Grid item id='chatBox' xs={20}>
                 <List id='chatBoxMessages'>
                   { listChatMessages }
                 </List>
-              </Grid>
-              <Grid item xs={2}>
-                <FormControl fullWidth>
-                  <TextField
-                    onChange={ (e) => handleNicknameChange(e) }
-                    value={ nickname }
-                    label="add a nickname"
-                    variant="outlined"/>
-                </FormControl>
               </Grid>
               <Grid xs={6} item>
                 <FormControl fullWidth>
@@ -117,6 +128,15 @@ const Chat = ({ initialUser }) => {
               </Grid>
             </Grid>
           </Box>
+          <Grid item xs={2}>
+            <FormControl fullWidth>
+              <TextField
+                onChange={ (e) => handleNicknameChange(e) }
+                value={ nickname }
+                label="add a nickname"
+                variant="outlined"/>
+            </FormControl>
+          </Grid>
         </Paper>
       </Container>
     </Fragment>

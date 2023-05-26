@@ -7,6 +7,7 @@ import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
 import MatchPage from '../pages/MatchPage.jsx';
 import NewUser from '../pages/NewUser.jsx';
+import ChatsPage from '../pages/ChatsPage.jsx';
 
 const App = () => {
 
