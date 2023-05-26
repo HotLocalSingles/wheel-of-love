@@ -62,15 +62,14 @@ app.use('/', matchRouter);
 //connectedUser will store the socket ids
 const connectedUsers = new Map();
 io.on('connection', (socket) => {
+  const { userId } = socket.handshake.query;
+  connectedUsers.set(userId, socket.id);
   console.log('User connected. Socket ID:', socket.id);
   //handle private chat
   socket.on('private-chat', async ({ senderId, receiverId, room }) => {
-    //store the socket ids in the connectedUsers map
-    connectedUsers.set(senderId, socket.id);
-    connectedUsers.set(receiverId, socket.id);
     socket.join(room);
     console.log('Private chat connected on server');
-    console.log(`User with ID ${socket.id} joined room ${room}`);
+    console.log(`User has joined room ${room}`);
   });
 
   //to broadcast message just to one user and not to sender

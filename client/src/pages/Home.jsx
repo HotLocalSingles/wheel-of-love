@@ -30,7 +30,11 @@ const Home = ({ user, handleLogout, setUser }) => {
 
   useEffect(() => {
     //create the socket instance
-    const socket = io('http://localhost:3000');
+    const socket = io('http://localhost:3000', {
+      query: {
+        userId: user.username,
+      }
+    });
     setSocket(socket);
     return () => {
       //disconnect the socket when the component unmounts
