@@ -28,7 +28,7 @@ const Home = ({ user, handleLogout, setUser }) => {
       <UserProfile user={ user } setUser={ setUser }/>
       <Vibe />
       <Icebreaker user={ user } />
-      <NewUser user={ user } setUser={ setUser }/>
+      {/* <NewUser user={ user } setUser={ setUser }/> */}
       <Matches user={ user }/>
       <br />
       <br />

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import { Stack, TextField, Slider, Box, FormControlLabel, FormGroup, Radio, Typography, Button } from '@mui/material';
 
 
 const NewUser = ({ user, setUser }) => {
+  const navigate = useNavigate();
+
   const [selectedGender, setSelectedGender] = useState(null);
   const [username, setUsername] = useState(null);
   const [age, setAge] = useState(18);
@@ -68,6 +72,7 @@ const NewUser = ({ user, setUser }) => {
       }
       //THIS IS UPDATING THE APP STATE, PASSED DOWN FROM PARENT
       setUser(response.data);
+      navigate('/');
 
     } catch (error) {
       console.log('Client Side Update of User Name Did Not Work', error);
