@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Vibe = () => {
-  const [vibe, setVibe] = useState(null);
+const Vibe = ({ bio, dbVibe }) => {
+  const [vibe, setVibe] = useState(dbVibe);
 
-  const bio = 'This is a fake bio to test the vibe!';
+  useEffect(() => {
+    updateVibe();
+  }, []);
 
   const vibeCalculator = (data) => {
     const {emotion_scores} = data;
@@ -16,12 +18,33 @@ const Vibe = () => {
     }
   };
 
-  const handleGetVibeClick = () => {
+  const updateVibe = () => {
     axios.post('/api/vibe', bio)
       .then(response => {
         const { data } = response;
         const emotion = vibeCalculator(data);
-        setVibe(emotion);
+        let emoToVibe;
+        switch (emotion) {
+        case 'anger':
+          emoToVibe = 'Metal';
+          break;
+        case 'joy':
+          emoToVibe = 'Hyperpop';
+          break;
+        case 'surprise':
+          emoToVibe = 'Industrial';
+          break;
+        case 'sadness':
+          emoToVibe = 'Dreampop';
+          break;
+        case 'disgust':
+          emoToVibe = 'Electroclash';
+          break;
+        case 'fear':
+          emoToVibe = 'Breakcore';
+          break;
+        }
+        setVibe(emoToVibe);
       })
       .catch(err => {
         console.error('Failed to POST vibe to API', err);
@@ -30,8 +53,7 @@ const Vibe = () => {
 
   return (
     <>
-      <h1>Vibe Rating: { vibe }</h1>
-      <button onClick={handleGetVibeClick}>Rate My Vibe</button>
+      Vibe: { vibe }
     </>
   );
 };
