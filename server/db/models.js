@@ -25,14 +25,50 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
   },
   location: {
-    type:DataTypes.STRING,
+    type: DataTypes.STRING,
   },
   gender: {
-    type:DataTypes.INTEGER,
-  }
+    type: DataTypes.STRING,
+  },
+  age: {
+    type: DataTypes.INTEGER,
+  },
+  bio: {
+    type: DataTypes.STRING,
+  },
+});
+
+const Match = sequelize.define('Match', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  userId1: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id',
+    },
+  },
+  userId2: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id',
+    },
+  },
+}, {
+  timestamps: false,
 });
 
 
+Match.belongsTo(User, { foreignKey: 'userId1', as: 'User1' });
+Match.belongsTo(User, { foreignKey: 'userId2', as: 'User2' });
+
 module.exports = {
   User,
+  Match
 };
