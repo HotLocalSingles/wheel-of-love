@@ -38,6 +38,26 @@ const User = sequelize.define('User', {
   },
 });
 
+const Messages = sequelize.define('Messages', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  senderId: {
+    type: DataTypes.STRING
+  },
+  receiverId: {
+    type: DataTypes.STRING
+  },
+  message: {
+    type: DataTypes.STRING
+  },
+  room: {
+    type: DataTypes.STRING
+  }
+});
+
 const Match = sequelize.define('Match', {
   id: {
     type: DataTypes.INTEGER,
@@ -70,5 +90,6 @@ Match.belongsTo(User, { foreignKey: 'userId2', as: 'User2' });
 
 module.exports = {
   User,
+  Messages,
   Match
 };

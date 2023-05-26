@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { User } = require('../db/models');
 
+
 //User for anything for an active user
 const verifySession = (req, res, next) => {
 
