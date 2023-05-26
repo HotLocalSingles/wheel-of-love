@@ -8,7 +8,7 @@ const Icebreaker = ({ user }) => {
   const [icebreaker, setIcebreaker] = useState(null);
 
   const fetchIcebreaker = () => {
-    axios.get('/api')
+    axios.get('/api/icebreaker')
       .then(response => setIcebreaker(response.data))
       .catch(err => {
         console.error('Failed to GET icebreaker from API', err);
@@ -18,7 +18,7 @@ const Icebreaker = ({ user }) => {
     fetchIcebreaker();
   };
   const handleSaveIcebreakerClick = () => {
-    axios.post('/api', { googleId, icebreaker })
+    axios.post('/api/icebreaker', { googleId, icebreaker })
       .then(user => user)
       .catch(err => {
         console.error('Failed to POST icebreaker to DB', err);

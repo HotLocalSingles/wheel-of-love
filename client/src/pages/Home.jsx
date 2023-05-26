@@ -44,7 +44,6 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <UserProfile user={user} setUser={setUser} />
-          <Vibe />
           <Icebreaker user={ user } />
         </Grid>
         <Grid item xs={6}>
