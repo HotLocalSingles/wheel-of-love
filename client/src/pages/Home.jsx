@@ -56,7 +56,6 @@ const Home = ({ user, handleLogout, setUser }) => {
         </Grid>
       </Grid>
       <br />
-      <Button variant="outlined" color="secondary" size="medium" onClick= { handleLogout }>See Messages</Button>
       <Conversations user={ user } socket={ socket }/>
       <br />
       <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>

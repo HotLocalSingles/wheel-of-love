@@ -1,16 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText, Container } from '@mui/material';
+// import Chat from '../components/Chat.jsx';
 
-//create a conversation template
-const Conversation = ({ conversation, onClick }) => (
-  <Box onClick={() => onClick(conversation.id)} style={{ cursor: 'pointer' }}>
-    <Typography variant="h6">{conversation.title}</Typography>
-    <Typography variant="body1">{conversation.latestMessage}</Typography>
-  </Box>
-);
-
+/*the conversations component will render a list of all the conversations.
+it will allow conversations to be clicked and render the information from the chat
+between users/matches as well as relevant information about each user (profile name)
+If time permits, I will make the profile name's clickable.
+*/
 const Conversations = ({ user, socket }) => {
+  console.log(user);
   const [conversations, setConversations] = useState([]);
+
+  //create a conversation object
+  const conversation = {
+    id,
+    title: `${user.name} and ${conversation.match}`,
+    messages: [],
+    user: user.name,
+    match,
+  };
+
+  //add conversation to conversations state
+  const addConvo = (conversation) => {
+    setConversations([...conversations, conversation]);
+  };
+
+  //renderConversation function which will display the conversation between users
+  const renderConversation = (id) => {
+    //find the conversation by id
+    const thatConvo = conversations.filter((convo) => { convo.id === id; });
+    console.log(thatConvo);
+    //create div/Box/Container that displays the info
+    //this container should basically be a chat box so they can continue the chat
+    return (
+      <Container>
+        <Box padding={3}>
+          <Typography>This is a conversation box</Typography>
+        </Box>
+      </Container>
+    );
+  };
 
   //fetch conversations from the server
   // const fetchConversations = async () => {
@@ -24,32 +53,27 @@ const Conversations = ({ user, socket }) => {
   // }, []);
 
   //when a new message comes in, update the conversation
-  useEffect(() => {
-    const handleMessage = (newMessage) => {
-      
-    };
+  const handleMessage = (newMessage) => {
+    //add to the conversation.messages array
+    console.log(newMessage);
+  };
 
-    if (socket) {
-      socket.on('private-chat', handleMessage);
-    }
-
-    return () => {
-      if (socket) {
-        socket.off('GoodBye');
-      }
-    };
-  }, [socket, conversations]);
-
-  const handleClick = (conversation) => {
+  const handleClick = (e) => {
     //open the selected conversation
+    console.log(e.value.target);
+    // renderConversation(e.target.value.id);
   };
 
   return (
     <Box>
       <Typography variant="h5">Conversations</Typography>
-      {conversations.map((conversation) => (
-        <Conversation conversation={conversation} onClick={handleClick} />
-      ))}
+      <List>
+        {conversations.map((conversation, index) => (
+          <ListItem key={index} onClick={(e) => handleClick(e) }>
+            <ListItemText primary={conversation.match} />
+          </ListItem>
+        ))}
+      </List>
     </Box>
   );
 };
