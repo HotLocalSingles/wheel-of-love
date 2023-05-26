@@ -6,7 +6,7 @@ const router = express.Router();
 const { getVibe } = require('../helpers/vibe.js');
 
 // Post bio to API for vibe check
-router.post('/api/vibe', async (req, res) => {
+router.post('/', async (req, res) => {
   const { bio } = req.body;
   try {
     const response = await getVibe(bio);
