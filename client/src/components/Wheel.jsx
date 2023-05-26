@@ -4,6 +4,7 @@ import Chat from '../components/Chat.jsx';
 import { FormControlLabel, Checkbox, Button } from '@mui/material';
 
 const Wheel = ({ user, socket }) => {
+  const thatUser = user;
   // State for the list of users, selected user, rotation angle
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -40,6 +41,7 @@ const Wheel = ({ user, socket }) => {
   }, [users.length]);
 
   const spinWheel = () => {
+    console.log(thatUser);
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / users.length;
     const randomIndex = Math.floor(Math.random() * users.length);
@@ -73,7 +75,7 @@ const Wheel = ({ user, socket }) => {
       );
       if (shouldChat) {
         setChatStarted(true);
-        socket.emit('private-chat', {senderId: user.username, receiverId: selectedUser.username, room: 'chat room'});
+        socket.emit('private-chat', {senderId: thatUser.username, receiverId: selectedUser.username, room: 'chat room'});
       }
     }, rotationDuration);
   

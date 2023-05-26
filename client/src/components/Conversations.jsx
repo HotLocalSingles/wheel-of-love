@@ -13,15 +13,15 @@ const Conversations = ({ user, socket }) => {
   const [conversations, setConversations] = useState([]);
 
   //fetch conversations from the server
-  const fetchConversations = async () => {
-    const res = await fetch('/chats/conversations');
-    const data = await res.json();
-    setConversations(data);
-  };
+  // const fetchConversations = async () => {
+  //   const res = await fetch('/chats/conversations');
+  //   const data = await res.json();
+  //   setConversations(data);
+  // };
 
-  useEffect(() => {
-    fetchConversations();
-  }, []);
+  // useEffect(() => {
+  //   fetchConversations();
+  // }, []);
 
   //when a new message comes in, update the conversation
   useEffect(() => {

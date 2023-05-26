@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
     //emit the message to the specified person
     const receiverSocketId = connectedUsers.get(receiverId);
     if (receiverSocketId) {
-      socket.to(receiverSocketId).emit('private-chat-message', { senderId, message });
+      socket.to(receiverSocketId).emit('private-chat-message', { nickname, message });
       console.log('message from other: ', message);
     }
     //create a new message instance

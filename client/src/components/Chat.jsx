@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 
 const Chat = ({ initialUser, selectedUser }) => {
   //room
-  const room = 'randomRoomForNow';
+  const room = 'chat room';
   //states for user and messages
   // const [selectUser, setSelectUser] = useState(initialUser ? initialUser.name : '');
   const [message, setMessage] = useState('');
