@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
@@ -9,7 +9,8 @@ import MatchSelect from '../Old Components/MatchSelect.jsx';
 // import Chat from '../components/Chat.jsx';
 import io from 'socket.io-client';
 import Matches from '../components/Matches.jsx';
-import NewUser from './NewUser.jsx';
+import Navbar from '../components/NavBar.jsx';
+// import NewUser from './NewUser.jsx';
 
 import Wheel from '../components/Wheel.jsx';
 import Conversations from '../components/Conversations.jsx';
@@ -39,18 +40,24 @@ const Home = ({ user, handleLogout, setUser }) => {
 
   return (
     <div>
-      <h1>Home</h1>
-      <UserProfile user={ user } setUser={ setUser }/>
-      <Vibe />
-      <Icebreaker user={ user } />
-      <NewUser />
-      <Matches user={ user }/>
+      <Navbar />
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <UserProfile user={user} setUser={setUser} />
+          <Vibe />
+          <Icebreaker user={ user } />
+        </Grid>
+        <Grid item xs={6}>
+          <Matches user={user} />
+        </Grid>
+      </Grid>
       <br />
       <Button variant="outlined" color="secondary" size="medium" onClick= { handleLogout }>See Messages</Button>
       <Conversations user={ user } socket={ socket }/>
       <br />
-      <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>Logout</Button>
-      <br/>
+      <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>
+        Logout
+      </Button>
       <br />
       <Wheel user={ user } socket={socket}/>
     </div>

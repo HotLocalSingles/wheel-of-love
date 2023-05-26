@@ -28,7 +28,7 @@ passport.use(
           where: { googleId: profile.id },
           defaults: {
             googleId: profile.id,
-            username: profile.id,
+            username: null,
             name: profile.name.givenName,
             picture: profile.photos[0].value,
           } // Set the default values for the new record
