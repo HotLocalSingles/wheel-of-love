@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // Material UI:
-import { Avatar, Box, TextField, Typography, } from '@mui/material';
+import { Avatar, Box, TextField, Typography, Grid } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
@@ -47,28 +47,37 @@ const UserProfile = ({ user, setUser }) => {
   //If the user clicks the edit button, show a text box where they can edit their name and submit it
   return (
     <div>
-      <Typography variant="h5" gutterBottom>Your Profile</Typography>
+      {/* <Typography variant="h5" gutterBottom align="center">Your Profile</Typography> */}
       <div>
-        <Box sx={{ maxHeight: 400, maxWidth: 360, border: '1px solid #ccc', borderRadius: '4px', padding: '8px' }}>
-          <Avatar alt="User Profile Image" src={ user.picture } sx={{ width: 100, height: 100 }} referrerPolicy="no-referrer"/>
-          { isEditing ? <> </> : <EditOutlinedIcon onClick={ handleEditClick } size="small" />}
-          {isEditing ? (
-            <div>
-              <Box
-                component="form"
-                sx={{
-                  '& .MuiTextField-root': { m: 1, width: '25ch' },
-                }}
-                noValidate
-                autoComplete="off"
-              >
+        <Box sx={{ display: 'flex', border: '1px solid #ccc', borderRadius: '4px', padding: '8px', margin: '0 auto' }}>
+          <Grid container spacing={1}>
+            <Grid item xs={3}>
+              <Avatar alt="User Profile Image" src={ user.picture } sx={{ width: 100, height: 100 }} referrerPolicy="no-referrer"/>
+              { isEditing ? <> </> : <EditOutlinedIcon onClick={ handleEditClick } size="small" />}
+              {isEditing ? (
                 <div>
-                  <TextField required size="small" id="outlined-basic" label="Edit Name" helperText="Please enter your new name" defaultValue={user.name} onChange={(event) => setEditedName(event.target.value)} />
-                  <SaveAltIcon onClick={ handleSubmitClick } size="large" />
-                  <DeleteForeverRoundedIcon size="large" onClick={ handleCancelClick }/>
-                </div>
-              </Box>
-            </div>) : <Typography id="username" gutterBottom>{ user.name }</Typography>}
+                  <Box component="form" sx={{'& .MuiTextField-root': { m: 1, width: '25ch' },}} noValidate autoComplete="off">
+                    <div>
+                      <TextField required size="small" id="outlined-basic" label="Edit Name" helperText="Please enter your new name" defaultValue={user.name} onChange={(event) => setEditedName(event.target.value)} />
+                      <SaveAltIcon onClick={ handleSubmitClick } size="large" />
+                      <DeleteForeverRoundedIcon size="large" onClick={ handleCancelClick }/>
+                    </div>
+                  </Box>
+                </div>) : (<Typography id="name" gutterBottom>{ user.name }</Typography>)}
+            </Grid>
+            <Grid item xs={9}>
+              <Typography id="username" gutterBottom>Username: {user.username}</Typography>
+              <Grid container spacing={1}>
+                <Grid item xs={6}>
+                  <Typography id="gender" gutterBottom>Gender: {user.gender}</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography id="age" gutterBottom>Age: {user.age}</Typography>
+                </Grid>
+                <Typography id="bio" gutterBottom> Bio: {user.bio}</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
         </Box>
       </div>
     </div>

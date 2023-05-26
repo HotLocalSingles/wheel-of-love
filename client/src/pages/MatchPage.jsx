@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import { Button, Avatar } from '@mui/material';
+import { Button, Avatar, Typography } from '@mui/material';
 
 const MatchPage = () => {
   const navigate = useNavigate();
@@ -40,11 +40,11 @@ const MatchPage = () => {
 
   return (
     <div>
-      <h1>Welcome to { stateMatchInfo.name }'s Profile</h1>
+      <Typography variant="h2" align="center" gutterBottom>{ stateMatchInfo.name }'s Profile</Typography>
       <Avatar alt="User Profile Image" src={ stateMatchInfo.picture } sx={{ width: 200, height: 200 }} referrerPolicy="no-referrer"/>
       <br />
       <br />
-      <Button onClick={ navigateToHome } variant="contained"> Back to Home</Button>
+      <Button onClick={ navigateToHome } variant="contained" sx={{ backgroundColor: '#926aa6' }}> Back to Home</Button>
     </div>
   );
 };

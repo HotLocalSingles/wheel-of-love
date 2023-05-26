@@ -19,7 +19,6 @@ const Matches = ({ user }) => {
       }
 
       const filteredMatches = allMatches.data.map((match) => match.User2);
-      console.log(filteredMatches);
       setMatches(filteredMatches);
 
     } catch (error) {
@@ -39,16 +38,18 @@ const Matches = ({ user }) => {
   if (matches.length === 0) {
     return (
       <div>
-        <Typography variant="h5" gutterBottom>Matches</Typography>
-        <Typography variant="h7" gutterBottom>No Matches</Typography>
+        {/* <Typography variant="h5" align="center" gutterBottom>Matches</Typography> */}
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          <ListItem><ListItemText sx={{ marginLeft: '16px' }} primary="No Matches" /></ListItem>
+        </List>
       </div>
     );
   }
 
   return (
     <div>
-      <Typography variant="h5" gutterBottom>Matches</Typography>
-      <Box sx={{ maxHeight: 400, maxWidth: 360, overflow: 'auto', border: '1px solid #ccc', borderRadius: '4px', padding: '8px' }}>
+      {/* <Typography variant="h5" align="center" gutterBottom>Matches</Typography> */}
+      <Box sx={{ maxHeight: 400, maxWidth: 360, overflow: 'auto', border: '1px solid #ccc', borderRadius: '4px', padding: '8px', margin: '0 auto' }}>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
           {matches.map((match) => (
             <div key={match.id}>

@@ -9,14 +9,12 @@ const Login = ({ login }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <div style={{ textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>Login with Google</Typography>
-        <Button variant="contained" size="medium" onClick={login}>
-            Login with Google
-        </Button>
+        <Typography variant="h2" gutterBottom>WHEEL OF LOVE</Typography>
+        <Button variant="contained" size="medium" onClick={login} sx={{ backgroundColor: '#926aa6' }}>Login with Google</Button>
       </div>
     </Box>
   );
-  
+
 };
 
 export default Login;
