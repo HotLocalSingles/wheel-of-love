@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Vibe from './Vibe.jsx';
+import Photos from './Photos.jsx';
 
 // Material UI:
 import { Avatar, Box, TextField, Typography, Grid } from '@mui/material';
@@ -82,6 +83,7 @@ const UserProfile = ({ user, setUser }) => {
           </Grid>
         </Box>
       </div>
+      <Photos id={user.id}/>
     </div>
   );
 };
