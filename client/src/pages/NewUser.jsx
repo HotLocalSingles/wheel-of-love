@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
-import { Stack, TextField, Slider, Box, FormControlLabel, FormGroup, Radio, Typography, Button } from '@mui/material';
+import { Stack, TextField, Slider, Box, FormControlLabel, FormGroup, Radio, Typography, Button, Alert } from '@mui/material';
 
 
 const NewUser = ({ user, setUser }) => {
   const navigate = useNavigate();
 
   const [selectedGender, setSelectedGender] = useState(null);
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState('');
   const [age, setAge] = useState(18);
+  const [location, setLocation] = useState('');
   const [bio, setBio] = useState('');
   const [showBio, setShowBio] = useState(true);
   const [editUsername, setEditUsername] = useState(true);
   const [editGender, setEditGender] = useState(true);
   const [confirmedAge, setConfirmedAge] = useState(false);
+  const [editLocation, setEditLocation] = useState(true);
   const [allSaved, setAllSaved] = useState(false);
 
   const handleGenderChange = (event) => {
@@ -37,14 +39,20 @@ const NewUser = ({ user, setUser }) => {
   };
 
   const handleBioSave = () => {
-    if (bio !== '') {
+    if (bio !== '' && bio !== ' ') {
       setShowBio(false);
     }
   };
 
   const handleUsernameSave = () => {
-    if (username !== null) {
+    if (username !== '' && username !== ' ') {
       setEditUsername(false);
+    }
+  };
+
+  const handleLocationSave = () => {
+    if (location !== '' && location !== ' ') {
+      setEditLocation(false);
     }
   };
 
@@ -52,19 +60,24 @@ const NewUser = ({ user, setUser }) => {
   const areAllSaved = () => {
     if (!showBio && !editUsername && !editGender && confirmedAge) {
       setAllSaved(true);
+    } else {
+      setAllSaved(false);
     }
   };
 
   const submitNewUserInfo = async () => {
 
+    //This is taking all of the info that they inputted and are sending it to the database to be stored/displayed on the user profile.
     const newUserInfo = {
       username: username,
       gender: selectedGender,
       age: age,
-      bio: bio
+      location: location,
+      bio: bio,
     };
 
     try {
+      //Sending the object created in newUserInfo to the database to be stored
       const response = await axios.put(`/users/edit/${ user.id}`, newUserInfo);
 
       if (!response.data) {
@@ -82,7 +95,7 @@ const NewUser = ({ user, setUser }) => {
 
   useEffect(() => {
     areAllSaved();
-  }, [showBio, editUsername, editGender, confirmedAge]);
+  }, [showBio, editUsername, editGender, confirmedAge, editLocation]);
 
   return (
     <div>
@@ -98,7 +111,7 @@ const NewUser = ({ user, setUser }) => {
       ) : (
         <div>
           <Typography id="username-textbox" gutterBottom>Username: { username }</Typography>
-          <Button variant="contained" onClick={ () => setEditUsername(true) }>Edit Username</Button>
+          <Button variant="contained" onClick={ () => { setEditUsername(true) } }>Edit Username</Button>
         </div>
       )}
 
@@ -131,6 +144,22 @@ const NewUser = ({ user, setUser }) => {
         </div>
       )}
 
+      {editLocation ? (
+        <div>
+          <Typography id="location-textbox" gutterBottom>Location:</Typography>
+          {editLocation && location.length > 0 && (
+            <Alert severity="warning">You better be spelling that city name correctly!</Alert>
+          )}
+          <TextField required size="small" id="outlined-basic" label="Location" onChange={ (event) => setLocation(event.target.value) } />
+          <Button variant="contained" onClick={ handleLocationSave }>Save</Button>
+        </div>
+      ) : (
+        <div>
+          <Typography id="location-textbox" gutterBottom>Location: { location }</Typography>
+          <Button variant="contained" onClick={ () => setEditLocation(true) }>Edit Location</Button>
+        </div>
+      )}
+
       { showBio ? (
         <TextField id="outlined-textarea" label="Bio" multiline rows={ 4 } value={ bio } onChange={ handleBioChange } />
       ) : (
@@ -155,44 +184,5 @@ const NewUser = ({ user, setUser }) => {
   );
 };
 
-/**
- SLIDER IF NEEDED
-
-   const marks = [
-    {
-      value: 0,
-      label: 'Gender 1',
-    },
-    {
-      value: 50,
-      label: 'Gender 2',
-    },
-    {
-      value: 100,
-      label: 'Gender 3',
-    },
-  ];
-
-  const valuetext = (value) => {
-    return `${value}`;
-  };
-
-  const valueLabelFormat = (value) => {
-    return marks.findIndex((mark) => mark.value === value) + 1;
-  };
-
-  <Slider
-  aria-label="Restricted values"
-  defaultValue={20}
-  valueLabelFormat={valueLabelFormat}
-  getAriaValueText={valuetext}
-  step={null}
-  valueLabelDisplay="auto"
-  marks={marks}
-  />
-          <Typography variant="h7" gutterBottom>Your New Profile Information</Typography>
-        <Typography id="username-test" gutterBottom>Username: { username }</Typography>
-        <Typography id="gender-test" gutterBottom>Gender: { selectedGender }</Typography>
- */
 
 export default NewUser;
