@@ -10,7 +10,7 @@ const EditAge = ({ user, editedAge, setEditedAge }) => {
 
   return (
     <div>
-      <Typography id="age" gutterBottom>Age:{ editedAge }</Typography>
+      <Typography id="age" gutterBottom>Age: { editedAge }</Typography>
       <Slider id="age-slider" value={ editedAge } min={ minAge } max={ maxAge } step={ 1 } onChange={ (event) => setEditedAge(event.target.value) } aria-labelledby="age-slider" />
     </div>
 
