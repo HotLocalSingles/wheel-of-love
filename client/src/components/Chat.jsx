@@ -3,8 +3,9 @@ import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typo
 import { io } from 'socket.io-client';
 
 const Chat = ({ initialUser, selectedUser }) => {
-  //room
-  const room = 'chat room';
+  //create room using the two user IDs
+  const room = [initialUser.id, selectedUser.id].join("-");
+  console.log(room);
   //states for user and messages
   // const [selectUser, setSelectUser] = useState(initialUser ? initialUser.name : '');
   const [message, setMessage] = useState('');
@@ -16,14 +17,14 @@ const Chat = ({ initialUser, selectedUser }) => {
     //create the socket instance and connect to the server
     const socket = io('http://localhost:3000', {
       query: {
-        userId: initialUser.username,
+        userId: initialUser.id,
       }
     });
     setSocket(socket);
     //join the chat room
     socket.emit('private-chat', {
-      senderId: initialUser.username,
-      receiverId: selectedUser.username,
+      senderId: initialUser.id,
+      receiverId: selectedUser.id,
       room: room
     });
 
@@ -37,7 +38,7 @@ const Chat = ({ initialUser, selectedUser }) => {
     return () => {
       socket.disconnect('GoodBye');
     };
-  }, []);
+  }, [socket]);
 
 
   //listChatMessages will display all the messages in the state array 'messages'
@@ -58,8 +59,8 @@ const Chat = ({ initialUser, selectedUser }) => {
       //create a new message object
       const newMessage = {
         nickname: nickname,
-        senderId: initialUser.username,
-        receiverId: selectedUser.username,
+        senderId: initialUser.id,
+        receiverId: selectedUser.id,
         message: message,
         room: room
       };

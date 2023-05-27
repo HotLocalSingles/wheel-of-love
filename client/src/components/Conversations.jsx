@@ -21,7 +21,7 @@ const Conversations = ({ user, socket }) => {
     setConversations(data);
   };
 
-  //get the message from the database constantly
+  //get the message from the database on mount
   useEffect(() => {
     fetchMessages();
   }, []);
@@ -55,16 +55,15 @@ const Conversations = ({ user, socket }) => {
   // function to handle send message
   const sendMessage = () => {
     if (selectedConversation) {
-      // console.log(selectedConversation);
       const newMessage = {
         senderId: user.username,
         receiverId: selectedConversation.partner,
-        message: message
+        message: message,
+        room: 'Chatting Again'
       };
-      // console.log(newMessage);
-      socket.emit('private-chat-message', newMessage);
-      //messages should render immediately
-      // Update the selected conversation's messages immediately
+      console.log(newMessage); //working
+      console.log(messages);
+      socket.emit('private-chat-message', newMessage); //not working
       const updatedConversations = conversations.map(conversation => {
         if (conversation.partner === selectedConversation.partner) {
           return { ...conversation, messages: [...conversation.messages, newMessage] };
@@ -73,37 +72,10 @@ const Conversations = ({ user, socket }) => {
       });
 
       setConversations(updatedConversations);
-
-      //update the messages state
       setMessages([...messages, newMessage]);
-      setMessage("");
+      setMessage(''); //works
     }
   };
-
-  //when a new message comes in update the conversation
-  // useEffect(() => {
-  //   const handleMessage = (newMessage) => {
-  //     if (conversations) {
-  //       // console.log(newMessage);
-  //       //conversations is an array of objects
-  //       //iterate and find the messages array for the current partner
-  //       const updatedConversations = conversations.map(message => {
-  //         message.partner === newMessage.receiverId
-  //         //add message to their message array
-  //           ? { ...message, messages: [...message.messages, newMessage] }
-  //           : convo;
-  //       });
-  //       //set the current conversations to their messages
-  //       setConversations(updatedConversations);
-  //     }
-  //     if (socket) {
-  //       socket.on('private-chat-message', handleMessage);
-  //       return () => {
-  //         socket.off('GoodBye');
-  //       };
-  //     }
-  //   };
-  // }, [conversations, socket]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {

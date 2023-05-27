@@ -112,7 +112,7 @@ const Wheel = ({ user, socket }) => {
 
       // update matches db with the chosen user(matched w/the logged in)
       axios
-        .post(`/matches/:${user.userId}`, { userId: user.id })
+        .post(`/matches/:${thatUser.id}`, { userId: thatUser.id })
         .then((response) => {
           console.log('Match added to the database');
         })

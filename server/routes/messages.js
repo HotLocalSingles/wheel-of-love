@@ -14,39 +14,38 @@ router.get('/chats/conversations', async (req, res) => {
     return;
   }
 
-  const groupByPartnerUsername = (messages, currentUser) => {
-    return messages.reduce((partners, message) => {
-      const partnerUsername = message.senderId === currentUser.username ? message.receiverId : message.senderId;
-  
-      //if the partner already exists, append the message to it
-      if (partners[partnerUsername]) {
-        partners[partnerUsername].push(message);
+  const groupByRoom = (messages) => {
+    return messages.reduce((rooms, message) => {
+      // if the room already exists, append the message to it
+      if (rooms[message.room]) {
+        rooms[message.room].push(message);
       } else {
-        //else create a new array with the message
-        partners[partnerUsername] = [message];
+        // else create a new array with the message
+        rooms[message.room] = [message];
       }
-      return partners;
+      return rooms;
     }, {});
   };
   
 
 
   try {
-    //fetch all messages where the senderId or receiverId matches the current user's username
+    // fetch all messages where the senderId or receiverId matches the current user's id
     const userMessages = await Messages.findAll({
       where: {
-        [Op.or]: [{senderId: currentUser.username}, {receiverId: currentUser.username}]
+        [Op.or]: [{ senderId: currentUser.id }, { receiverId: currentUser.id }]
       }
     });
 
-    //group messages by match
-    const messagesByPartner = groupByPartnerUsername(userMessages, currentUser);
+    // group messages by room
+    const messagesByRoom = groupByRoom(userMessages);
 
-    //create an array of conversations
-    const conversations = Object.entries(messagesByPartner).map(([partner, messages]) => {
-      return { partner, messages };
+    // create an array of conversations
+    const conversations = Object.entries(messagesByRoom).map(([room, messages]) => {
+      return { room, messages };
     });
-    //return the array
+
+    // return the array
     res.json(conversations);
   } catch (err) {
     res.status(500).send(err);

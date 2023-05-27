@@ -57,7 +57,8 @@ const Messages = sequelize.define('Messages', {
     type: DataTypes.STRING
   },
   room: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    unique: true
   }
 });
 
