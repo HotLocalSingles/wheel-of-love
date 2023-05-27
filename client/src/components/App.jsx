@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { CircularProgress, Typography } from '@mui/material';
+import '../../../styles/mainLoading.css';
 
 
 import Navbar from './NavBar.jsx';
@@ -91,41 +92,16 @@ const App = () => {
   //while the server requests are sending to update the state
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <CircularProgress disableShrink color="success" />
+      <div className="main-loading-container">
+        <CircularProgress disableShrink className="main-loading-progress" color="success" />
         <Typography
           variant="subtitle1"
           component="p"
-          sx={{
-            color: 'transparent',
-            marginTop: '10px',
-            fontWeight: 'bold',
-            animation: 'colorSlide 3s linear infinite',
-            animationDirection: 'alternate',
-            animationDelay: '1s',
-          }}
+          className="main-loading-text"
         >
         Your matches are almost ready for you
         </Typography>
-        <style>
-          {`
-        @keyframes colorSlide {
-          0% { color: transparent; }
-          50% { color: #34243c; }
-          100% { color: transparent; }
-        }
-        `}
-        </style>
-      </div>
-    );
+      </div> );
   }
 
   //Routes div is telling us that all the defined routes are in between it.
