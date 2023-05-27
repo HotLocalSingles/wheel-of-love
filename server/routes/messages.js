@@ -51,5 +51,6 @@ router.get('/chats/conversations', async (req, res) => {
     res.status(500).send(err);
   }
 });
-
+//returns an array of message objects sorted by room
+//[{room: 'blah', messages: []}]
 module.exports = router;

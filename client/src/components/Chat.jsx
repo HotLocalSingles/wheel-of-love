@@ -5,9 +5,11 @@ import { io } from 'socket.io-client';
 const Chat = ({ initialUser, selectedUser }) => {
   //create room using the two user IDs
   const room = [initialUser.id, selectedUser.id].join("-");
-  console.log(room);
+  // console.log(room);
   //states for user and messages
   // const [selectUser, setSelectUser] = useState(initialUser ? initialUser.name : '');
+  const [conversations, setConversations] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [nickname, setNickname] = useState(initialUser.name);
@@ -40,16 +42,34 @@ const Chat = ({ initialUser, selectedUser }) => {
     };
   }, [socket]);
 
+  //fetch messages from the server
+  const fetchMessages = async () => {
+    const res = await fetch('/chats/conversations');
+    const data = await res.json();
+    // console.log(data); //[ { room: 'blah', messages: [] } ]
+    setConversations(data);
+  };
+  
+  //get the message from the database on mount
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
 
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
-    return (
-      <ListItem key={index}>
-        <ListItemText primary={`${messageObj.nickname}: ${messageObj.message}`} />
+    //find the conversation with the matching room
+    const conversation = conversations.find(convo => convo.room === room);
+    //if the conversation doesn't exist or doesn't have any messages, return null
+    if (!conversation || !conversation.messages) { return null; }
+    //map through the messages in the conversation
+    return conversation.messages.map((message, messageIndex) => (
+      <ListItem key={messageIndex}>
+        <ListItemText primary={`${message.nickname}: ${message.content}`} />
       </ListItem>
-    );
+    ));
   });
 
 

@@ -17,7 +17,7 @@ const Conversations = ({ user, socket }) => {
   const fetchMessages = async () => {
     const res = await fetch('/chats/conversations');
     const data = await res.json();
-    // console.log(data); //[{ partner: selectedUser.username, messages: [{}, {}] }]
+    // console.log(data); //[ { room: 'blah', messages: [] } ]
     setConversations(data);
   };
 

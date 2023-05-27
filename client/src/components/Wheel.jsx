@@ -114,10 +114,10 @@ const Wheel = ({ user, socket }) => {
       setSelectedUsers((prevSelectedUsers) => [...prevSelectedUsers, user]);
 
       // update matches db with the chosen user(matched w/the logged in)
-      console.log(user.id, 'CHOSEN USER ID ');
+      // console.log(user.id, 'CHOSEN USER ID ');
       // Update matches db with the chosen user (matched with the logged-in user)
-      const userId = thatUser.id; // Replace with the actual user ID
-      const userId2 = user.id; // Replace with the actual user ID
+      const userId = thatUser.id;
+      const userId2 = user.id;
 
       axios
         .post(`/matches/${userId}`, { userId2 })
@@ -137,12 +137,9 @@ const Wheel = ({ user, socket }) => {
         socket.emit('private-chat', {
           senderId: thatUser.username,
           receiverId: user.username,
-
-          room: 'chat room',
+          message: message,
+          room: [thatUser.id, user.id].join("-"),
         });
-
-          room: 'chat room'});
-
       }
     }, rotationDuration);
   };

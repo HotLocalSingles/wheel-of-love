@@ -5,7 +5,7 @@ import { Button, Grid } from '@mui/material';
 import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
-// import Chat from '../components/Chat.jsx';
+import Chat from '../components/Chat.jsx';
 import io from 'socket.io-client';
 import Matches from '../components/Matches.jsx';
 import Navbar from '../components/NavBar.jsx';
@@ -62,6 +62,7 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
       <br />
       <Wheel user={ user } socket={ socket }/>
+      <Chat initialUser={ user } selectedUser={ user } />
     </div>
   );
 };
