@@ -3,7 +3,7 @@ import axios from 'axios';
 import Chat from '../components/Chat.jsx';
 import { Checkbox, Button, Box, Typography } from '@mui/material';
 
-const Wheel = ({ user, socket }) => {
+const Wheel = ({ user, socket, setIsChatting }) => {
   const thatUser = user;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -125,6 +125,7 @@ const Wheel = ({ user, socket }) => {
         `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
       );
       if (shouldChat) {
+        setIsChatting(true);
         setChatStarted(true);
         socket.emit('private-chat', {
           senderId: thatUser.username,

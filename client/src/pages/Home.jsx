@@ -35,6 +35,8 @@ const classes = {
 const Home = ({ user, handleLogout, setUser }) => {
   const [socket, setSocket] = useState(null);
   const [editing, setEditing] = useState(false);
+
+  const [isChatting, setIsChatting] = useState(false);
   //The handleLogout is referring to the function in App.jsx and is changing the state in there
   //Button is from the material ui
   const navigate = useNavigate();
@@ -65,12 +67,12 @@ const Home = ({ user, handleLogout, setUser }) => {
         <Grid container spacing={3}>
 
           {/* Top Bar */}
-          <Grid container item xs={12} spacing={3}>
+          <Grid container item xs={12} spacing={3} alignItems="center">
             <Grid item xs={4}>
               <Conversations user={ user } socket={ socket }/>
             </Grid>
             <Grid item xs={4}>
-              <Typography>Neon App Name</Typography>
+              <Typography align="center">Neon App Name</Typography>
             </Grid>
             <Grid item xs={4}>
               <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
@@ -78,51 +80,54 @@ const Home = ({ user, handleLogout, setUser }) => {
           </Grid>
 
           {/* Profile Box */}
-          <Grid item xs={12} sm={6}>
-            <Grid item xs={12}>
-              <Paper>
-                <Typography>Profile</Typography>
-                <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
-                { editing ? null : <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>}
-                <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
-              </Paper>
-            </Grid>
+          <Grid item xs={12} sm={6} alignItems="center">
             <Grid item xs={12}>
               <Paper style={classes.paper}>
-                <Typography>Photos</Typography>
-                <Photos id={user.id}/>
+                <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
+                { editing ? null : <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>}
               </Paper>
+            </Grid>
+            <Grid item xs={12} alignItems="center">
+              <Typography align="center">Photos</Typography>
+              <Photos id={user.id}/>
             </Grid>
           </Grid>
 
           {/* Matches Box */}
-          <Grid item xs={12} sm={6}>
-            <Grid item xs={12}>
-              <Paper style={classes.paper}>
-                <Typography>Matches</Typography>
-                <Matches user={ user } />
-              </Paper>
+          <Grid item xs={12} sm={6} alignItems="center">
+            <Grid item xs={12} alignItems="center">
+              <Typography align="center">Matches</Typography>
+              <Matches user={ user } />
             </Grid>
-            <Grid item xs={12}>
-              <Paper style={classes.paper}>
-                <Typography>Icebreaker</Typography>
-                <Icebreaker user={ user } />
-              </Paper>
+            <Grid item xs={12} alignItems="center">
+              <Typography>Icebreaker</Typography>
+              <Icebreaker user={ user } />
             </Grid>
           </Grid>
 
           {/* Wheel Box */}
-          <Grid item xs={12} sm={6}>
-            <Paper style={classes.paper}>
-              <Typography>Wheel</Typography>
-              <Wheel user={ user } socket={ socket }/>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Paper style={classes.paper}>
-              <Typography>Conditional Rendering of Chat</Typography>
-            </Paper>
-          </Grid>
+          { isChatting ? (
+            <Grid container item xs={12} spacing={3} alignItems="center">
+              <Grid item xs={12} sm={6}>
+                <Paper style={classes.paper}>
+                  <Typography>Wheel</Typography>
+                  <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting }/>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper style={classes.paper}>
+                  <Typography>Conditional Rendering of Chat</Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid item xs={12} alignItems="center">
+              <Paper style={classes.paper}>
+                <Typography>Wheel</Typography>
+                <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting }/>
+              </Paper>
+            </Grid>
+          ) }
         </Grid>
       </div>
       {/* <Grid container spacing={2}>
