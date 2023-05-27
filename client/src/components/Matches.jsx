@@ -22,7 +22,7 @@ const Matches = ({ user }) => {
   const getMatches = async () => {
     try {
       const allMatches = await axios.get(`/matches/${user.id}`);
-
+      console.log(allMatches);
       if (!allMatches) {
         throw allMatches;
       }

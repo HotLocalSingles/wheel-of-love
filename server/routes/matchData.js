@@ -9,9 +9,9 @@ const { User, Match } = require('../db/models');
 router.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    // console.log(userId);
+    console.log(userId);
     const user = await User.findByPk(userId);
-    // console.log(user);
+    console.log(user);
     if (!user) {
       return res.sendStatus(404);
     }
