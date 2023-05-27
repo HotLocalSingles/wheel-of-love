@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 import Vibe from './Vibe.jsx';
+import Photos from './Photos.jsx';
 import EditName from './EditProfileComp.jsx/EditName.jsx';
 import EditUsername from './EditProfileComp.jsx/EditUsername.jsx';
 import EditLocation from './EditProfileComp.jsx/EditLocation.jsx';
@@ -64,21 +65,20 @@ const UserProfile = ({ user, setUser, editing, setEditing }) => {
 
   const submitNewBio = async () => {
     //If they click save bio, need to double check that they aren't editing the bio anymore and it's a different bio than before
-      const newBio = {
-        bio: editedBio
-      };
-      try {
-        const response = await axios.put(`/users/edit/${ user.id }`, newBio);
-        if (!response.data) {
-          throw response;
-        }
-        console.log(response.data.bio);
-        setUser(response.data);
-        setIsEditingBio(false);
-      } catch (error) {
-        console.log('Client Side Update of Bio Did Not Work', error);
+    const newBio = {
+      bio: editedBio
+    };
+    try {
+      const response = await axios.put(`/users/edit/${ user.id }`, newBio);
+      if (!response.data) {
+        throw response;
       }
-
+      console.log(response.data.bio);
+      setUser(response.data);
+      setIsEditingBio(false);
+    } catch (error) {
+      console.log('Client Side Update of Bio Did Not Work', error);
+    }
   };
 
 
@@ -123,6 +123,7 @@ const UserProfile = ({ user, setUser, editing, setEditing }) => {
           </Grid>
         </Box>
       </div>
+      <Photos id={user.id}/>
       { editing ? (<div>
         <Button variant="outlined" color="secondary" size="medium" onClick={ submitNewUserInfo }>Save Profile</Button>
         <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
