@@ -152,7 +152,8 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         width: '50%',
         margin: 'auto',
         textAlign: 'center',
-        color: 'lightpink',
+        color: 'black',
+        position: 'absolute',
       }}
     >
       <h3 style={{ marginBottom: '20px' }}>Have Fate Pick your Date</h3>
@@ -199,9 +200,10 @@ const Wheel = ({ user, socket, setIsChatting }) => {
 
         <div
           className='wheelContainer'
+          id='wheelContainer'
           style={{
             // Wheel Container
-            backgroundColor: 'lightgray',
+            backgroundColor: 'black',
             position: 'relative',
             width: '100%',
             height: '100%',
@@ -215,11 +217,11 @@ const Wheel = ({ user, socket, setIsChatting }) => {
               // Actual wheel
               border: '0.2rem solid #bc13fe',
               boxShadow: '0 0 4px #bc13fe, 0 0 11px #bc13fe, 0 0 19px #bc13fe',
-              backgroundColor: 'lightpink',
+              backgroundColor: 'black',
               borderRadius: '50%',
               position: 'absolute',
               width: '95%',
-              height: '85%',
+              height: '80%',
               marginLeft: '12px',
               marginTop: '12px',
               transform: `rotate(${rotationAngle}deg)`,
@@ -231,7 +233,9 @@ const Wheel = ({ user, socket, setIsChatting }) => {
               const userRotationAngle = index * (360 / filteredUsers.length);
 
               // Calculate the translation values to move the user divs vertically.
-              const radius = 200; // Adjust this value to control the distance of names from the center of wheel.
+
+              const radius =
+                document.getElementById('wheelContainer').clientWidth / 3 + 30; // Adjust this value to control the distance of names from the center of wheel.
               const translationY = -radius;
 
               return (
@@ -247,6 +251,8 @@ const Wheel = ({ user, socket, setIsChatting }) => {
                     color: 'white',
                     textShadow: 'black 0px 0px 2px',
                     fontSize: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   {user.name}
@@ -259,7 +265,19 @@ const Wheel = ({ user, socket, setIsChatting }) => {
 
       {selectedUser ? (
         <div>
-          <Button variant='contained' onClick={spinWheel}>
+          <Button
+            variant='contained'
+            onClick={spinWheel}
+            sx={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: '0.2rem solid #bc13fe',
+              boxShadow: '0 0 4px #bc13fe, 0 0 11px #bc13fe, 0 0 19px #bc13fe',
+              '&:hover': {
+                backgroundColor: '#bc13fe',
+              },
+            }}
+          >
             Spin Again
           </Button>
           {chatStarted && (
