@@ -14,7 +14,11 @@ const Chat = ({ initialUser, selectedUser }) => {
 
   useEffect(() => {
     //create the socket instance and connect to the server
-    const socket = io('http://localhost:3000');
+    const socket = io('http://localhost:3000', {
+      query: {
+        userId: initialUser.username,
+      }
+    });
     setSocket(socket);
     //join the chat room
     socket.emit('private-chat', {
@@ -60,7 +64,7 @@ const Chat = ({ initialUser, selectedUser }) => {
         room: room
       };
       //emit the message with socket
-      console.log(newMessage);
+      // console.log(newMessage);
       socket.emit('private-chat-message', newMessage);
       //update the state with the new message
       setMessages([...messages, newMessage]);
@@ -113,6 +117,9 @@ const Chat = ({ initialUser, selectedUser }) => {
               <Grid xs={6} item>
                 <FormControl fullWidth>
                   <TextField
+                    sx={{
+                      border: 1,
+                    }}
                     onKeyPress={ handleKeyPress }
                     onChange={ (e) => setMessage(e.target.value) }
                     value={ message }

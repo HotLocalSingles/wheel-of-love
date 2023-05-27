@@ -4,7 +4,7 @@ import Chat from '../components/Chat.jsx';
 import { Checkbox, Button, Box, Typography } from '@mui/material';
 
 const Wheel = ({ user, socket }) => {
-
+  const thatUser = user;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -29,8 +29,8 @@ const Wheel = ({ user, socket }) => {
       }
       console.log('Backend call for all users:', insertUsers);
       //adding filtering (by location) directly, because I want it done automagically.
-      // currently checking if i can filter by ID since users dont yet have properties.
-      //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
+      // currently checking if i can filter by ID since users don't yet have properties.
+      //this could probably be done on backend, idk if that would mess anyone up, so its here for now.
       setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
@@ -48,7 +48,7 @@ const Wheel = ({ user, socket }) => {
   }, [users, selectedUsers, maleChecked, femaleChecked, queerChecked]);
 
   // For MUI checkboxes/ filtering
-  // * So this also  filters out the self, users who dont share the self's location, and users the wheel has chosen (this session) *
+  // * So this also  filters out the self, users who don't share the self's location, and users the wheel has chosen (this session) *
   const genderFilter = () => {
     const genderFilteredUsers = users.filter((dater) => {
       const isGenderMatched =
@@ -127,10 +127,9 @@ const Wheel = ({ user, socket }) => {
       if (shouldChat) {
         setChatStarted(true);
         socket.emit('private-chat', {
-          senderId: user.username,
-          receiverId: selectedUser.username,
-          room: 'chat room',
-        });
+          senderId: thatUser.username,
+          receiverId: user.username,
+          room: 'chat room'});
       }
     }, rotationDuration);
   };
