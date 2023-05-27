@@ -1,106 +1,119 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, TextField, Button } from '@mui/material';
-// import Chat from '../components/Chat.jsx';
-import Conversation from '../components/ConvoObj.jsx';
+import { io } from "socket.io-client";
 
 /*the conversations component will render a list of all the conversations.
 it will allow conversations to be clicked and render the information from the chat
 between users/matches as well as relevant information about each user (profile name)
 If time permits, I will make the profile name's clickable.
 */
-const Conversations = ({ user, socket }) => {
+const Conversations = ({ user }) => {
   // console.log(user); //obj
   const [conversations, setConversations] = useState([]);
   const [message, setMessage] = useState("");
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [socket, setSocket] = useState(null);
 
   //fetch messages from the server
   const fetchMessages = async () => {
     const res = await fetch('/chats/conversations');
     const data = await res.json();
-    console.log(data); //[{ partner: selectedUser.username, messages: [{}, {}] }]
+    // console.log(data); //[{ partner: selectedUser.username, messages: [{}, {}] }]
     setConversations(data);
   };
 
-  //start a private chat session
+  //get the message from the database constantly
   useEffect(() => {
     fetchMessages();
-    console.log(conversations);
-    if (socket) {
-      socket.emit('private-chat', {
-        senderId: user.username,
-        receiverId: selectedConversation.receiverId,
-        room: 'Chatting Again'
-      });
-    }
-  }, [user, selectedConversation]);
 
-  //renderConversation function which will display the conversation between users
-  const renderConversation = (match) => {
-    //find the conversation by id
-    const thatConvo = conversations.find(convo => convo.id === convoId);
-    console.log(thatConvo);
-    //create div/Box/Container that displays the info
-    //this container should basically be a chat box so they can continue the chat
-    return (
-      <Box>
-        <Typography variant="h5">Conversation with {match}</Typography>
-        <List key={ 'list' }>
-          {thatConvo.map(message => (
-            <ListItem>
-              <ListItemText primary={ message }/>
-            </ListItem>
-          ))}
-        </List>
-        <TextField
-          id="outlined-multiline-static"
-          label="Message"
-          multiline
-          rows={4}
-          variant="outlined"
-          onChange={ handleMessage }
-          value={ message }
-        />
-        <Button onClick={ sendMessage }>Send</Button>
-      </Box>
-    );
-  };
+  }, []);
+
+  //start a private chat session
+  useEffect(() => {
+    const socket = io('http://localhost:3000', {
+      query: {
+        userId: user.username,
+      }
+    });
+    setSocket(socket);
+    // console.log(conversations);
+  
+    socket.emit('private-chat', {
+      senderId: user.username,
+      receiverId: selectedConversation.receiverId,
+      room: 'Chatting Again'
+    });
+    //listen for private-chat-message event
+    socket.on('private-chat-message', (message) => {
+      setConversations((prevConversations) => {
+        const updatedConversations = { ...prevConversations };
+        const conversation = updatedConversations[message.receiverId];
+        if (conversation) {
+          conversation.messages.push(message);
+        } else {
+          updatedConversations[message.receiverId] = {
+            partner: message.receiverId,
+            messages: [message]
+          };
+        }
+        return updatedConversations;
+      });
+    });
+    return () => {
+      socket.disconnect('GoodBye');
+    };
+
+  }, [user, selectedConversation, socket]);
 
   // function to handle send message
   const sendMessage = () => {
     if (selectedConversation) {
+      console.log(selectedConversation);
+      const receiverId = selectedConversation.partner;
       const newMessage = { senderId: user.username, receiverId: selectedConversation.partner, message: message };
-      console.log(newMessage);
+      // console.log(newMessage);
       socket.emit('private-chat-message', newMessage);
-      const updatedConvo = [...selectedConversation.messages, newMessage];
-      const updatedConversations = conversations.map(convo => convo.partner === selectedConversation.partner ? { ...convo, messages: updatedConvo } : convo);
-      setConversations(updatedConversations);
+      //messages should render immediately
+      // Update the selected conversation's messages immediately
+      const updatedConversation = {
+        ...selectedConversation,
+        messages: [...selectedConversation.messages, newMessage]
+      };
+
+      // Update the conversations state by merging the updated conversation
+      setConversations(prevConversations => ({
+        ...prevConversations,
+        [receiverId]: updatedConversation
+      }));
       setMessage("");
     }
   };
 
   //when a new message comes in update the conversation
   useEffect(() => {
+    //on a message, 
     const handleMessage = (newMessage) => {
-      //add to the message on state
-      console.log(newMessage);
-      const updatedConversations = conversations.map(convo => convo.partner === newMessage.receiverId ? { ...convo, messages: [...convo.messages, newMessage] } : convo);
-      setConversations(updatedConversations);
+      if (conversations) {
+        // console.log(newMessage);
+        //conversations is an array of objects
+        //iterate and find the messages array for the curren partner
+        const updatedConversations = conversations.map(message => {
+          message.partner === newMessage.receiverId
+          //add message to their message array
+            ? { ...message, messages: [...message.messages, newMessage] }
+            : convo;
+        });
+        //set the current conversations to their messages
+        setConversations(updatedConversations);
+      }
+      if (socket) {
+        socket.on('private-chat-message', handleMessage);
+        return () => {
+          socket.off('GoodBye');
+        };
+      }
     };
-    if (socket) {
-      socket.on('private-chat-message', handleMessage);
-      return () => {
-        socket.off('GoodBye');
-      };
-    }
   }, [conversations, socket]);
-
-  //when a new message comes in update the conversation
-  const handleMessage = (newMessage) => {
-    //add to the message on state
-    console.log(newMessage);
-    setMessage(newMessage);
-  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -109,9 +122,16 @@ const Conversations = ({ user, socket }) => {
     }
   };
 
+  //click event should find the partner in the conversations
+  //array and set the current conversation to that data/partner
   const handleClick = (partner) => {
-    console.log(partner);
-    const selectedConvo = conversations.find(convo => convo.partner === partner);
+    let selectedConvo = {};
+    for (let i = 0; i < conversations.length; i++) {
+      if (conversations[i].partner === partner) {
+        selectedConvo = conversations[i];
+        break;
+      }
+    }
     setSelectedConversation(selectedConvo);
   };
 
@@ -119,19 +139,19 @@ const Conversations = ({ user, socket }) => {
     <Box>
       <Typography variant="h5" sx={{ color: '#901403' }}>Conversations</Typography>
       <List key={ 'list' }>
-        {conversations.map((convo) => (
-          <ListItem onClick={() => handleClick(convo.partner) }>
-            {convo.partner}
+        {Object.values(conversations).map((convo, index) => (
+          <ListItem key={ index } onClick={() => handleClick(convo.partner) }>
+            { convo.partner }
           </ListItem>
         ))}
       </List>
       {selectedConversation && (
         <Box>
-          <Typography variant="h5" sx={{ color: '#be3455' }}>Conversation with {selectedConversation.partner}</Typography>
+          <Typography variant="h5" sx={{ color: '#be3455' }}>Conversation with { selectedConversation.partner }</Typography>
           <List>
-            {selectedConversation.messages.map(message => (
-              <ListItem key={ 'list' }>
-                <ListItemText primary={message.message} />
+            {selectedConversation.messages.map((message, index) => (
+              <ListItem key={ index }>
+                <ListItemText primary={ message.message } />
               </ListItem>
             ))}
           </List>

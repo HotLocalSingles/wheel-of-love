@@ -47,22 +47,22 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Navbar />
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <UserProfile user={user} setUser={setUser} />
+          <UserProfile user={ user } setUser={ setUser } />
           <Vibe />
           <Icebreaker user={ user } />
         </Grid>
         <Grid item xs={6}>
-          <Matches user={user} />
+          <Matches user={ user } />
         </Grid>
       </Grid>
       <br />
-      <Conversations user={ user } socket={ socket }/>
+      <Conversations user={ user }/>
       <br />
-      <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>
+      <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>
         Logout
       </Button>
       <br />
-      <Wheel user={ user } socket={socket}/>
+      <Wheel user={ user } socket={ socket }/>
     </div>
   );
 };

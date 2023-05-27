@@ -65,7 +65,7 @@ const connectedUsers = new Map();
 io.on('connection', (socket) => {
   const { userId } = socket.handshake.query;
   connectedUsers.set(userId, socket.id);
-  console.log('User connected. Socket ID:', socket.id);
+  // console.log('User connected. Socket ID:', socket.id);
   //handle private chat
   socket.on('private-chat', async ({ senderId, receiverId, room }) => {
     socket.join(room);
@@ -79,7 +79,6 @@ io.on('connection', (socket) => {
     const receiverSocketId = connectedUsers.get(receiverId);
     if (receiverSocketId) {
       socket.to(receiverSocketId).emit('private-chat-message', { nickname, message });
-      console.log('message from other: ', message);
     }
     //create a new message instance
     Messages.create({
