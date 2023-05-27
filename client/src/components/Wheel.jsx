@@ -5,8 +5,9 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+// import './wheel.css';
 
-const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
+const Wheel = ({ user, socket, setIsChatting }) => {
   const thatUser = user;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -55,9 +56,10 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
   const genderFilter = () => {
     const genderFilteredUsers = users.filter((dater) => {
       const isGenderMatched =
-        (maleChecked && dater.gender === 'male') ||
-        (femaleChecked && dater.gender === 'female') ||
-        (queerChecked && dater.gender === 'queer');
+      (maleChecked && dater.gender === 'Male') ||
+      (femaleChecked && dater.gender === 'Female') ||
+      (queerChecked && dater.gender === 'Queer');
+
       const isInUserLocation = dater.location === user.location;
       const isNotCurrentUser = dater.id !== user.id;
       const isNotSelectedUser = !selectedUsers.find(
@@ -133,7 +135,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
         `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
       );
       if (shouldChat) {
-        getSelectedUser(user);
+        // getSelectedUser(user);
         setIsChatting(true);
         setChatStarted(true);
         socket.emit('private-chat', {
@@ -153,7 +155,8 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
         width: '50%',
         margin: 'auto',
         textAlign: 'center',
-        color: 'lightpink',
+        color: 'black',
+        position: 'absolute',
       }}
     >
       <h3 style={{ marginBottom: '20px' }}>Have Fate Pick your Date</h3>
@@ -200,9 +203,10 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
 
         <div
           className='wheelContainer'
+          id='wheelContainer'
           style={{
             // Wheel Container
-            backgroundColor: 'lightgray',
+            backgroundColor: 'black',
             position: 'relative',
             width: '100%',
             height: '100%',
@@ -214,11 +218,13 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
             className='wheel'
             style={{
               // Actual wheel
-              backgroundColor: 'lightpink',
+              border: '0.2rem solid #bc13fe',
+              boxShadow: '0 0 4px #bc13fe, 0 0 11px #bc13fe, 0 0 19px #bc13fe',
+              backgroundColor: 'black',
               borderRadius: '50%',
               position: 'absolute',
               width: '95%',
-              height: '87%',
+              height: '80%',
               marginLeft: '12px',
               marginTop: '12px',
               transform: `rotate(${rotationAngle}deg)`,
@@ -230,7 +236,9 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
               const userRotationAngle = index * (360 / filteredUsers.length);
 
               // Calculate the translation values to move the user divs vertically.
-              const radius = 200; // Adjust this value to control the distance of names from the center of wheel.
+
+              const radius =
+                document.getElementById('wheelContainer').clientWidth / 3 + 30; // Adjust this value to control the distance of names from the center of wheel.
               const translationY = -radius;
 
               return (
@@ -246,6 +254,8 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
                     color: 'white',
                     textShadow: 'black 0px 0px 2px',
                     fontSize: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
                   {user.name}
@@ -258,12 +268,23 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
 
       {selectedUser ? (
         <div>
-          <Button variant='contained' onClick={spinWheel}>
+          <Button
+            variant='contained'
+            onClick={spinWheel}
+            sx={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: '0.2rem solid #bc13fe',
+              boxShadow: '0 0 4px #bc13fe, 0 0 11px #bc13fe, 0 0 19px #bc13fe',
+              '&:hover': {
+                backgroundColor: '#bc13fe',
+              },
+            }}
+          >
             Spin Again
           </Button>
           {chatStarted && (
-            console.log('still working')
-            // <Chat initialUser={user} selectedUser={selectedUser} />
+            <Chat initialUser={user} selectedUser={selectedUser} />
           )}
         </div>
       ) : (

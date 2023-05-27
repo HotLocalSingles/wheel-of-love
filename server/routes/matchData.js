@@ -53,17 +53,19 @@ router.post('/matches/:userId', async (req, res) => {
 
     // Create a new match in the database
     const match = await Match.create({
-      userId1: userId,
-      userId2: userId2,
+      userId1: userId, // Assign userId1
+      userId2,
     });
 
     res.status(201).send(match);
     console.log('Match made successfully');
   } catch (error) {
     console.error(error);
+    console.log(userId1, userId2);
     res.sendStatus(500);
   }
 });
+
 
 
 module.exports = router;
