@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 const Wheel = ({ user, socket }) => {
-
+  const thatUser = user;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -108,19 +108,24 @@ const Wheel = ({ user, socket }) => {
       //THE WHEEL HAS CHOSEN
       const user = filteredUsers[closestIndex];
 
-      //sets the user the wheel chose. (for chatbox mostly)
+      //sets the user chosen by the wheel.
       setSelectedUser(user);
-      //adds the chosen user to array of previously chosen users.
+      //adds the chosen user to array of previously chosen users, to filter them out of next spin.
       setSelectedUsers((prevSelectedUsers) => [...prevSelectedUsers, user]);
 
       // update matches db with the chosen user(matched w/the logged in)
+      console.log(user.id, 'CHOSEN USER ID ');
+      // Update matches db with the chosen user (matched with the logged-in user)
+      const userId = thatUser.id; // Replace with the actual user ID
+      const userId2 = user.id; // Replace with the actual user ID
+
       axios
-        .post(`/matches/:${user.userId}`, { userId: user.id })
+        .post(`/matches/${userId}`, { userId2 })
         .then((response) => {
-          console.log('Match added to the database');
+          console.log('Match created:', response.data);
         })
         .catch((error) => {
-          console.error('Error adding match to the database:', error);
+          console.error('Failed to create a match:', error);
         });
 
       //Cynthia addition
@@ -130,8 +135,8 @@ const Wheel = ({ user, socket }) => {
       if (shouldChat) {
         setChatStarted(true);
         socket.emit('private-chat', {
-          senderId: user.username,
-          receiverId: selectedUser.username,
+          senderId: thatUser.username,
+          receiverId: user.username,
           room: 'chat room',
         });
       }
@@ -150,7 +155,10 @@ const Wheel = ({ user, socket }) => {
     >
       <h3 style={{ marginBottom: '20px' }}>Have Fate Pick your Date</h3>
 
-      <div style={{ display: 'flex' }}>
+      <div
+        className='wheelAndCheckboxContainer'
+        style={{ display: 'flex', marginLeft: '20px' }}
+      >
         <div style={{ marginRight: '20px' }}>
           <Box
             display='flex'
@@ -250,7 +258,6 @@ const Wheel = ({ user, socket }) => {
           <Button variant='contained' onClick={spinWheel}>
             Spin Again
           </Button>
-          <p>Selected User: {selectedUser.name}</p>
           {chatStarted && (
             <Chat initialUser={user} selectedUser={selectedUser} />
           )}
