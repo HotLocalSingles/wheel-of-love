@@ -23,6 +23,7 @@ const vibe = require('../server/routes/vibeRoute.js');
 const icebreaker = require('../server/routes/icebreakerRoute.js');
 const conversations = require('../server/routes/messages.js');
 const matchRouter = require('../server/routes/matchData.js');
+const photos = require('../server/routes/photosRoute.js');
 
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
@@ -53,7 +54,7 @@ app.use('/users', users);
 app.use('/api/vibe', vibe);
 app.use('/api/icebreaker', icebreaker);
 app.use('/chats/conversations', conversations);
-
+app.use('/photos', photos);
 app.use('/', matchRouter);
 
 //building socket.io logic
