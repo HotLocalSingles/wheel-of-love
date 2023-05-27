@@ -15,18 +15,18 @@ const Conversations = ({ user }) => {
   const [socket, setSocket] = useState(null);
 
   //fetch messages from the server
-  const fetchMessages = async () => {
-    const res = await fetch('/chats/conversations');
-    const data = await res.json();
-    // console.log(data); //[{ partner: selectedUser.username, messages: [{}, {}] }]
-    setConversations(data);
-  };
+  // const fetchMessages = async () => {
+  //   const res = await fetch('/chats/conversations');
+  //   const data = await res.json();
+  //   // console.log(data); //[{ partner: selectedUser.username, messages: [{}, {}] }]
+  //   setConversations(data);
+  // };
 
-  //get the message from the database constantly
-  useEffect(() => {
-    fetchMessages();
+  // //get the message from the database constantly
+  // useEffect(() => {
+  //   fetchMessages();
 
-  }, []);
+  // }, []);
 
   //start a private chat session
   useEffect(() => {
@@ -40,9 +40,10 @@ const Conversations = ({ user }) => {
   
     socket.emit('private-chat', {
       senderId: user.username,
-      receiverId: selectedConversation.receiverId,
+      receiverId: 'chris',
       room: 'Chatting Again'
     });
+
     //listen for private-chat-message event
     socket.on('private-chat-message', (message) => {
       setConversations((prevConversations) => {
@@ -90,30 +91,27 @@ const Conversations = ({ user }) => {
   };
 
   //when a new message comes in update the conversation
-  useEffect(() => {
-    //on a message, 
-    const handleMessage = (newMessage) => {
-      if (conversations) {
-        // console.log(newMessage);
-        //conversations is an array of objects
-        //iterate and find the messages array for the curren partner
-        const updatedConversations = conversations.map(message => {
-          message.partner === newMessage.receiverId
-          //add message to their message array
-            ? { ...message, messages: [...message.messages, newMessage] }
-            : convo;
-        });
-        //set the current conversations to their messages
-        setConversations(updatedConversations);
-      }
-      if (socket) {
-        socket.on('private-chat-message', handleMessage);
-        return () => {
-          socket.off('GoodBye');
-        };
-      }
-    };
-  }, [conversations, socket]);
+  // useEffect(() => {
+  //   //on a message, 
+  //   const handleMessage = (newMessage) => {
+  //     if (conversations) {
+  //       // console.log(newMessage);
+  //       //conversations is an array of objects
+  //       //iterate and find the messages array for the curren partner
+  //       const updatedConversations = conversations.map(message => {
+  //         message.partner === newMessage.receiverId
+  //         //add message to their message array
+  //           ? { ...message, messages: [...message.messages, newMessage] }
+  //           : convo;
+  //       });
+  //       //set the current conversations to their messages
+  //       setConversations(updatedConversations);
+  //     }
+  //     return () => {
+  //       socket.off('GoodBye');
+  //     };
+  //   };
+  // }, [conversations, socket]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -129,6 +127,7 @@ const Conversations = ({ user }) => {
     for (let i = 0; i < conversations.length; i++) {
       if (conversations[i].partner === partner) {
         selectedConvo = conversations[i];
+        console.log(selectedConvo);
         break;
       }
     }

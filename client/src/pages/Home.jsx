@@ -38,7 +38,7 @@ const Home = ({ user, handleLogout, setUser }) => {
     setSocket(socket);
     return () => {
       //disconnect the socket when the component unmounts
-      socket.off('GoodBye');
+      socket.disconnect('GoodBye');
     };
   }, []);
 
