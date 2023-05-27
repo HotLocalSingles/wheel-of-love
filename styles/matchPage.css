@@ -1,0 +1,33 @@
+
+.match-page-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.match-page-progress {
+  color: #4caf50;
+}
+
+.match-page-typography {
+  color: transparent;
+  margin-top: 10px;
+  font-weight: bold;
+  animation: colorSlide 3s linear infinite;
+  animation-direction: alternate;
+  animation-delay: 1s;
+}
+
+@keyframes colorSlide {
+  0% {
+    color: transparent;
+  }
+  50% {
+    color: #34243c;
+  }
+  100% {
+    color: transparent;
+  }
+}
