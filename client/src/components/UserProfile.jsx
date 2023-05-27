@@ -11,10 +11,12 @@ import EditAge from './EditProfileComp.jsx/EditAge.jsx';
 import EditBio from './EditProfileComp.jsx/EditBio.jsx';
 
 // Material UI:
-import { Avatar, Box, TextField, Typography, Grid, Button } from '@mui/material';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 
 const UserProfile = ({ user, setUser, editing, setEditing }) => {
   const navigate = useNavigate();

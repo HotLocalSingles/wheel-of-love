@@ -2,7 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import { Button, Avatar, Typography, CircularProgress } from '@mui/material';
+
+//Material MUI
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+
+
+//CSS for this Match Page
+import '../../../styles/matchPage.css';
 
 const MatchPage = () => {
   const navigate = useNavigate();
@@ -35,41 +44,18 @@ const MatchPage = () => {
   };
 
   if (stateMatchInfo === null) {
-    return (      
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <CircularProgress disableShrink color="success" />
+    return (
+      <div className="match-page-loading">
+        <CircularProgress disableShrink className="match-page-progress" color="success" />
         <Typography
           variant="subtitle1"
           component="p"
-          sx={{
-            color: 'transparent',
-            marginTop: '10px',
-            fontWeight: 'bold',
-            animation: 'colorSlide 3s linear infinite',
-            animationDirection: 'alternate',
-            animationDelay: '1s',
-          }}
+          className="match-page-typography"
         >
-        They're Coming
+          They're Coming for You
         </Typography>
-        <style>
-          {`
-        @keyframes colorSlide {
-          0% { color: transparent; }
-          50% { color: #34243c; }
-          100% { color: transparent; }
-        }
-        `}
-        </style>
-      </div>);
+      </div>
+    );
   }
 
   return (
