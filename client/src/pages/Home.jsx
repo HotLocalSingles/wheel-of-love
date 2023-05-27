@@ -30,11 +30,15 @@ const Home = ({ user, handleLogout, setUser }) => {
 
   useEffect(() => {
     //create the socket instance
-    const socket = io('http://localhost:3000');
+    const socket = io('http://localhost:3000', {
+      query: {
+        userId: user.username,
+      }
+    });
     setSocket(socket);
     return () => {
       //disconnect the socket when the component unmounts
-      socket.off('GoodBye');
+      socket.disconnect('GoodBye');
     };
   }, []);
 
@@ -49,16 +53,15 @@ const Home = ({ user, handleLogout, setUser }) => {
           <Icebreaker user={ user } />
         </Grid>
         <Grid item xs={6}>
-          <Matches user={user} />
+          <Matches user={ user } />
         </Grid>
       </Grid>
       <br />
-      <Button variant="outlined" color="secondary" size="medium" onClick= { handleLogout }>See Messages</Button>
       <Conversations user={ user } socket={ socket }/>
       <br />
       <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
       <br />
-      <Wheel user={ user } socket={socket}/>
+      <Wheel user={ user } socket={ socket }/>
     </div>
   );
 };

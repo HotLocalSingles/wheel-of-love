@@ -87,12 +87,32 @@ const Match = sequelize.define('Match', {
   timestamps: false,
 });
 
+const Photo = sequelize.define('Photo', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  userPhotos: {
+    type: DataTypes.STRING,
+    defaultValue: '',
+  },
+  userId3: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id',
+    },
+  },
+});
 
 Match.belongsTo(User, { foreignKey: 'userId1', as: 'User1' });
 Match.belongsTo(User, { foreignKey: 'userId2', as: 'User2' });
+Photo.belongsTo(User);
 
 module.exports = {
   User,
   Messages,
-  Match
+  Match,
+  Photo
 };
