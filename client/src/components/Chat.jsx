@@ -74,8 +74,10 @@ const Chat = ({ initialUser, selectedUser }) => {
 
 
   const sendMessage = () => {
+    console.log('sendMessage works before conditional');
     //check if nickname and message are not empty
     if (socket && nickname && message && selectedUser) {
+      console.log('sendMessage working after conditional');
       //create a new message object
       const newMessage = {
         nickname: nickname,

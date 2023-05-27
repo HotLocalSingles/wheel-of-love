@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 // import './wheel.css';
 
-const Wheel = ({ user, socket, setIsChatting }) => {
+const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
   const thatUser = user;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -56,10 +56,9 @@ const Wheel = ({ user, socket, setIsChatting }) => {
   const genderFilter = () => {
     const genderFilteredUsers = users.filter((dater) => {
       const isGenderMatched =
-      (maleChecked && dater.gender === 'Male') ||
-      (femaleChecked && dater.gender === 'Female') ||
-      (queerChecked && dater.gender === 'Queer');
-
+        (maleChecked && dater.gender === 'Male') ||
+        (femaleChecked && dater.gender === 'Female') ||
+        (queerChecked && dater.gender === 'Queer');
       const isInUserLocation = dater.location === user.location;
       const isNotCurrentUser = dater.id !== user.id;
       const isNotSelectedUser = !selectedUsers.find(
@@ -72,7 +71,7 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         isNotSelectedUser
       );
     });
-
+    console.log(genderFilteredUsers);
     setFilteredUsers(genderFilteredUsers);
   };
 
@@ -135,7 +134,7 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
       );
       if (shouldChat) {
-        // getSelectedUser(user);
+        getSelectedUser(user);
         setIsChatting(true);
         setChatStarted(true);
         socket.emit('private-chat', {
@@ -282,9 +281,9 @@ const Wheel = ({ user, socket, setIsChatting }) => {
           >
             Spin Again
           </Button>
-          {chatStarted && (
-            <Chat initialUser={user} selectedUser={selectedUser} />
-          )}
+          {/* {chatStarted && (
+            // <Chat initialUser={user} selectedUser={selectedUser} />
+          )} */}
         </div>
       ) : (
         <div>
