@@ -9,7 +9,6 @@ const session = require('express-session');
 const path = require('path');
 //import Messages model
 const { Messages } = require('./db/models');
-// const { senderUsername, receiverUsername } = Messages;
 
 //Importing passport for auth
 //Also importing the initializePassport function created in auth
@@ -28,7 +27,8 @@ const photos = require('../server/routes/photosRoute.js');
 //Creating server variable to require http and using app/express to initialize the server
 const server = require('http').createServer(app);
 
-//Creating socket.io server instance that is attaching the server instance and enabling Cross-Origin Resource Sharing for the WebSocket Server
+//Creating socket.io server instance that is attaching the server instance
+//and enabling Cross-Origin Resource Sharing for the WebSocket Server
 const io = require('socket.io')(server, { cors: { origin: '*' } });
 
 //Parses incoming JSON requests
@@ -43,7 +43,8 @@ app.use(session({
 }));
 
 
-//Initialize Passport middleware and have the express server use it, makes it so the user doesn't have to keep logging in to authenticate requests
+//Initialize Passport middleware and have the express server use it,
+//makes it so the user doesn't have to keep logging in to authenticate requests
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -55,6 +56,7 @@ app.use('/api/vibe', vibe);
 app.use('/api/icebreaker', icebreaker);
 app.use('/chats/conversations', conversations);
 app.use('/photos', photos);
+app.use('/', conversations);
 app.use('/', matchRouter);
 
 //building socket.io logic
@@ -63,15 +65,14 @@ app.use('/', matchRouter);
 //connectedUser will store the socket ids
 const connectedUsers = new Map();
 io.on('connection', (socket) => {
-  console.log('User connected. Socket ID:', socket.id);
+  const { userId } = socket.handshake.query;
+  connectedUsers.set(userId, socket.id);
+  // console.log('User connected. Socket ID:', socket.id);
   //handle private chat
   socket.on('private-chat', async ({ senderId, receiverId, room }) => {
-    //store the socket ids in the connectedUsers map
-    connectedUsers.set(senderId, socket.id);
-    connectedUsers.set(receiverId, socket.id);
     socket.join(room);
     console.log('Private chat connected on server');
-    console.log(`User with ID ${socket.id} joined room ${room}`);
+    console.log(`User has joined room ${room}`);
   });
 
   //to broadcast message just to one user and not to sender
@@ -80,7 +81,6 @@ io.on('connection', (socket) => {
     const receiverSocketId = connectedUsers.get(receiverId);
     if (receiverSocketId) {
       socket.to(receiverSocketId).emit('private-chat-message', { nickname, message });
-      console.log('message from other: ', message);
     }
     //create a new message instance
     Messages.create({
