@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
-// import Chat from '../components/Chat.jsx';
+import Chat from '../components/Chat.jsx';
 import io from 'socket.io-client';
 import Matches from '../components/Matches.jsx';
 import Navbar from '../components/NavBar.jsx';
@@ -35,6 +35,7 @@ const classes = {
 const Home = ({ user, handleLogout, setUser }) => {
   const [socket, setSocket] = useState(null);
   const [editing, setEditing] = useState(false);
+  const [selectedUser, getSelectedUser] = useState(null);
 
   const [isChatting, setIsChatting] = useState(false);
   //The handleLogout is referring to the function in App.jsx and is changing the state in there
@@ -110,13 +111,14 @@ const Home = ({ user, handleLogout, setUser }) => {
             <Grid container item xs={12} spacing={3} alignItems="center">
               <Grid item xs={12} sm={6}>
                 <Paper style={classes.paper}>
-                  <Typography>Wheel</Typography>
-                  <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting }/>
+                  <Typography align="center">Wheel</Typography>
+                  <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting } getSelectedUser={ getSelectedUser }/>
                 </Paper>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Paper style={classes.paper}>
                   <Typography>Conditional Rendering of Chat</Typography>
+                  <Chat initialUser={ user } selectedUser={ selectedUser }/>
                 </Paper>
               </Grid>
             </Grid>
@@ -124,30 +126,12 @@ const Home = ({ user, handleLogout, setUser }) => {
             <Grid item xs={12} alignItems="center">
               <Paper style={classes.paper}>
                 <Typography>Wheel</Typography>
-                <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting }/>
+                <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting } getSelectedUser={ getSelectedUser }/>
               </Paper>
             </Grid>
           ) }
         </Grid>
       </div>
-      {/* <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Paper>
-            <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
-          </Paper>
-          { editing ? null : <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>}
-          <Icebreaker user={ user } />
-        </Grid>
-        <Grid item xs={6}>
-          <Matches user={ user } />
-        </Grid>
-      </Grid>
-      <br />
-      <Conversations user={ user } socket={ socket }/>
-      <br />
-      <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
-      <br />
-      <Wheel user={ user } socket={ socket }/> */}
     </div>
   );
 };
