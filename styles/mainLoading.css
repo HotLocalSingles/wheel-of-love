@@ -1,0 +1,27 @@
+
+.main-loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.main-loading-progress {
+  color: success;
+}
+
+.main-loading-text {
+  color: transparent;
+  margin-top: 10px;
+  font-weight: bold;
+  animation: colorSlide 3s linear infinite;
+  animation-direction: alternate;
+  animation-delay: 1s;
+}
+
+@keyframes colorSlide {
+  0% { color: transparent; }
+  50% { color: #34243c; }
+  100% { color: transparent; }
+}

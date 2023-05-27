@@ -2,7 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
-import { Avatar, Typography, List, ListItem, ListItemText, ListItemAvatar, Divider, Box } from '@mui/material';
+
+//Material UI
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
 
 
 const Matches = ({ user }) => {

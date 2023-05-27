@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Route, Routes, Navigate } from 'react-router-dom';
+import { CircularProgress, Typography } from '@mui/material';
+import '../../../styles/mainLoading.css';
+
 
 import Navbar from './NavBar.jsx';
 
@@ -88,7 +91,17 @@ const App = () => {
   //If isLoading is true, show only this div. I had to add this so that the render didn't try and render based on the user state
   //while the server requests are sending to update the state
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="main-loading-container">
+        <CircularProgress disableShrink className="main-loading-progress" color="success" />
+        <Typography
+          variant="subtitle1"
+          component="p"
+          className="main-loading-text"
+        >
+        Your matches are almost ready for you
+        </Typography>
+      </div> );
   }
 
   //Routes div is telling us that all the defined routes are in between it.
