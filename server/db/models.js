@@ -36,6 +36,9 @@ const User = sequelize.define('User', {
   bio: {
     type: DataTypes.STRING,
   },
+  vibe: {
+    type: DataTypes.STRING,
+  },
 });
 
 const Messages = sequelize.define('Messages', {

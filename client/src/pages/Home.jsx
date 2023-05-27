@@ -47,8 +47,7 @@ const Home = ({ user, handleLogout, setUser }) => {
       <Navbar />
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <UserProfile user={ user } setUser={ setUser } />
-          <Vibe />
+          <UserProfile user={user} setUser={setUser} />
           <Icebreaker user={ user } />
         </Grid>
         <Grid item xs={6}>
@@ -56,7 +55,7 @@ const Home = ({ user, handleLogout, setUser }) => {
         </Grid>
       </Grid>
       <br />
-      <Conversations user={ user }/>
+      <Conversations user={ user } socket={ socket }/>
       <br />
       <Button variant="outlined" color="error" size="medium" onClick={ handleLogout }>
         Logout

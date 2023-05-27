@@ -98,7 +98,10 @@ const Wheel = ({ user, socket }) => {
       );
       if (shouldChat) {
         setChatStarted(true);
-        socket.emit('private-chat', {senderId: thatUser.username, receiverId: selectedUser.username, room: 'chat room'});
+        socket.emit('private-chat', {
+          senderId: thatUser.username,
+          receiverId: user.username,
+          room: 'chat room'});
       }
     }, rotationDuration);
   

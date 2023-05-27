@@ -8,7 +8,7 @@ const { getIcebreaker } = require('../helpers/icebreakers.js');
 const { User } = require('../db/models.js');
 
 // Icebreaker API request
-router.get('/api', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const response = await getIcebreaker();
     res.status(201).send(response.data.question);
@@ -19,7 +19,7 @@ router.get('/api', async (req, res) => {
 });
 
 // Save Icebreaker to DB
-router.post('/api', async (req, res) => {
+router.post('/', async (req, res) => {
   const { icebreaker, googleId } = req.body;
   try {
     const user = await User.findOne({ where: { googleId }});

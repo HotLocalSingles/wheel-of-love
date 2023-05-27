@@ -117,6 +117,9 @@ const Chat = ({ initialUser, selectedUser }) => {
               <Grid xs={6} item>
                 <FormControl fullWidth>
                   <TextField
+                    sx={{
+                      border: 1,
+                    }}
                     onKeyPress={ handleKeyPress }
                     onChange={ (e) => setMessage(e.target.value) }
                     value={ message }

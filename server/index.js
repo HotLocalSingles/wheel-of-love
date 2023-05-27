@@ -51,8 +51,8 @@ app.use(passport.session());
 //Including other routers
 app.use("/auth", googleRouter);
 app.use('/users', users);
-app.use('/', vibe);
-app.use('/', icebreaker);
+app.use('/api/vibe', vibe);
+app.use('/api/icebreaker', icebreaker);
 app.use('/', conversations);
 
 app.use('/', matchRouter);
