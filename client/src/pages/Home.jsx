@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Grid } from '@mui/material';
 import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
 import Vibe from '../components/Vibe.jsx';
@@ -13,6 +12,11 @@ import Navbar from '../components/NavBar.jsx';
 
 import Wheel from '../components/Wheel.jsx';
 import Conversations from '../components/Conversations.jsx';
+
+//Material UI
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
 
 const Home = ({ user, handleLogout, setUser }) => {
@@ -48,7 +52,9 @@ const Home = ({ user, handleLogout, setUser }) => {
       {/* <NewUser user={ user } setUser={ setUser }/> */}
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
+          <Paper>
+            <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
+          </Paper>
           { editing ? null : <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>}
           <Icebreaker user={ user } />
         </Grid>
