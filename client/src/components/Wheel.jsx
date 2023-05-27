@@ -5,6 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+// import './wheel.css';
 
 const Wheel = ({ user, socket }) => {
   const thatUser = user;
@@ -32,8 +33,8 @@ const Wheel = ({ user, socket }) => {
       }
       console.log('Backend call for all users:', insertUsers);
       //adding filtering (by location) directly, because I want it done automagically.
-      // currently checking if i can filter by ID since users don't yet have properties.
-      //this could probably be done on backend, idk if that would mess anyone up, so its here for now.
+      // currently checking if i can filter by ID since users dont yet have properties.
+      //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
       setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
@@ -51,7 +52,7 @@ const Wheel = ({ user, socket }) => {
   }, [users, selectedUsers, maleChecked, femaleChecked, queerChecked]);
 
   // For MUI checkboxes/ filtering
-  // * So this also  filters out the self, users who don't share the self's location, and users the wheel has chosen (this session) *
+  // * So this also  filters out the self, users who dont share the self's location, and users the wheel has chosen (this session) *
   const genderFilter = () => {
     const genderFilteredUsers = users.filter((dater) => {
       const isGenderMatched =
@@ -137,12 +138,8 @@ const Wheel = ({ user, socket }) => {
         socket.emit('private-chat', {
           senderId: thatUser.username,
           receiverId: user.username,
-
           room: 'chat room',
         });
-
-          room: 'chat room'});
-
       }
     }, rotationDuration);
   };
@@ -215,11 +212,13 @@ const Wheel = ({ user, socket }) => {
             className='wheel'
             style={{
               // Actual wheel
+              border: '0.2rem solid #bc13fe',
+              boxShadow: '0 0 4px #bc13fe, 0 0 11px #bc13fe, 0 0 19px #bc13fe',
               backgroundColor: 'lightpink',
               borderRadius: '50%',
               position: 'absolute',
               width: '95%',
-              height: '87%',
+              height: '85%',
               marginLeft: '12px',
               marginTop: '12px',
               transform: `rotate(${rotationAngle}deg)`,
