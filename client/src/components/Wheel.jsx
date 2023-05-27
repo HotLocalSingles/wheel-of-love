@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Chat from '../components/Chat.jsx';
-import { Checkbox, Button, Box, Typography } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 const Wheel = ({ user, socket }) => {
 
