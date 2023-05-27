@@ -12,6 +12,7 @@ import Navbar from '../components/NavBar.jsx';
 import Photos from '../components/Photos.jsx';
 
 import Wheel from '../components/Wheel.jsx';
+// import { selectedUser } from '../components/Wheel.jsx';
 import Conversations from '../components/Conversations.jsx';
 
 //Material UI
@@ -121,7 +122,7 @@ const Home = ({ user, handleLogout, setUser }) => {
               <Grid item xs={12} sm={6}>
                 <Paper style={classes.paper}>
                   <Typography>Conditional Rendering of Chat</Typography>
-                  console.log(selectedUser)
+                  {/* <Chat initialUser={user} selectedUser={selectedUser} /> */}
                 </Paper>
               </Grid>
             </Grid>

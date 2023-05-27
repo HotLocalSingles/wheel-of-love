@@ -141,7 +141,6 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         socket.emit('private-chat', {
           senderId: thatUser.username,
           receiverId: user.username,
-          message: message,
           room: [thatUser.id, user.id].join("-"),
         });
       }
