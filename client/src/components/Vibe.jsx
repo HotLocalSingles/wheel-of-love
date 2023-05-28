@@ -3,10 +3,9 @@ import axios from 'axios';
 
 const Vibe = ({ bio, dbVibe }) => {
   const [vibe, setVibe] = useState(dbVibe);
-
   useEffect(() => {
     updateVibe();
-  }, []);
+  }, [bio]);
 
   const vibeCalculator = (data) => {
     const {emotion_scores} = data;
@@ -19,7 +18,7 @@ const Vibe = ({ bio, dbVibe }) => {
   };
 
   const updateVibe = () => {
-    axios.post('/api/vibe', bio)
+    axios.post('/api/vibe', { bio })
       .then(response => {
         const { data } = response;
         const emotion = vibeCalculator(data);
