@@ -31,7 +31,7 @@ const classes = {
   }
 };
 
-const UserProfile = ({ user, setUser, editing, setEditing }) => {
+const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEditingBio, }) => {
   const navigate = useNavigate();
 
   //Edited states of the user profile info
@@ -42,7 +42,6 @@ const UserProfile = ({ user, setUser, editing, setEditing }) => {
   const [editedAge, setEditedAge] = useState(user.age);
 
   //Edit bio is separate since it's a textbox:
-  const [isEditingBio, setIsEditingBio] = useState(false);
   const [editedBio, setEditedBio] = useState(user.bio);
 
 
@@ -140,7 +139,6 @@ const UserProfile = ({ user, setUser, editing, setEditing }) => {
                 <Typography id="bio" gutterBottom>Bio: </Typography>
                 { isEditingBio ? <EditBio user={ user } setEditedBio={ setEditedBio } setIsEditingBio={ setIsEditingBio } editedBio={ editedBio } submitNewBio={ submitNewBio }/> : (<div>
                   <TextField id="bio" value={user.bio} variant="outlined" InputProps={{ readOnly: true }} multiline rows={3} style={{ paddingRight: '2px', paddingBottom: '3px' }} />
-                  <Button variant="outlined" color="secondary" size="medium" onClick={ () => setIsEditingBio(true) }>Edit Bio</Button>
                 </div>)}
               </Grid>
             </Grid>
