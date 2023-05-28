@@ -20,6 +20,9 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+// import '../../../styles/login.css';
+
+
 
 const classes = {
   root: {
@@ -70,12 +73,16 @@ const Home = ({ user, handleLogout, setUser }) => {
           {/* Top Bar */}
           <Grid container item xs={12} spacing={3} alignItems="center">
             <Grid item xs={4}>
-              <Conversations user={ user } socket={ socket }/>
+              {/* <Conversations user={ user } socket={ socket }/> */}
             </Grid>
             <Grid item xs={4}>
-              <Typography align="center">Neon App Name</Typography>
+              <div className="neonBorder" >
+                <div className="neonText">
+                  <Typography variant="h4" align="center" fontFamily="Sacramento">Wheel of Love</Typography>
+                </div>
+              </div>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
             </Grid>
           </Grid>

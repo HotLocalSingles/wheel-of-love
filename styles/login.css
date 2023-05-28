@@ -19,17 +19,35 @@ body {
   align-items: center;  
 }
 
-h1, h2 {
+.neonBorderLogin {
   text-align: center;
   font-weight: 400;
 }
 
-h1 {
+.neonBorderLogin {
   font-size: 6.2rem;
   animation: pulsate 1.5s infinite alternate;  
   border: 0.2rem solid #fff;
   border-radius: 2rem;
   padding: 0.4em;
+  box-shadow: 0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 2rem #61151a,
+    0 0 0.8rem #61151a,
+    0 0 2.8rem #61151a,
+    inset 0 0 1.3rem #61151a; 
+}
+
+.neonBorder {
+  text-align: center;
+  font-weight: 400;
+}
+
+.neonBorder {
+  animation: pulsate 1.5s infinite alternate;  
+  border: 0.2rem solid #fff;
+  border-radius: 2rem;
+  padding: 0.3em;
   box-shadow: 0 0 .2rem #fff,
     0 0 .2rem #fff,
     0 0 2rem #61151a,
