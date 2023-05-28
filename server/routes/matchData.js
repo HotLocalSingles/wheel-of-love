@@ -36,13 +36,14 @@ router.get('/matches/:userId', async (req, res) => {
   }
 });
 
+
 router.post('/matches/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const { userId2 } = req.body;
 
     if (!userId2) {
-      return res.status(400).send('userId2 is required'); // Return a meaningful error response if userId2 is not provided
+      return res.status(400).send('userId2 is required');
     }
 
     const user = await User.findByPk(userId);
@@ -51,9 +52,21 @@ router.post('/matches/:userId', async (req, res) => {
       return res.sendStatus(404);
     }
 
+    // Check if userId2 is already matched with userId1
+    const existingMatch = await Match.findOne({
+      where: {
+        userId1: userId,
+        userId2,
+      },
+    });
+
+    if (existingMatch) {
+      return res.status(200).send('Already matched. DM them!');
+    }
+
     // Create a new match in the database
     const match = await Match.create({
-      userId1: userId, // Assign userId1
+      userId1: userId,
       userId2,
     });
 
@@ -61,7 +74,6 @@ router.post('/matches/:userId', async (req, res) => {
     console.log('Match made successfully');
   } catch (error) {
     console.error(error);
-    console.log(userId1, userId2);
     res.sendStatus(500);
   }
 });

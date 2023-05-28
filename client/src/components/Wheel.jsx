@@ -48,10 +48,10 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
   }, []);
 
   // Use effect for filtering users and setting the initial filtered users
-
+  
   useEffect(() => {
     genderFilter();
-  }, [users, selectedUsers, maleChecked, femaleChecked, queerChecked]);
+  }, [users, maleChecked, femaleChecked, queerChecked, selectedUser]);
 
   // For MUI checkboxes/ filtering
   // * So this also  filters out the self, users who dont share the self's location, and users the wheel has chosen (this session) *
@@ -73,15 +73,15 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
         isNotSelectedUser
       );
     });
-    console.log(genderFilteredUsers);
+    console.log(genderFilteredUsers, 'genderFilteredUsers');
     setFilteredUsers(genderFilteredUsers);
   };
-
+ 
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
   useEffect(() => {
     userRefs.current = userRefs.current.slice(0, filteredUsers.length);
-  }, [filteredUsers.length]);
+  }, [filteredUsers]);
 
   const spinWheel = () => {
     // Calculate the rotation increment and update the rotation angle
@@ -94,8 +94,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
     const rotationDuration = 1000;
 
     // Update the rotation angle with a delay to simulate spinning
-    setRotationAngle(rotationAngle + 360 * 5 + targetRotationAngle); // extra rotations
-
+    setRotationAngle(prevRotationAngle => prevRotationAngle + 360 * 5 + targetRotationAngle);  // extra rotations
     // After the rotation duration, set the selected user and invoke the callback
     setTimeout(() => {
       // Get the y-coordinate of each user div. rect is for rectangle
@@ -110,18 +109,19 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
 
       //THE WHEEL HAS CHOSEN
       const user = filteredUsers[closestIndex];
-
+      
       //sets the user chosen by the wheel.
       setSelectedUser(user);
+      
       //adds the chosen user to array of previously chosen users, to filter them out of next spin.
       setSelectedUsers((prevSelectedUsers) => [...prevSelectedUsers, user]);
-
+      
       // update matches db with the chosen user(matched w/the logged in)
-      // console.log(user.id, 'CHOSEN USER ID ');
+      
       // Update matches db with the chosen user (matched with the logged-in user)
       const userId = thatUser.id; // Replace with the actual user ID
       const userId2 = user.id; // Replace with the actual user ID
-
+      
       axios
         .post(`/matches/${userId}`, { userId2 })
         .then((response) => {
@@ -147,16 +147,23 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
       }
     }, rotationDuration);
   };
-
+  
   return (
-<div className="neonBorder" style={{ backgroundColor: 'white' }}>
+<div className="neonBorder" style={{ backgroundColor: 'black' }}>
 
-      <Typography variant='h3'>Have Fate Pick your Date</Typography>
+      <Typography variant='h3' sx={{
+                  color: 'white',
+                  border: '0.2rem #a8434c',
+                  textShadow:
+                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
+                    fontSize: '40px',
+                    paddingBottom: '20px'
+                }}>Have Fate Pick your Date</Typography>
 
 
       <div
         className='wheelAndCheckboxContainer'
-        style={{ display: 'flex', marginLeft: '20px' }}
+        style={{ display: 'flex', marginLeft: '20px', color: "black" }}
       >
         <div style={{ marginRight: '20px' }}>
           <Box
@@ -172,8 +179,8 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
                 color='default'
                 sx={{
                   backgroundColor: 'black',
-                  color: 'white',
-                  border: '0.1rem solid #a8434c',
+                  color: '#a8434c',
+                  border: '0.1rem #a8434c',
                   boxShadow:
                     '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
                   '&:hover': {
@@ -181,7 +188,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
                   },
                 }}
               />
-              <Typography variant='body1'>Male</Typography>
+              <Typography variant='body1' color='white' >Male</Typography>
             </Box>
             <Box display='flex' alignItems='center'>
               <Checkbox
@@ -191,16 +198,16 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
                 color='default'
                 sx={{
                   backgroundColor: 'black',
-                  color: 'white',
-                  border: '0.1rem solid #a8434c',
+                  color: '#a8434c',
+                  border: '0.1rem #a8434c',
                   boxShadow:
-                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
+                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 20px #61151a',
                   '&:hover': {
                     backgroundColor: '#61151a',
                   },
                 }}
               />
-              <Typography variant='body1'>Female</Typography>
+              <Typography variant='body1' color='white'>Female</Typography>
             </Box>
             <Box display='flex' alignItems='center'>
               <Checkbox
@@ -210,16 +217,16 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
                 color='default'
                 sx={{
                   backgroundColor: 'black',
-                  color: 'white',
-                  border: '0.1rem solid #a8434c',
+                  color: '#a8434c',
+                  border: '0.1rem  #a8434c',
                   boxShadow:
-                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
+                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 20px #61151a',
                   '&:hover': {
                     backgroundColor: '#61151a',
                   },
                 }}
               />
-              <Typography variant='body1'>Queer</Typography>
+              <Typography variant='body1' color='white' >Queer</Typography>
             </Box>
           </Box>
         </div>
@@ -238,11 +245,14 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
           }}
         >
           <div
+          style={{color:'white',
+          textShadow: '0 0 4px #61151a, 0 0 11px #61151a, 0 0 10px #61151a',}}>↓</div>
+          <div
             className='wheel'
             style={{
               // Actual wheel
               border: '0.2rem solid #a8434c',
-              boxShadow: '0 0 4px #61151a, 0 0 11px #61151a, 0 0 100px #61151a',
+              boxShadow: '0 0 4px #61151a, 0 0 11px #61151a, 0 0 80px #61151a',
               backgroundColor: 'black',
               borderRadius: '50%',
               position: 'absolute',
@@ -306,9 +316,6 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
           >
             Spin Again
           </Button>
-          {/* {chatStarted && (
-            // <Chat initialUser={user} selectedUser={selectedUser} />
-          )} */}
         </div>
       ) : (
         <div>
@@ -326,6 +333,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
             }}
           >
             Spin the Wheel
+            
           </Button>
         </div>
       )}
