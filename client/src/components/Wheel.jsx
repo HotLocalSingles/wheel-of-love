@@ -138,12 +138,8 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         socket.emit('private-chat', {
           senderId: thatUser.username,
           receiverId: user.username,
-
           room: 'chat room',
         });
-
-          room: 'chat room'});
-
       }
     }, rotationDuration);
   };
