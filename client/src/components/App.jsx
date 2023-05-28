@@ -13,6 +13,7 @@ import Home from '../pages/Home.jsx';
 import Login from '../pages/Login.jsx';
 import MatchPage from '../pages/MatchPage.jsx';
 import NewUser from '../pages/NewUser.jsx';
+import Main from '../pages/Main.jsx';
 import ChatsPage from '../pages/ChatsPage.jsx';
 
 const App = () => {
@@ -117,7 +118,7 @@ const App = () => {
           element={user ? <Home user={ user } handleLogout={ handleLogout } setUser={ setUser }/> : <Navigate to="/login" />}
         />
         <Route path="/matchPage/:matchName" element={<MatchPage />} />
-        <Route path="/login" element={<Login login={ login } />} />
+        <Route path="/login" element={<Main />} />
         <Route path="/newUser" element={<NewUser user={ user } setUser={ setUser }/>} />
 
       </Routes>
