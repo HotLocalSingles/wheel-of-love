@@ -5,8 +5,10 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 
-const Wheel = ({ user, socket, setIsChatting }) => {
+
+const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
   const thatUser = user;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -71,7 +73,7 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         isNotSelectedUser
       );
     });
-
+    console.log(genderFilteredUsers);
     setFilteredUsers(genderFilteredUsers);
   };
 
@@ -115,7 +117,7 @@ const Wheel = ({ user, socket, setIsChatting }) => {
       setSelectedUsers((prevSelectedUsers) => [...prevSelectedUsers, user]);
 
       // update matches db with the chosen user(matched w/the logged in)
-      console.log(user.id, 'CHOSEN USER ID ');
+      // console.log(user.id, 'CHOSEN USER ID ');
       // Update matches db with the chosen user (matched with the logged-in user)
       const userId = thatUser.id; // Replace with the actual user ID
       const userId2 = user.id; // Replace with the actual user ID
@@ -134,6 +136,7 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
       );
       if (shouldChat) {
+        getSelectedUser(user);
         setIsChatting(true);
         setChatStarted(true);
         socket.emit('private-chat', {
@@ -146,17 +149,10 @@ const Wheel = ({ user, socket, setIsChatting }) => {
   };
 
   return (
-    <div
-      className='wheelContainerContainer'
-      style={{
-        width: '50%',
-        margin: 'auto',
-        textAlign: 'center',
-        color: 'black',
-        position: 'absolute',
-      }}
-    >
-      <h3 style={{ marginBottom: '20px' }}>Have Fate Pick your Date</h3>
+<div className="neonBorder" style={{ backgroundColor: 'white' }}>
+
+      <Typography variant='h3'>Have Fate Pick your Date</Typography>
+
 
       <div
         className='wheelAndCheckboxContainer'
@@ -310,13 +306,9 @@ const Wheel = ({ user, socket, setIsChatting }) => {
           >
             Spin Again
           </Button>
-          {chatStarted && (
-            <Chat
-              key={`chat-${selectedUser.id}`}
-              initialUser={user}
-              selectedUser={selectedUser}
-            />
-          )}
+          {/* {chatStarted && (
+            // <Chat initialUser={user} selectedUser={selectedUser} />
+          )} */}
         </div>
       ) : (
         <div>
