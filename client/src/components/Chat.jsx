@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 
+//importing from the specific endpoint takes less toll on computer
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -14,9 +15,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { io } from 'socket.io-client';
 
-
+/*
+The chat component is designed to take in the logged in user
+and the user selected from the wheel or from clicking one of the matches.
+Then allow those users to communicate in a private chat room in real time.
+Messages are saved to mysql database so they can be rendered later
+This component will also render any previous messages between the users
+*/
 const Chat = ({ initialUser, selectedUser }) => {
-  //create room using the two user IDs
+  //create room using the two user IDs so it will always be unique
+  //sort so the room number for both people is consistent in database
   const room = [initialUser.id, selectedUser.id].sort().join("-"); //works
   console.log(room);
   //states for user and messages
@@ -25,7 +33,9 @@ const Chat = ({ initialUser, selectedUser }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [nickname, setNickname] = useState(initialUser.name);
+  const [socket, setSocket] = useState(null);
 
+  //useEffect so 
   useEffect(() => {
     //create the socket instance and connect to the server
     const socket = io('http://localhost:3000', {
@@ -39,6 +49,13 @@ const Chat = ({ initialUser, selectedUser }) => {
       senderId: initialUser.id,
       receiverId: selectedUser.id,
       room: room
+    });
+
+
+    //listen for chat-message event
+    socket.on('private-chat-message', (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+      console.log('messages set from p-c-m');
     });
 
     //disconnect the socket when the component unmounts
@@ -60,9 +77,23 @@ const Chat = ({ initialUser, selectedUser }) => {
     fetchMessages();
   }, []);
 
+  const fetchPreviousMessages = async (conversation) => {
+    if (conversation && conversation.messages) {
+      setMessages(conversation.messages);
+    } else {
+      setMessages([]);
+    }
+  };
+  
+  useEffect(() => {
+    //fetch previous messages when the selectedConversation changes
+    fetchPreviousMessages(selectedConversation);
+  }, [selectedConversation]);
+
 
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
+  //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
     return (
       <ListItem
@@ -104,8 +135,10 @@ const Chat = ({ initialUser, selectedUser }) => {
 
 
   const sendMessage = () => {
+    // console.log('sendMessage works before conditional'); //works
     //check if nickname and message are not empty
     if (socket && nickname && message && selectedUser) {
+      // console.log('sendMessage working after conditional'); //works
       //create a new message object
       const newMessage = {
         nickname: nickname,
@@ -128,6 +161,7 @@ const Chat = ({ initialUser, selectedUser }) => {
         setSelectedConversation(conversation[0]);
       }
       //emit the message with socket
+      // console.log(newMessage);
       socket.emit('private-chat-message', newMessage);
       //update the state with the new message
       setMessages([...messages, newMessage]);
@@ -191,11 +225,18 @@ const Chat = ({ initialUser, selectedUser }) => {
             <Grid container spacing={4} alignItems="center"
               sx={{ backgroundColor: 'rgba(0, 0, 255, 0)' }}>
               <Grid item id='chatBox' xs={20}>
-                <List id='chatBoxMessages' sx={{
-                  height: '300px',
-                  width: '300px',
-                  backgroundColor: 'rgba(0, 0, 255, 0)'
-                }}>
+                <List id='chatBoxMessages'
+                  sx={{
+                    height: '300px',
+                    width: '300px',
+                    backgroundColor: 'rgba(0, 0, 255, 0)',
+                    height: '600px',
+                    width: '400px',
+                    backgroundColor: 'rgba(0, 0, 255, 0)',
+                    overflowY: 'auto',
+                    maxHeight: '400px',
+                    overflow: 'auto'
+                  }}>
                   { listChatMessages }
                 </List>
               </Grid>
