@@ -8,7 +8,6 @@ const { getVibe } = require('../helpers/vibe.js');
 // Post bio to API for vibe check
 router.post('/', async (req, res) => {
   const { bio } = req.body;
-  console.log("server", bio);
   try {
     const response = await getVibe(bio);
     res.status(201).send(response.data);
