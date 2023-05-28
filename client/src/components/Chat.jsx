@@ -14,6 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { io } from 'socket.io-client';
 
+
 const Chat = ({ initialUser, selectedUser }) => {
   //create room using the two user IDs
   const room = [initialUser.id, selectedUser.id].sort().join("-"); //works
@@ -73,8 +74,25 @@ const Chat = ({ initialUser, selectedUser }) => {
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
     return (
-      <ListItem key={ index }>
-        <ListItemText primary={ `${messageObj.nickname}: ${messageObj.message}` } />
+      <ListItem
+        key={ index }
+        sx={{
+          display: 'flex',
+          justifyContent: messageObj.senderId === selectedUser.id ? 'flex-end' : 'flex-start',
+        }}>
+        <ListItemText
+          primary={`${messageObj.nickname}: ${messageObj.message}`}
+          sx={{
+            display: 'inline-block',
+            padding: '10px',
+            borderRadius: '5px',
+            border: '2px solid #a738ff',
+            background: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            fontWeight: 'bolder',
+          }}
+        />
       </ListItem>
     );
   });
@@ -143,17 +161,39 @@ const Chat = ({ initialUser, selectedUser }) => {
   */
   return (
     <Fragment>
-      <Container>
-        <Paper elevation={6}>
+      <Typography
+        sx={{
+          display: 'inline-block',
+          padding: '10px',
+          borderRadius: '5px',
+          border: '2px solid #a738ff',
+          background: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 'bold',
+        }}>
+              Now Chatting with {selectedUser.name}
+      </Typography>
+      <Container sx={{
+        height: "600px",
+        width: "600px",
+        backgroundImage: 'url(https://i.gifer.com/Ctsx.gif)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        <Paper elevation={6} sx={{
+          backgroundColor: 'rgba(0, 0, 255, 0)'
+        }}>
           <Box padding={3}>
-            <Typography>
-              {/* add maybe icebreaker here? */}
-              Temp Title for Chatbox
-            </Typography>
             <Divider />
-            <Grid container spacing={4} alignItems="center">
+            <Grid container spacing={4} alignItems="center"
+              sx={{ backgroundColor: 'rgba(0, 0, 255, 0)' }}>
               <Grid item id='chatBox' xs={20}>
-                <List id='chatBoxMessages'>
+                <List id='chatBoxMessages' sx={{
+                  height: '300px',
+                  width: '300px',
+                  backgroundColor: 'rgba(0, 0, 255, 0)'
+                }}>
                   { listChatMessages }
                 </List>
               </Grid>
@@ -162,6 +202,8 @@ const Chat = ({ initialUser, selectedUser }) => {
                   <TextField
                     sx={{
                       border: 1,
+                      borderRadius: '5px',
+                      backgroundColor: '#c7b4a7'
                     }}
                     onKeyPress={ handleKeyPress }
                     onChange={ (e) => setMessage(e.target.value) }
@@ -172,6 +214,7 @@ const Chat = ({ initialUser, selectedUser }) => {
               </Grid>
               <Grid item xs={1}>
                 <IconButton
+                  sx={{ backgroundColor: '#c7b4a7'}}
                   onClick={ sendMessage }
                   fontSize='large'>Send
                 </IconButton>
@@ -181,6 +224,13 @@ const Chat = ({ initialUser, selectedUser }) => {
           <Grid item xs={2}>
             <FormControl fullWidth>
               <TextField
+                sx={{
+                  backgroundColor: '#c7b4a7',
+                  color: 'black',
+                  fontWeight: '800',
+                  width: '200px',
+                  borderRadius: '5px'
+                }}
                 onChange={ (e) => handleNicknameChange(e) }
                 value={ nickname }
                 label="add a nickname"
