@@ -25,7 +25,6 @@ const Chat = ({ initialUser, selectedUser }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [nickname, setNickname] = useState(initialUser.name);
-  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     //create the socket instance and connect to the server
@@ -40,13 +39,6 @@ const Chat = ({ initialUser, selectedUser }) => {
       senderId: initialUser.id,
       receiverId: selectedUser.id,
       room: room
-    });
-
-
-    //listen for chat-message event
-    socket.on('private-chat-message', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-      console.log('messages set from p-c-m');
     });
 
     //disconnect the socket when the component unmounts
@@ -71,26 +63,39 @@ const Chat = ({ initialUser, selectedUser }) => {
 
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
-  //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
     return (
       <ListItem
-        key={ index }
+        key={index}
         sx={{
           display: 'flex',
           justifyContent: messageObj.senderId === selectedUser.id ? 'flex-end' : 'flex-start',
-        }}>
+        }}
+      >
         <ListItemText
           primary={`${messageObj.nickname}: ${messageObj.message}`}
           sx={{
             display: 'inline-block',
             padding: '10px',
             borderRadius: '5px',
-            border: '2px solid #a738ff',
-            background: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+            backgroundImage: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             fontWeight: 'bolder',
+            position: 'relative',
+            zIndex: '1',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            backgroundColor: 'black',
+            border: '2px solid #a738ff',
+            zIndex: '0',
           }}
         />
       </ListItem>
@@ -99,10 +104,8 @@ const Chat = ({ initialUser, selectedUser }) => {
 
 
   const sendMessage = () => {
-    // console.log('sendMessage works before conditional'); //works
     //check if nickname and message are not empty
     if (socket && nickname && message && selectedUser) {
-      // console.log('sendMessage working after conditional'); //works
       //create a new message object
       const newMessage = {
         nickname: nickname,
@@ -125,7 +128,6 @@ const Chat = ({ initialUser, selectedUser }) => {
         setSelectedConversation(conversation[0]);
       }
       //emit the message with socket
-      // console.log(newMessage);
       socket.emit('private-chat-message', newMessage);
       //update the state with the new message
       setMessages([...messages, newMessage]);
