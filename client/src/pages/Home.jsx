@@ -73,85 +73,68 @@ const Home = ({ user, handleLogout, setUser }) => {
           {/* Top Bar */}
           <Grid container item xs={12} spacing={3} alignItems="center">
             <Grid item xs={4}>
-              {/* <Conversations user={ user } socket={ socket }/> */}
-            </Grid>
-            <Grid item xs={4}>
-              <div className="neonBorder" >
-                <div className="neonText">
-                  <Typography variant="h4" align="center" fontFamily="Sacramento">Wheel of Love</Typography>
-                </div>
+              <div className="neonText">
+                <Typography variant="h4" align="left" fontFamily="Sacramento">Wheel of Love</Typography>
               </div>
             </Grid>
+            <Grid item xs={4}>
+              {/* <Conversations user={user} socket={socket} /> */}
+            </Grid>
+
             <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
             </Grid>
           </Grid>
 
           {/* Profile Box */}
-          <Grid item xs={12} sm={6} alignItems="center">
-            <div className="neonBorder" >
+          <Grid item xs={12} sm={8} alignItems="center">
+            <div className="neonBorder">
               <Grid item xs={12}>
                 <Paper style={classes.paper}>
-                  <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
-                  { editing ? null : <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>}
+                  <UserProfile user={user} setUser={setUser} editing={editing} setEditing={setEditing} />
+                  {editing ? null : (
+                    <Button variant="outlined" color="secondary" size="medium" onClick={() => setEditing(true)}>Edit Profile</Button>
+                  )}
                 </Paper>
-              </Grid>
-            </div>
-            <div className="neonBorder" >
-              <Grid item xs={12} alignItems="center">
-                <Typography align="center">Photos</Typography>
-                <Photos id={user.id}/>
               </Grid>
             </div>
           </Grid>
 
           {/* Matches Box */}
-          <Grid item xs={12} sm={6} alignItems="center">
-            <div className="neonBorder" >
 
-              <Grid item xs={12} alignItems="center">
-                <Typography align="center">Matches</Typography>
-                <Matches user={ user } />
+          <Grid item xs={12} sm={4} alignItems="center" style={{ backgroundColor: 'white' }}>
+            <div className="neonBorder">
+              <Grid item xs={12} alignItems="center" >
+                <Typography variant="h6" align="center">Matches</Typography>
+                <Matches user={user} />
               </Grid>
-            </ div>
-            <div className="neonBorder" >
               <Grid item xs={12} alignItems="center">
-                <Typography>Icebreaker</Typography>
-                <Icebreaker user={ user } />
-              </Grid>
-            </ div>
-          </Grid>
-
-          {/* Wheel Box */}
-          { isChatting ? (
-            <Grid container item xs={12} spacing={3} alignItems="center">
-              <div className="neonBorder" >
-                <Grid item xs={12} sm={6}>
-                  <Paper style={classes.paper}>
-                    <Typography align="center">Wheel</Typography>
-                    <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting } getSelectedUser={ getSelectedUser }/>
-                  </Paper>
-                </Grid>
-              </div>
-              <div className="neonBorder" >
-                <Grid item xs={12} sm={6}>
-                  <Paper style={classes.paper}>
-                    <Typography>Conditional Rendering of Chat</Typography>
-                    <Chat initialUser={ user } selectedUser={ selectedUser }/>
-                  </Paper>
-                </Grid>
-              </div>
-            </Grid>
-          ) : (
-            <div className="neonBorder" >
-              <Grid item xs={12} sm={6}>
-                <Paper style={classes.paper}>
-                  <Typography align="center">Wheel</Typography>
-                  <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting } getSelectedUser={ getSelectedUser }/>
-                </Paper>
+                <Typography variant="h6" align="center">Icebreaker</Typography>
+                <Icebreaker user={user} />
               </Grid>
             </div>
-          ) }
+          </Grid>
+
+
+          {/* Wheel Box */}
+          {isChatting ? (
+            <Grid container item xs={12} spacing={3} alignItems="center">
+              <Grid item xs={12} sm={6}>
+                <Typography variant="h6" align="center">Wheel</Typography>
+                <Wheel user={user} socket={socket} setIsChatting={setIsChatting} getSelectedUser={getSelectedUser} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper style={classes.paper}>
+                  <Typography variant="h6" align="center">Chat</Typography>
+                  <Chat initialUser={user} selectedUser={selectedUser} />
+                </Paper>
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid item xs={12} sm={6}>
+              <Wheel user={user} socket={socket} setIsChatting={setIsChatting} getSelectedUser={getSelectedUser} />
+            </Grid>
+          )}
         </Grid>
       </div>
     </div>

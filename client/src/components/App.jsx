@@ -98,6 +98,7 @@ const App = () => {
           variant="subtitle1"
           component="p"
           className="main-loading-text"
+          color="#c7b4a7"
         >
         Your matches are almost ready for you
         </Typography>
