@@ -140,7 +140,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
         socket.emit('private-chat', {
           senderId: thatUser.username,
           receiverId: user.username,
-          room: [thatUser.id, user.id].join("-"),
+          room: [thatUser.id, user.id].sort().join("-"),
         });
       }
     }, rotationDuration);

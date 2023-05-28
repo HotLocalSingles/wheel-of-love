@@ -71,19 +71,13 @@ io.on('connection', (socket) => {
   //handle private chat
   socket.on('private-chat', async ({ senderId, receiverId, room }) => {
     socket.join(room);
-    console.log('Private chat connected on server');
-    console.log(`User has joined room ${room}`);
   });
 
   //to broadcast message just to one user and not to sender
   //combined event handler
   socket.on('private-chat-message', ({ nickname, senderId, receiverId, message, room }) => {
-    const receiverSocketId = connectedUsers.get(receiverId);
-    if (receiverSocketId) {
-      // Directly include the nickname, senderId and message
-      const thatMessage = { nickname, message };
-      socket.to(receiverSocketId).emit('private-chat-message', thatMessage);
-    }
+    const thatMessage = { nickname, message };
+    socket.to(room).emit('private-chat-message', thatMessage);
     Messages.create({
       senderId: senderId,
       receiverId: receiverId,

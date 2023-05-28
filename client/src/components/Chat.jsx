@@ -1,13 +1,24 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, Paper } from '@mui/material';
+
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { io } from 'socket.io-client';
 
 const Chat = ({ initialUser, selectedUser }) => {
   //create room using the two user IDs
-  const room = [initialUser.id, selectedUser.id].join("-");
-  // console.log(room);
+  const room = [initialUser.id, selectedUser.id].sort().join("-"); //works
+  console.log(room);
   //states for user and messages
-  // const [selectUser, setSelectUser] = useState(initialUser ? initialUser.name : '');
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [message, setMessage] = useState('');
@@ -34,13 +45,14 @@ const Chat = ({ initialUser, selectedUser }) => {
     //listen for chat-message event
     socket.on('private-chat-message', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
+      console.log('messages set from p-c-m');
     });
 
     //disconnect the socket when the component unmounts
     return () => {
       socket.disconnect('GoodBye');
     };
-  }, [socket]);
+  }, []);
 
   //fetch messages from the server
   const fetchMessages = async () => {
@@ -60,24 +72,19 @@ const Chat = ({ initialUser, selectedUser }) => {
   //and create a listItem from each message obj
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
-    //find the conversation with the matching room
-    const conversation = conversations.find(convo => convo.room === room);
-    //if the conversation doesn't exist or doesn't have any messages, return null
-    if (!conversation || !conversation.messages) { return null; }
-    //map through the messages in the conversation
-    return conversation.messages.map((message, messageIndex) => (
-      <ListItem key={messageIndex}>
-        <ListItemText primary={`${message.nickname}: ${message.content}`} />
+    return (
+      <ListItem key={ index }>
+        <ListItemText primary={ `${messageObj.nickname}: ${messageObj.message}` } />
       </ListItem>
-    ));
+    );
   });
 
 
   const sendMessage = () => {
-    console.log('sendMessage works before conditional');
+    // console.log('sendMessage works before conditional'); //works
     //check if nickname and message are not empty
     if (socket && nickname && message && selectedUser) {
-      console.log('sendMessage working after conditional');
+      // console.log('sendMessage working after conditional'); //works
       //create a new message object
       const newMessage = {
         nickname: nickname,
@@ -86,6 +93,19 @@ const Chat = ({ initialUser, selectedUser }) => {
         message: message,
         room: room
       };
+      //check if a conversation already exists for the room
+      const conversation = conversations.filter(convo => convo.room === room);
+
+      //if the conversation exists, add the message to it
+      //if it doesn't, create a new conversation
+      //do it here because listChatMessages re-renders too much
+      if (conversation[0] && conversation[0].messages) {
+        conversation[0].messages.push(newMessage);
+        setSelectedConversation(conversation[0]);
+      } else {
+        setConversations(prevConversations => [...prevConversations, { room: room, messages: [newMessage] }]);
+        setSelectedConversation(conversation[0]);
+      }
       //emit the message with socket
       // console.log(newMessage);
       socket.emit('private-chat-message', newMessage);

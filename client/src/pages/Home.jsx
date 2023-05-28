@@ -12,8 +12,6 @@ import Navbar from '../components/NavBar.jsx';
 import Photos from '../components/Photos.jsx';
 
 import Wheel from '../components/Wheel.jsx';
-// import { selectedUser } from '../components/Wheel.jsx';
-import Conversations from '../components/Conversations.jsx';
 
 //Material UI
 import Grid from '@mui/material/Grid';
@@ -53,7 +51,7 @@ const Home = ({ user, handleLogout, setUser }) => {
     //create the socket instance
     const socket = io('http://localhost:3000', {
       query: {
-        userId: user.username,
+        userId: user.id,
       }
     });
     setSocket(socket);
@@ -71,7 +69,6 @@ const Home = ({ user, handleLogout, setUser }) => {
           {/* Top Bar */}
           <Grid container item xs={12} spacing={3} alignItems="center">
             <Grid item xs={4}>
-              <Conversations user={ user } socket={ socket }/>
             </Grid>
             <Grid item xs={4}>
               <Typography align="center">Neon App Name</Typography>
