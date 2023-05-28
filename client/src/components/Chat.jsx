@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 
 //importing from the specific endpoint takes less toll on computer
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -26,7 +25,6 @@ const Chat = ({ initialUser, selectedUser }) => {
   //create room using the two user IDs so it will always be unique
   //sort so the room number for both people is consistent in database
   const room = [initialUser.id, selectedUser.id].sort().join("-"); //works
-  console.log(room);
   //states for user and messages
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
@@ -54,7 +52,6 @@ const Chat = ({ initialUser, selectedUser }) => {
     //listen for chat-message event
     socket.on('private-chat-message', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
-      console.log('messages set from p-c-m');
     });
 
     //disconnect the socket when the component unmounts
@@ -83,6 +80,7 @@ const Chat = ({ initialUser, selectedUser }) => {
     fetchMessages(selectedConversation);
   }, []);
 
+  //get the previous messages and store them in the correct conversation
   const fetchPreviousMessages = async (conversation) => {
     if (conversation && conversation.messages) {
       setMessages(conversation.messages);
@@ -143,10 +141,8 @@ const Chat = ({ initialUser, selectedUser }) => {
 
 
   const sendMessage = () => {
-    // console.log('sendMessage works before conditional'); //works
     //check if nickname and message are not empty
     if (socket && nickname && message && selectedUser) {
-      // console.log('sendMessage working after conditional'); //works
       //create a new message object
       const newMessage = {
         nickname: nickname,
