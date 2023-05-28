@@ -43,11 +43,10 @@ const Wheel = ({ user, socket, setIsChatting }) => {
   // use effect saves us from rerendering loop from fetchUsers
   useEffect(() => {
     fetchUsers();
-    
   }, []);
 
   // Use effect for filtering users and setting the initial filtered users
-  
+
   useEffect(() => {
     genderFilter();
   }, [users, selectedUsers, maleChecked, femaleChecked, queerChecked]);
@@ -62,7 +61,9 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         (queerChecked && dater.gender === 'Queer');
       const isInUserLocation = dater.location === user.location;
       const isNotCurrentUser = dater.id !== user.id;
-      const isNotSelectedUser = !selectedUsers.find((selectedUser) => selectedUser.id === dater.id);
+      const isNotSelectedUser = !selectedUsers.find(
+        (selectedUser) => selectedUser.id === dater.id,
+      );
       return (
         isGenderMatched &&
         isInUserLocation &&
@@ -70,10 +71,9 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         isNotSelectedUser
       );
     });
-  
+
     setFilteredUsers(genderFilteredUsers);
   };
-  
 
   // This keeps the (positional) reference array and users array the same length,
   // In case a user is added or removed in the future.
@@ -82,7 +82,6 @@ const Wheel = ({ user, socket, setIsChatting }) => {
   }, [filteredUsers.length]);
 
   const spinWheel = () => {
-    
     // Calculate the rotation increment and update the rotation angle
     const rotationIncrement = 360 / filteredUsers.length;
     const randomIndex = Math.floor(Math.random() * filteredUsers.length);
@@ -109,7 +108,7 @@ const Wheel = ({ user, socket, setIsChatting }) => {
 
       //THE WHEEL HAS CHOSEN
       const user = filteredUsers[closestIndex];
-      
+
       //sets the user chosen by the wheel.
       setSelectedUser(user);
       //adds the chosen user to array of previously chosen users, to filter them out of next spin.
@@ -129,7 +128,7 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         .catch((error) => {
           console.error('Failed to create a match:', error);
         });
-      
+
       //Cynthia addition
       const shouldChat = window.confirm(
         `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
@@ -179,11 +178,12 @@ const Wheel = ({ user, socket, setIsChatting }) => {
                   backgroundColor: 'black',
                   color: 'white',
                   border: '0.1rem solid #a8434c',
-                  boxShadow: '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
+                  boxShadow:
+                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
                   '&:hover': {
                     backgroundColor: '#61151a',
                   },
-                }} 
+                }}
               />
               <Typography variant='body1'>Male</Typography>
             </Box>
@@ -197,7 +197,8 @@ const Wheel = ({ user, socket, setIsChatting }) => {
                   backgroundColor: 'black',
                   color: 'white',
                   border: '0.1rem solid #a8434c',
-                  boxShadow: '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
+                  boxShadow:
+                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
                   '&:hover': {
                     backgroundColor: '#61151a',
                   },
@@ -215,15 +216,15 @@ const Wheel = ({ user, socket, setIsChatting }) => {
                   backgroundColor: 'black',
                   color: 'white',
                   border: '0.1rem solid #a8434c',
-                  boxShadow: '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
+                  boxShadow:
+                    '0 0 4px #61151a, 0 0 11px #61151a, 0 0 25px #61151a',
                   '&:hover': {
                     backgroundColor: '#61151a',
                   },
                 }}
               />
               <Typography variant='body1'>Queer</Typography>
-            </Box
-            >
+            </Box>
           </Box>
         </div>
 
@@ -263,7 +264,8 @@ const Wheel = ({ user, socket, setIsChatting }) => {
 
               // Calculate the translation values to move the user divs vertically.
 
-              const radius = document.getElementById('wheelContainer').clientWidth / 3 + 30; // Adjust this value to control the distance of names from the center of wheel.
+              const radius =
+                document.getElementById('wheelContainer').clientWidth / 3 + 30; // Adjust this value to control the distance of names from the center of wheel.
               const translationY = -radius;
 
               return (
@@ -318,17 +320,18 @@ const Wheel = ({ user, socket, setIsChatting }) => {
         </div>
       ) : (
         <div>
-          <Button variant='contained'
-           onClick={spinWheel}
-           sx={{
-            backgroundColor: 'black',
-            color: 'white',
-            border: '0.2rem solid #a8434c',
-            boxShadow: '0 0 4px #a8434c, 0 0 11px #a8434c, 0 0 19px #a8434c',
-            '&:hover': {
-              backgroundColor: '#a8434c',
-            },
-          }}
+          <Button
+            variant='contained'
+            onClick={spinWheel}
+            sx={{
+              backgroundColor: 'black',
+              color: 'white',
+              border: '0.2rem solid #a8434c',
+              boxShadow: '0 0 4px #a8434c, 0 0 11px #a8434c, 0 0 19px #a8434c',
+              '&:hover': {
+                backgroundColor: '#a8434c',
+              },
+            }}
           >
             Spin the Wheel
           </Button>
