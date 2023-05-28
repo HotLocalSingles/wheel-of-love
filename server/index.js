@@ -79,6 +79,7 @@ io.on('connection', (socket) => {
     const thatMessage = { nickname, message };
     socket.to(room).emit('private-chat-message', thatMessage);
     Messages.create({
+      nickname: nickname,
       senderId: senderId,
       receiverId: receiverId,
       message: message,

@@ -35,7 +35,6 @@ const Chat = ({ initialUser, selectedUser }) => {
   const [nickname, setNickname] = useState(initialUser.name);
   const [socket, setSocket] = useState(null);
 
-  //useEffect so 
   useEffect(() => {
     //create the socket instance and connect to the server
     const socket = io('http://localhost:3000', {
@@ -70,11 +69,18 @@ const Chat = ({ initialUser, selectedUser }) => {
     const data = await res.json();
     // console.log(data); //[ { room: 'blah', messages: [] } ]
     setConversations(data);
+    //render the previous messages as soon as the room is established
+    const conversation = data.find(convo => convo.room === room);
+    if (conversation) {
+      setMessages(conversation.messages);
+    } else {
+      setMessages([]);
+    }
   };
-  
+
   //get the message from the database on mount
   useEffect(() => {
-    fetchMessages();
+    fetchMessages(selectedConversation);
   }, []);
 
   const fetchPreviousMessages = async (conversation) => {
@@ -88,7 +94,7 @@ const Chat = ({ initialUser, selectedUser }) => {
   useEffect(() => {
     //fetch previous messages when the selectedConversation changes
     fetchPreviousMessages(selectedConversation);
-  }, [selectedConversation]);
+  }, [selectedConversation, selectedUser]);
 
 
   //listChatMessages will display all the messages in the state array 'messages'
@@ -100,7 +106,9 @@ const Chat = ({ initialUser, selectedUser }) => {
         key={index}
         sx={{
           display: 'flex',
-          justifyContent: messageObj.senderId === selectedUser.id ? 'flex-end' : 'flex-start',
+          justifyContent: 'flex-start',
+          marginBottom: '10px',
+          maxWidth: '95%'
         }}
       >
         <ListItemText
@@ -211,76 +219,81 @@ const Chat = ({ initialUser, selectedUser }) => {
               Now Chatting with {selectedUser.name}
       </Typography>
       <Container sx={{
-        height: "600px",
+        height: "650px",
         width: "600px",
         backgroundImage: 'url(https://i.gifer.com/Ctsx.gif)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}>
-        <Paper elevation={6} sx={{
-          backgroundColor: 'rgba(0, 0, 255, 0)'
-        }}>
-          <Box padding={3}>
-            <Divider />
-            <Grid container spacing={4} alignItems="center"
-              sx={{ backgroundColor: 'rgba(0, 0, 255, 0)' }}>
-              <Grid item id='chatBox' xs={20}>
-                <List id='chatBoxMessages'
-                  sx={{
-                    height: '300px',
-                    width: '300px',
-                    backgroundColor: 'rgba(0, 0, 255, 0)',
-                    height: '600px',
-                    width: '400px',
-                    backgroundColor: 'rgba(0, 0, 255, 0)',
-                    overflowY: 'auto',
-                    maxHeight: '400px',
-                    overflow: 'auto'
-                  }}>
-                  { listChatMessages }
-                </List>
-              </Grid>
-              <Grid xs={6} item>
-                <FormControl fullWidth>
-                  <TextField
-                    sx={{
-                      border: 1,
-                      borderRadius: '5px',
-                      backgroundColor: '#c7b4a7'
-                    }}
-                    onKeyPress={ handleKeyPress }
-                    onChange={ (e) => setMessage(e.target.value) }
-                    value={ message }
-                    label="What would you like to say?"
-                    variant="outlined"/>
-                </FormControl>
-              </Grid>
-              <Grid item xs={1}>
-                <IconButton
-                  sx={{ backgroundColor: '#c7b4a7'}}
-                  onClick={ sendMessage }
-                  fontSize='large'>Send
-                </IconButton>
-              </Grid>
-            </Grid>
-          </Box>
-          <Grid item xs={2}>
-            <FormControl fullWidth>
-              <TextField
+        <Box padding={3}>
+          <Divider />
+          <Grid container spacing={4} alignItems="center"
+            sx={{ backgroundColor: 'rgba(0, 0, 255, 0)' }}>
+            <Grid item id='chatBox' xs={20}>
+              <List
+                id='chatBoxMessages'
                 sx={{
-                  backgroundColor: '#c7b4a7',
-                  color: 'black',
-                  fontWeight: '800',
-                  width: '200px',
-                  borderRadius: '5px'
-                }}
-                onChange={ (e) => handleNicknameChange(e) }
-                value={ nickname }
-                label="add a nickname"
-                variant="outlined"/>
-            </FormControl>
+                  height: '800px',
+                  width: '400px',
+                  backgroundColor: 'rgba(0, 0, 255, 0)',
+                  overflowY: 'auto',
+                  maxHeight: '400px',
+                  overflow: 'auto',
+                  '&::-webkit-scrollbar': {
+                    width: '0.2em'
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: 'rgba(0,0,0,.1)',
+                    outline: '1px solid slategrey'
+                  }
+                }}>
+                { listChatMessages }
+              </List>
+            </Grid>
+            <Grid xs={6} item>
+              <FormControl fullWidth>
+                <TextField
+                  sx={{
+                    border: 1,
+                    borderRadius: '5px',
+                    backgroundColor: '#c7b4a7'
+                  }}
+                  onKeyPress={ handleKeyPress }
+                  onChange={ (e) => setMessage(e.target.value) }
+                  value={ message }
+                  label="What would you like to say?"
+                  variant="outlined"/>
+              </FormControl>
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton
+                sx={{ backgroundColor: '#c7b4a7'}}
+                onClick={ sendMessage }
+                fontSize='large'>Send
+              </IconButton>
+            </Grid>
           </Grid>
-        </Paper>
+        </Box>
+        <Grid item xs={2}>
+          <FormControl fullWidth>
+            <TextField
+              sx={{
+                backgroundColor: '#c7b4a7',
+                color: 'black',
+                fontWeight: '800',
+                width: '200px',
+                borderRadius: '5px'
+              }}
+              onChange={ (e) => handleNicknameChange(e) }
+              value={ nickname }
+              label="add a nickname"
+              variant="outlined"/>
+          </FormControl>
+        </Grid>
       </Container>
     </Fragment>
   );
