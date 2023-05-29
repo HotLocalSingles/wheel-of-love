@@ -130,7 +130,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
           console.error('Failed to create a match:', error);
         });
 
-      //Cynthia addition
+      //Cynthia addition for Chat component
       const shouldChat = window.confirm(
         `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
       );
@@ -148,7 +148,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
   };
 
   return (
-<div className="neonBorder" style={{ backgroundColor: 'white' }}>
+    <div className="neonBorder" style={{ backgroundColor: 'white' }}>
 
       <Typography variant='h3'>Have Fate Pick your Date</Typography>
 

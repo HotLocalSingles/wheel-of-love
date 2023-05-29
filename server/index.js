@@ -65,6 +65,11 @@ app.use('/', matchRouter);
 //connectedUser will store the socket ids
 const connectedUsers = new Map();
 io.on('connection', (socket) => {
+  //to validate messages before saving them
+  const validateMessage = (message) => {
+    return (!message || typeof message !== 'string') ? false : true;
+  };
+
   const { userId } = socket.handshake.query;
   connectedUsers.set(userId, socket.id);
   // console.log('User connected. Socket ID:', socket.id);
@@ -76,17 +81,23 @@ io.on('connection', (socket) => {
   //to broadcast message just to one user and not to sender
   //combined event handler
   socket.on('private-chat-message', ({ nickname, senderId, receiverId, message, room }) => {
-    const thatMessage = { nickname, message };
-    socket.to(room).emit('private-chat-message', thatMessage);
-    Messages.create({
-      nickname: nickname,
-      senderId: senderId,
-      receiverId: receiverId,
-      message: message,
-      room: room
-    })
-      .then(() => console.log('Message saved successfully.', senderId, message, receiverId, room))
-      .catch(err => console.log(err));
+    if (!validateMessage(message)) {
+      //return error response to the client
+      socket.emit('Validation error. This is an invalid message: ', message);
+      return;
+    } else {
+      const thatMessage = { nickname, message };
+      socket.to(room).emit('private-chat-message', thatMessage);
+      Messages.create({
+        nickname: nickname,
+        senderId: senderId,
+        receiverId: receiverId,
+        message: message,
+        room: room
+      })
+        .then(() => console.log('Message saved successfully.', senderId, message, receiverId, room))
+        .catch(err => console.log(err));
+    }
   });
 
   //handle disconnect event
