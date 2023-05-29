@@ -47,6 +47,9 @@ const Messages = sequelize.define('Messages', {
     primaryKey: true,
     autoIncrement: true,
   },
+  nickname: {
+    type: DataTypes.STRING
+  },
   senderId: {
     type: DataTypes.STRING
   },

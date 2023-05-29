@@ -11,7 +11,7 @@ const EditUsername = ({ user, editedUsername, setEditedUsername }) => {
     <div>
       <Box component="form" sx={{'& .MuiTextField-root': { m: 1, },}} noValidate autoComplete="off">
         <div>
-          <Typography id="username" gutterBottom>Username:</Typography>
+          {/* <Typography id="username" gutterBottom>Username:</Typography> */}
           <TextField required size="small" id="outlined-basic" label="Edit Username" value={ editedUsername } onChange={(event) => setEditedUsername(event.target.value)} />
           { editedUsername === user.username ? null : <DeleteForeverRoundedIcon size="large" onClick={ () => setEditedUsername(user.username) }/>}
         </div>
