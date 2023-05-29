@@ -11,6 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import { Card, CardContent, CardActions, } from '@mui/material';
 import Box from '@mui/material/Box';
+import '@fontsource/sacramento';
 
 const style = {
   align: "center",
@@ -93,7 +94,9 @@ const Matches = ({ user }) => {
     return (
       <Grid container item xs={ 12 } >
         <Stack direction="column" spacing={1} sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
-          <Typography variant="h6" align="center">No Matches- Spin the Wheel!</Typography>
+          <div className="neonText">
+            <Typography variant="h3" align="center" fontFamily="Sacramento">No Matches - Spin the Wheel!</Typography>
+          </div>
         </Stack>
       </Grid>
     );
