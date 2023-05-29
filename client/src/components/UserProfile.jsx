@@ -74,8 +74,8 @@ const UserProfile = ({ user, setUser, }) => {
       }
       //THIS IS UPDATING THE APP STATE, PASSED DOWN FROM PARENT
       setEditing(false);
-      navigate('/');
       setUser(response.data);
+      navigate('/');
 
     } catch (error) {
       console.log('Client Side Update of Profile Did Not Work', error);
@@ -93,7 +93,6 @@ const UserProfile = ({ user, setUser, }) => {
       if (!response.data) {
         throw response;
       }
-      console.log(response.data.bio);
       setUser(response.data);
       setIsEditingBio(false);
     } catch (error) {

@@ -89,7 +89,6 @@ const Wheel = () => {
   );
 };
 
-//        <div className="">    </div>
 const Main = ({ user, handleLogout, setUser }) => {
 
   const [activeTab, setActiveTab] = useState('profile');
@@ -136,7 +135,7 @@ const Main = ({ user, handleLogout, setUser }) => {
 
         <Grid container alignItems='center' item xs={12} >
           {activeTab === 'matches' && <Matches user={ user }/>}
-          {activeTab === 'profile' && <UserProfile user={ user }/>}
+          {activeTab === 'profile' && <UserProfile user={ user } setUser={ setUser }/>}
           {activeTab === 'icebreaker' && <Icebreaker googleId={ user.googleId }/>}
           {activeTab === 'wheel' && <Wheel />}
         </Grid>
