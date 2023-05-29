@@ -3,10 +3,15 @@ import axios from 'axios';
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import '@fontsource/sacramento';
+import '../../../styles/styling.css';
+
+
 
 const Icebreaker = ({ googleId }) => {
 
-  const [icebreaker, setIcebreaker] = useState(null);
+  const [icebreaker, setIcebreaker] = useState(icebreaker);
 
   const fetchIcebreaker = () => {
     axios.get('/api/icebreaker')
@@ -28,17 +33,14 @@ const Icebreaker = ({ googleId }) => {
   return (
     <Grid container >
       <Grid container item xs={12} >
-        <Typography variant="h4" align="center">{ icebreaker }</Typography>
+        <div className="neonText">
+          <Typography variant="h4" align="center" fontFamily="Sacramento">{ icebreaker }</Typography>
+        </div>
       </Grid>
       <Grid container item xs={12} >
-        <button onClick={handleNewIcebreakerClick}>Create New Icebreaker</button>
-        <button onClick={handleSaveIcebreakerClick}>Save Favorite Icebreaker</button>
+        <Button variant="outlined" color="error" size="medium" onClick={handleNewIcebreakerClick} sx={{ mx: 'auto', mt: 2 }}>Create New Icebreaker</Button>
+        <Button variant="outlined" color="error" size="medium" onClick={handleSaveIcebreakerClick} sx={{ mx: 'auto', mt: 2 }}>Save Favorite Icebreaker</Button>
       </Grid>
-      {/* <div >
-        <button onClick={handleNewIcebreakerClick}>Create New Icebreaker</button>
-        <button onClick={handleSaveIcebreakerClick}>Save Favorite Icebreaker</button>
-      </div>
-      <div>{icebreaker}</div> */}
     </Grid>
   );
 };

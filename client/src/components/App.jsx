@@ -20,7 +20,6 @@ const App = () => {
 
   //FAKE USER DATA FOR NOW, COMMENT THESE OUT AND UNCOMMENT THE REAL CODE BELOW WHEN NEEDED //
   // const fakeUser = {
-  //   id: 1,
   //   name: "Me",
   //   username: 'myusername',
   //   gender: 'Queer',
