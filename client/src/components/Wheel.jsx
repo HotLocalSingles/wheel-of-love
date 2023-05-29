@@ -143,7 +143,6 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
           senderId: thatUser.username,
           receiverId: user.username,
           room: [thatUser.id, user.id].sort().join("-"),
-          room: [thatUser.id, user.id].sort().join("-"),
         });
       }
     }, rotationDuration);
