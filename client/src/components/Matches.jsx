@@ -6,16 +6,18 @@ import axios from 'axios';
 //Material UI
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
 
+
+const style = {
+  align: "center",
+  border: '1px solid black'
+};
 
 const Matches = ({ user }) => {
   const [matches, setMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
 
@@ -33,6 +35,8 @@ const Matches = ({ user }) => {
     } catch (error) {
       console.error('Could not retrieve all matches:', error);
     }
+
+    setIsLoading(false);
   };
 
   const navigateToMatchPage = (matchName) => {
@@ -43,35 +47,46 @@ const Matches = ({ user }) => {
     getMatches();
   }, []);
 
-
-  if (matches.length === 0) {
+  if (isLoading) {
     return (
-      <div>
-        {/* <Typography variant="h5" align="center" gutterBottom>Matches</Typography> */}
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          <ListItem><ListItemText sx={{ marginLeft: '16px' }} primary="No Matches" /></ListItem>
-        </List>
-      </div>
+      <Grid container item xs={ 12 } >
+        <div className="main-loading-container">
+          <CircularProgress align="center" className="main-loading-progress" color="success" />
+          <Typography variant="h6" align="center">Loading your Matches</Typography>
+        </div>
+      </Grid>
     );
   }
 
+  if (!isLoading && matches.length === 0) {
+    return (
+      <Grid container item xs={ 12 }>
+        <Typography variant="h6" align="center">No Matches- Spin the Wheel!</Typography>
+      </Grid>
+    );
+  }
+  // const Matches = () => {
+  //   return (
+  //     <Grid container >
+  //       {matches.map((match) => (
+  //         <Grid item xs={12} style={style}>
+  //           <Avatar onClick={() => navigateToMatchPage(match.name)} src={match.picture} sx={{ cursor: 'pointer' }} referrerPolicy="no-referrer" />
+  //           <Typography variant="h6" align="center">{match.name}</Typography>
+  //         </Grid>
+  //       ))}
+  //     </Grid>
+  //   );
+  // };
+
   return (
-    <div>
-      {/* <Typography variant="h5" align="center" gutterBottom>Matches</Typography> */}
-      <List sx={{ width: '100%',}}>
-        {matches.map((match) => (
-          <div key={match.id}>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar onClick={() => navigateToMatchPage(match.name)} alt="Match Profile Image" src={match.picture} sx={{ width: 80, height: 80, cursor: 'pointer' }} referrerPolicy="no-referrer" />
-              </ListItemAvatar>
-              <ListItemText sx={{ marginLeft: '16px' }} primary={match.name} />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </div>
-        ))}
-      </List>
-    </div>
+    <Grid container >
+      {matches.map((match) => (
+        <Grid item xs={12} style={style}>
+          <Avatar onClick={() => navigateToMatchPage(match.name)} src={match.picture} sx={{ cursor: 'pointer' }} referrerPolicy="no-referrer" />
+          <Typography variant="h6" align="center">{match.name}</Typography>
+        </Grid>
+      ))}
+    </Grid>
   );
 
 
