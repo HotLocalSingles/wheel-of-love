@@ -21,6 +21,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
 
 //Tester Styling:
 const classes = {
@@ -37,8 +38,25 @@ const style = {
   border: '1px solid black'
 };
 
-const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEditingBio, }) => {
+const UserProfile = ({ user, setUser, }) => {
   const navigate = useNavigate();
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [isBioHovered, setIsBioHovered] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setIsBioHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setIsBioHovered(false);
+  };
+
 
   //Edited states of the user profile info
   const [editedName, setEditedName] = useState(user.name);
@@ -113,7 +131,10 @@ const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEd
       <Grid item xs={12} style={{ height: '100%', width: '100%', }}>
         <Stack direction="column" spacing={1} sx={{ height: '100%', width: '100%' }}>
           <Stack key={user.username} direction="row" sx={{ height: '100%', width: '100%' }} spacing={1}>
-            <Card key={user.name} sx={{ height: '100%', width: '100%' }}>
+            <Card key={user.name} sx={{ height: '100%', width: '100%' }}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
                 <Avatar
                   alt={user.name}
@@ -125,16 +146,27 @@ const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEd
                     { editing ? <EditName user={ user } editedName={ editedName } setEditedName={ setEditedName }/> : <Typography gutterBottom variant="h5" component="div">{user.name}</Typography>}
                     { editing ? <EditUsername user={ user } editedUsername={ editedUsername } setEditedUsername={ setEditedUsername }/> : <Typography variant="body2" color="text.secondary" marginLeft={1}>@{user.username}</Typography> }
                   </Box>
-                  <Typography  marginTop={1}>
-                    {user.bio}
-                  </Typography>
+                  { isEditingBio ? <EditBio user={ user } setEditedBio={ setEditedBio } setIsEditingBio={ setIsEditingBio } editedBio={ editedBio } submitNewBio={ submitNewBio }/> 
+                    : <Typography
+                      marginTop={1}>{user.bio}</Typography>}
+                  {(isBioHovered && !isEditingBio) && (
+                    <Box>
+                      <EditIcon sx={{ cursor: 'pointer' }} variant="outlined" size="medium"onClick={() => setIsEditingBio(true)}>Edit Bio</EditIcon>
+                    </Box>
+                  )}
+
                   <Box display="flex" alignItems="center" marginTop={3}>
                     { editing ? <EditGender user={ user } editedGender={ editedGender } setEditedGender={ setEditedGender }/> : <Typography >Gender: {user.gender}</Typography>}
-                    { editing ? <EditAge user={ user } editedAge={ editedAge } setEditedAge={ setEditedAge }/> : <Typography  marginLeft={2}>Age: {user.age}</Typography> }
+                    { editing ? <EditAge user={ user } editedAge={ editedAge } setEditedAge={ setEditedAge }/> : <Typography marginLeft={2}>Age: {user.age}</Typography> }
                   </Box>
-                  <Typography  marginTop={1}>Lives in {user.location}</Typography>
+                  <Typography marginTop={1}>Lives in {user.location}</Typography>
                   <Typography id="vibe" marginTop={1} ><Vibe bio={user.bio} dbVibe={user.vibe}/></Typography>
                 </CardContent>
+                {(isHovered && !editing) && (
+                  <Box>
+                    <EditIcon sx={{ cursor: 'pointer' }} variant="outlined" size="medium"onClick={() => setEditing(true)}>Edit Profile</EditIcon>
+                  </Box>
+                )}
               </Box>
               <CardActions>
               </CardActions>

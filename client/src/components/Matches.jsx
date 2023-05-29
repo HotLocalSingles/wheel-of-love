@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
-import { Card, CardMedia, CardContent, CardActions, } from '@mui/material';
+import { Card, CardContent, CardActions, } from '@mui/material';
 import Box from '@mui/material/Box';
 
 const style = {
