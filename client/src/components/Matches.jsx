@@ -42,9 +42,9 @@ const matchesList = [
 ];
 
 const Matches = ({ user }) => {
-  const [matches, setMatches] = useState(matchesList);
-  // const [isLoading, setIsLoading] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [matches, setMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -58,6 +58,7 @@ const Matches = ({ user }) => {
       }
 
       const filteredMatches = allMatches.data.map((match) => match.User2);
+      console.log(filteredMatches);
       setMatches(filteredMatches);
 
     } catch (error) {
@@ -71,28 +72,30 @@ const Matches = ({ user }) => {
     navigate(`/matchPage/${ matchName }`);
   };
 
-  // useEffect(() => {
-  //   getMatches();
-  // }, []);
+  useEffect(() => {
+    getMatches();
+  }, []);
 
   if (isLoading) {
     return (
       <Grid container item xs={ 12 } >
-        <div className="main-loading-container">
-          <CircularProgress align="center" className="main-loading-progress" color="success" />
-          <Typography variant="h6" align="center">Loading your Matches</Typography>
-        </div>
+        <Stack direction="column" spacing={1} sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
+          <div className="main-loading-container">
+            <CircularProgress align="center" className="main-loading-progress" color="success" />
+            <Typography variant="h6" align="center" color="white">Loading your Matches</Typography>
+          </div>
+        </Stack>
       </Grid>
     );
   }
 
-  // if (!isLoading && matches.length === 0) {
-  //   return (
-  //     <Grid container item xs={ 12 }>
-  //       <Typography variant="h6" align="center">No Matches- Spin the Wheel!</Typography>
-  //     </Grid>
-  //   );
-  // }
+  if (!isLoading && matches.length === 0) {
+    return (
+      <Grid container item xs={ 12 }>
+        <Typography variant="h6" align="center">No Matches- Spin the Wheel!</Typography>
+      </Grid>
+    );
+  }
   // const Matches = () => {
   //   return (
   //     <Grid container >
@@ -108,10 +111,10 @@ const Matches = ({ user }) => {
 
   return (
     <Grid item xs={12} style={{ height: '100%', width: '100%', }}>
-      <Stack direction="column" spacing={1} sx={{ height: '100%', width: '100%' }}>
+      <Stack direction="column" spacing={1} sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
         {matches.map((match) => (
           <Stack style={style} key={match.username} direction="row" sx={{ height: '100%', width: '100%' }} spacing={1}>
-            <Card key={match.name} sx={{ height: '100%', width: '100%' }}>
+            <Card key={match.name} sx={{ height: '100%', width: '100%', }}>
               <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
                 <Avatar
                   alt={match.name}
@@ -151,7 +154,7 @@ const Matches = ({ user }) => {
       </Stack>
     </Grid>
   );
-      
+
 
 
 };
