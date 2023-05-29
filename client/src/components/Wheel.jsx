@@ -121,9 +121,6 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
       // Update matches db with the chosen user (matched with the logged-in user)
       const userId = thatUser.id;
       const userId2 = user.id;
-
-      const userId = thatUser.id; // Replace with the actual user ID
-      const userId2 = user.id; // Replace with the actual user ID
       
       axios
         .post(`/matches/${userId}`, { userId2 })
