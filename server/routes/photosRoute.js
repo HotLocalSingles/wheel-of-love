@@ -47,7 +47,6 @@ router.post('/:id', async (req, res) => {
 // Delete photo from DB
 router.delete('/:id/:imageURL', async (req, res) => {
   const { id, imageURL } = req.params;
-  console.log(imageURL);
   try {
     const user = await User.findByPk(id);
     if (!user) {
