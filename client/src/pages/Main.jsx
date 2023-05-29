@@ -104,28 +104,28 @@ const Main = ({ user, handleLogout, setUser }) => {
 
         <Grid container item xs={12} style={style}>
 
-          <Grid item xs={12} className="wheel-sign">
-            <Typography fontFamily="Sacramento" className="neonText" variant="h4" align="center">Wheel of Love</Typography>
+          <Grid item xs={12} className="wheel-sign neonBorder">
+            <Typography fontFamily="Sacramento" className="neonText" variant="h2" align="center">Wheel of Love</Typography>
           </Grid>
 
           <Grid item xs={6}>
-            <div style={style} className="tab">
-              <Typography onClick={() => setActiveTab('profile')} variant="h6" align="center">Profile</Typography>
+            <div className="tab neonBorder">
+              <Typography onClick={() => setActiveTab('profile')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Profile</Typography>
             </div>
           </Grid>
           <Grid item xs={6}>
-            <div style={style} className="tab">
-              <Typography onClick={() => setActiveTab('matches')} variant="h6" align="center">Matches</Typography>
+            <div className="tab neonBorder">
+              <Typography onClick={() => setActiveTab('matches')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Matches</Typography>
             </div>
           </Grid>
           <Grid item xs={6}>
-            <div style={style} className="tab">
-              <Typography onClick={() => setActiveTab('icebreaker')} variant="h6" align="center">Ice Breaker</Typography>
+            <div className="tab neonBorder">
+              <Typography onClick={() => setActiveTab('icebreaker')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Ice Breaker</Typography>
             </div>
           </Grid>
           <Grid item xs={6}>
-            <div style={style} className="tab">
-              <Typography onClick={() => setActiveTab('wheel')} variant="h6" align="center">Wheel/Chat</Typography>
+            <div className="tab neonBorder">
+              <Typography onClick={() => setActiveTab('wheel')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Wheel/Chat</Typography>
             </div>
           </Grid>
         </Grid>
