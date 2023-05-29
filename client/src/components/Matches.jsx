@@ -91,8 +91,10 @@ const Matches = ({ user }) => {
 
   if (!isLoading && matches.length === 0) {
     return (
-      <Grid container item xs={ 12 }>
-        <Typography variant="h6" align="center">No Matches- Spin the Wheel!</Typography>
+      <Grid container item xs={ 12 } >
+        <Stack direction="column" spacing={1} sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
+          <Typography variant="h6" align="center">No Matches- Spin the Wheel!</Typography>
+        </Stack>
       </Grid>
     );
   }

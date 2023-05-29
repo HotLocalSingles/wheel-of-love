@@ -162,55 +162,6 @@ const UserProfile = ({ user, setUser, }) => {
           <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
         </div>) : null}
       </Grid>
-
-      {/* <Grid container spacing={1}>
-        <Grid container item xs={12} spacing={3}>
-          <>
-            <Grid item xs={4} container direction="column" justifyContent="center" alignItems="center">
-              <Grid item>
-                <Avatar alt="User Profile Image" src={user.picture} sx={{ width: 100, height: 100 }} referrerPolicy="no-referrer" />
-              </Grid>
-              <Grid item>
-                { editing ? <EditName user={ user } editedName={ editedName } setEditedName={ setEditedName }/> : <Typography id="name" gutterBottom>{ user.name }</Typography>}
-              </Grid>
-            </Grid>
-
-            <Grid item xs={4} container direction="column" alignItems="center">
-              <Grid item>
-                { editing ? <EditUsername user={ user } editedUsername={ editedUsername } setEditedUsername={ setEditedUsername }/> : <Typography id="username" gutterBottom>Username: {user.username}</Typography> }
-              </Grid>
-              <Grid item>
-                { editing ? <EditGender user={ user } editedGender={ editedGender } setEditedGender={ setEditedGender }/> : <Typography id="gender" gutterBottom>Gender: {user.gender}</Typography>}
-              </Grid>
-              <Grid item>
-                { editing ? <EditAge user={ user } editedAge={ editedAge } setEditedAge={ setEditedAge }/> : <Typography id="age" gutterBottom>Age: {user.age}</Typography> }
-              </Grid>
-              <Grid item>
-                <Typography id="vibe" gutterBottom><Vibe bio={user.bio} dbVibe={user.vibe}/></Typography>
-              </Grid>
-
-            </Grid>
-            <Grid item xs={4} container direction="column" alignItems="center">
-              <Grid item>
-                { editing ? <EditLocation user={ user } editedLocation={ editedLocation } setEditedLocation={ setEditedLocation }/> : <Typography id="location" gutterBottom> Location: {user.location}</Typography>}
-              </Grid>
-              <Grid item>
-                <Typography id="bio" gutterBottom>Bio: </Typography>
-                { isEditingBio ? <EditBio user={ user } setEditedBio={ setEditedBio } setIsEditingBio={ setIsEditingBio } editedBio={ editedBio } submitNewBio={ submitNewBio }/> : (<div>
-                  <TextField id="bio" value={user.bio} variant="outlined" InputProps={{ readOnly: true }} multiline rows={3} style={{ paddingRight: '2px', paddingBottom: '3px' }} />
-                </div>)}
-              </Grid>
-            </Grid>
-          </>
-        </Grid>
-      </Grid>
-      { editing ? (<div>
-        <Button variant="outlined" color="secondary" size="medium" onClick={ submitNewUserInfo }>Save Profile</Button>
-        <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
-      </div>) : null}
-      <Grid item xs={12} alignItems="center">
-        <Photos id={user.id} />
-      </Grid> */}
     </Grid>
   );
 };

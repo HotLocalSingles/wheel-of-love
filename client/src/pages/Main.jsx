@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 //Material UI
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 
 import UserProfile from '../components/UserProfile.jsx';
 import Icebreaker from '../components/Icebreaker.jsx';
@@ -128,6 +128,7 @@ const Main = ({ user, handleLogout, setUser }) => {
             </div>
           </Grid>
         </Grid>
+        <Button variant="outlined" color="error" size="medium" onClick={handleLogout} sx={{ mx: 'auto', mt: 2 }}>Get Me Out of Here</Button>
       </Grid>
 
       {/* Right Grid */}
