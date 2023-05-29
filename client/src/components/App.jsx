@@ -33,7 +33,7 @@ const App = () => {
 
   // const [user, setUser] = useState(fakeUser);
   // const [isLoading, setIsLoading] = useState(false); //<-- Bypassing the login screen and loading screen
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   //The states, storing the logged in user information and if the page is loading information
   const [user, setUser] = useState(null);
@@ -137,7 +137,7 @@ const App = () => {
         <Route path="/matchPage/:matchName" element={<MatchPage setUser={ setUser }/>} />
         <Route path="/login" element={ <Login login={ login }/>} />
         <Route path="/newUser" element={<NewUser user={ user } setUser={ setUser }/>} />
-
+        <Route path="/wheel" element={ <Home user={ user } setUser={ setUser }/> } />
       </Routes>
     </div>
   );

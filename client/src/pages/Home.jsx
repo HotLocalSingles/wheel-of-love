@@ -35,7 +35,7 @@ const classes = {
 };
 
 
-const Home = ({ user, handleLogout, setUser }) => {
+const Home = ({ user }) => {
   const [socket, setSocket] = useState(null);
   const [selectedUser, getSelectedUser] = useState(null);
 

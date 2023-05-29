@@ -68,9 +68,9 @@ const Matches = ({ user }) => {
     setIsLoading(false);
   };
 
-  const navigateToMatchPage = (matchName) => {
-    navigate(`/matchPage/${ matchName }`);
-  };
+  // const navigateToMatchPage = (matchName) => {
+  //   navigate(`/matchPage/${ matchName }`);
+  // };
 
   useEffect(() => {
     getMatches();
@@ -116,7 +116,7 @@ const Matches = ({ user }) => {
       <Stack direction="column" spacing={1} sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
         {matches.map((match) => (
           <Stack style={style} key={match.username} direction="row" sx={{ height: '100%', width: '100%' }} spacing={1}>
-            <Card key={match.name} sx={{ height: '100%', width: '100%', }}>
+            <Card key={match.susername} sx={{ height: '100%', width: '100%', }}>
               <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
                 <Avatar
                   alt={match.name}
