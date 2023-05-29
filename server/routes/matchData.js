@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 const { User, Match } = require('../db/models');
 
 //Get matches for a specific user
-router.get('/:userId', async (req, res) => {
+router.get('/matches/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     console.log(userId);
