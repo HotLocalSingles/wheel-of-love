@@ -13,6 +13,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { io } from 'socket.io-client';
+import DOMPurify from 'dompurify';
 
 /*
 The chat component is designed to take in the logged in user
@@ -48,7 +49,6 @@ const Chat = ({ initialUser, selectedUser }) => {
       room: room
     });
 
-
     //listen for chat-message event
     socket.on('private-chat-message', (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
@@ -83,7 +83,13 @@ const Chat = ({ initialUser, selectedUser }) => {
   //get the previous messages and store them in the correct conversation
   const fetchPreviousMessages = async (conversation) => {
     if (conversation && conversation.messages) {
-      setMessages(conversation.messages);
+      //sanitize the previous messages using DOMPurify
+      const sanitizedMessages = conversation.messages.map((message) => ({
+        ...message,
+        nickname: DOMPurify.sanitize(message.nickname),
+        message: DOMPurify.sanitize(message.message),
+      }));
+      setMessages(sanitizedMessages);
     } else {
       setMessages([]);
     }
@@ -99,6 +105,8 @@ const Chat = ({ initialUser, selectedUser }) => {
   //and create a listItem from each message obj
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
+    const sanitizedNickname = DOMPurify.sanitize(messageObj.nickname);
+    const sanitizedMessage = DOMPurify.sanitize(messageObj.message);
     return (
       <ListItem
         key={index}
@@ -110,7 +118,7 @@ const Chat = ({ initialUser, selectedUser }) => {
         }}
       >
         <ListItemText
-          primary={`${messageObj.nickname}: ${messageObj.message}`}
+          primary={`${sanitizedNickname}: ${sanitizedMessage}`}
           sx={{
             display: 'inline-block',
             padding: '10px',
@@ -143,13 +151,15 @@ const Chat = ({ initialUser, selectedUser }) => {
   const sendMessage = () => {
     //check if nickname and message are not empty
     if (socket && nickname && message && selectedUser) {
+      const sanitizedNickname = DOMPurify.sanitize(nickname);
+      const sanitizedMessage = DOMPurify.sanitize(message);
       //create a new message object
       const newMessage = {
-        nickname: nickname,
+        nickname: sanitizedNickname,
         senderId: initialUser.id,
         receiverId: selectedUser.id,
-        message: message,
-        room: room
+        message: sanitizedMessage,
+        room: room,
       };
       //check if a conversation already exists for the room
       const conversation = conversations.filter(convo => convo.room === room);
@@ -183,10 +193,11 @@ const Chat = ({ initialUser, selectedUser }) => {
   };
 
   const handleNicknameChange = (event) => {
-    setNickname(event.target.value);
+    const sanitizedNickname = DOMPurify.sanitize(event.target.value);
+    setNickname(sanitizedNickname);
   };
 
-  // Use useEffect to initialize tempNickname with initialUser when the component mounts
+  // Use useEffect to initialize nickname with initialUser when the component mounts
   useEffect(() => {
     setNickname(initialUser.name);
   }, [initialUser.name]);

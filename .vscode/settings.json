@@ -5,6 +5,7 @@
     "chatbox",
     "convo",
     "divs",
+    "dompurify",
     "resave"
   ]
 }

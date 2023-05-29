@@ -129,7 +129,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
           console.error('Failed to create a match:', error);
         });
 
-      //Cynthia addition
+      //Cynthia addition for Chat component
       const shouldChat = window.confirm(
         `You are now connected to ${user.name}. Do you want to chat with ${user.name}? `,
       );
