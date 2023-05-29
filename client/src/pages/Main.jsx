@@ -12,9 +12,12 @@ import Matches from '../components/Matches.jsx';
 
 // import Wheel from '../components/Wheel.jsx';
 
+import '../../../styles/styling.css';
+import '../../../styles/login.css';
+import '@fontsource/sacramento';
+
 
 const style = {
-  align: "center",
   border: '1px solid black'
 };
 
@@ -86,7 +89,7 @@ const Wheel = () => {
   );
 };
 
-
+//        <div className="">    </div>
 const Main = ({ user, handleLogout, setUser }) => {
 
   const [activeTab, setActiveTab] = useState('profile');
@@ -94,43 +97,52 @@ const Main = ({ user, handleLogout, setUser }) => {
 
 
   return (
-    <div className="pageContainer">
-      <Grid container spacing={3} style={style}>
+    <Grid spacing={5} className="page-container" container style={style}>
 
-        {/* Left Grid */}
-        <Grid container item xs={6} sm={6} style={style}>
+      {/* Left Grid */}
+      <Grid spacing={2} container item xs={6} sm={6} style={style}>
 
-          <Grid container item xs={12} style={style}>
-            <Grid item xs={12} style={style}>
-              <Typography variant="h4" align="center">Wheel of Love</Typography>
-            </Grid>
-            <Grid item xs={6} style={style}>
-              <Typography onClick={ () => setActiveTab('profile') } variant="h6" align="center">Profile</Typography>
-            </Grid>
-            <Grid item xs={6} style={style}>
-              <Typography onClick={ () => setActiveTab('matches')} variant="h6" align="center">Matches</Typography>
-            </Grid>
-            <Grid item xs={6} style={style}>
-              <Typography onClick={ () => setActiveTab('icebreaker') } variant="h6" align="center">Ice Breaker</Typography>
-            </Grid>
-            <Grid item xs={6} style={style}>
-              <Typography onClick={ () => setActiveTab('wheel') } variant="h6" align="center">Wheel/Chat</Typography>
-            </Grid>
+        <Grid container item xs={12} style={style}>
+
+          <Grid item xs={12} className="wheel-sign">
+            <Typography fontFamily="Sacramento" className="neonText" variant="h4" align="center">Wheel of Love</Typography>
           </Grid>
-        </Grid>
 
-        {/* Right Grid */}
-        <Grid container item xs={6} sm={6} style={style}>
-
-          <Grid container item xs={12} style={style}>
-            {activeTab === 'matches' && <Matches user={ user }/>}
-            {activeTab === 'profile' && <UserProfile user={ user }/>}
-            {activeTab === 'icebreaker' && <Icebreaker googleId={ user.googleId }/>}
-            {activeTab === 'wheel' && <Wheel />}
+          <Grid item xs={6}>
+            <div style={style} className="tab">
+              <Typography onClick={() => setActiveTab('profile')} variant="h6" align="center">Profile</Typography>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div style={style} className="tab">
+              <Typography onClick={() => setActiveTab('matches')} variant="h6" align="center">Matches</Typography>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div style={style} className="tab">
+              <Typography onClick={() => setActiveTab('icebreaker')} variant="h6" align="center">Ice Breaker</Typography>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div style={style} className="tab">
+              <Typography onClick={() => setActiveTab('wheel')} variant="h6" align="center">Wheel/Chat</Typography>
+            </div>
           </Grid>
         </Grid>
       </Grid>
-    </div>
+
+      {/* Right Grid */}
+      <Grid container item xs={6} sm={6} style={style}>
+
+        <Grid container item xs={12} style={style}>
+          {activeTab === 'matches' && <Matches user={ user }/>}
+          {activeTab === 'profile' && <UserProfile user={ user }/>}
+          {activeTab === 'icebreaker' && <Icebreaker googleId={ user.googleId }/>}
+          {activeTab === 'wheel' && <Wheel />}
+        </Grid>
+      </Grid>
+
+    </Grid>
   );
 
 };
