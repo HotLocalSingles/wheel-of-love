@@ -20,7 +20,6 @@ const App = () => {
 
   //FAKE USER DATA FOR NOW, COMMENT THESE OUT AND UNCOMMENT THE REAL CODE BELOW WHEN NEEDED //
   // const fakeUser = {
-  //   id: 1,
   //   name: "Me",
   //   username: 'myusername',
   //   gender: 'Queer',
@@ -137,7 +136,7 @@ const App = () => {
         <Route path="/matchPage/:matchName" element={<MatchPage setUser={ setUser }/>} />
         <Route path="/login" element={ <Login login={ login }/>} />
         <Route path="/newUser" element={<NewUser user={ user } setUser={ setUser }/>} />
-
+        <Route path="/wheel" element={ <Home user={ user } setUser={ setUser }/> } />
       </Routes>
     </div>
   );
