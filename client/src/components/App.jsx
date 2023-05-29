@@ -115,10 +115,10 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={user ? <Home user={ user } handleLogout={ handleLogout } setUser={ setUser }/> : <Navigate to="/login" />}
+          element={user ? <Main user={user} handleLogout={ handleLogout } setUser={ setUser }/> : <Navigate to="/login" />}
         />
         <Route path="/matchPage/:matchName" element={<MatchPage />} />
-        <Route path="/login" element={<Main />} />
+        <Route path="/login" element={ <Login login={ login }/>} />
         <Route path="/newUser" element={<NewUser user={ user } setUser={ setUser }/>} />
 
       </Routes>

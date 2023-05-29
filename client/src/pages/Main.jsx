@@ -31,9 +31,6 @@ const matches = [
   },
 ];
 
-const user = {
-  name: "Me",
-}
 
 const Matches = () => {
   return (
@@ -49,11 +46,11 @@ const Matches = () => {
 
 };
 
-const UserProfile = () => {
+const UserProfile = ({ user }) => {
   return (
     <Grid container >
       <Grid item xs={12} style={style}>
-        <Avatar />
+        <Avatar src={user.picture}/>
         <Typography variant="h6" align="center">{user.name}</Typography>
       </Grid>
     </Grid>
@@ -119,7 +116,7 @@ const Main = ({ user, handleLogout, setUser }) => {
           <Typography variant="h3" align="center">Right Column</Typography>
           <Grid container item xs={12} style={style}>
             {activeTab === 'matches' && <Matches />}
-            {activeTab === 'profile' && <UserProfile />}
+            {activeTab === 'profile' && <UserProfile user={ user }/>}
             {activeTab === 'icebreaker' && <Icebreaker />}
             {activeTab === 'wheel' && <Wheel />}
           </Grid>
