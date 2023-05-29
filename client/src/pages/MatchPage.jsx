@@ -64,6 +64,7 @@ const MatchPage = () => {
       <Avatar alt="User Profile Image" src={ stateMatchInfo.picture } sx={{ width: 200, height: 200 }} referrerPolicy="no-referrer"/>
       <br />
       <br />
+      {/* <Chat initialUser={ } selectedUser={ stateMatchInfo } */}
       <Button onClick={ navigateToHome } variant="contained" sx={{ backgroundColor: '#926aa6' }}> Back to Home</Button>
     </div>
   );
