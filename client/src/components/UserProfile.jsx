@@ -103,7 +103,8 @@ const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEd
 
 
   return (
-    <div style={classes.root}>
+    <Grid container >
+
       <Grid container spacing={1}>
         <Grid container item xs={12} spacing={3}>
           <>
@@ -150,12 +151,9 @@ const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEd
         <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
       </div>) : null}
       <Grid item xs={12} alignItems="center">
-        <Typography variant="h6">
-              Photos
-        </Typography>
         <Photos id={user.id} />
       </Grid>
-    </div>
+    </Grid>
   );
 };
 

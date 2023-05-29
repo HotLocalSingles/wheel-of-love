@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-const Icebreaker = ({ user }) => {
-  const googleId = user.googleId;
+const Icebreaker = ({ googleId }) => {
 
   const [icebreaker, setIcebreaker] = useState(null);
 

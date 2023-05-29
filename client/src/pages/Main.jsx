@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react';
 //Material UI
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-
 import Avatar from '@mui/material/Avatar';
 
+import UserProfile from '../components/UserProfile.jsx';
+import Icebreaker from '../components/Icebreaker.jsx';
 
 
 const style = {
@@ -46,27 +47,27 @@ const Matches = () => {
 
 };
 
-const UserProfile = ({ user }) => {
-  return (
-    <Grid container >
-      <Grid item xs={12} style={style}>
-        <Avatar src={user.picture}/>
-        <Typography variant="h6" align="center">{user.name}</Typography>
-      </Grid>
-    </Grid>
+// const UserProfile = ({ user }) => {
+//   return (
+//     <Grid container >
+//       <Grid item xs={12} style={style}>
+//         <Avatar src={user.picture}/>
+//         <Typography variant="h6" align="center">{user.name}</Typography>
+//       </Grid>
+//     </Grid>
 
-  );
-};
+//   );
+// };
 
-const Icebreaker = () => {
-  return (
-    <Grid container >
-      <Grid item xs={12} style={style}>
-        <Typography variant="h6" align="center">Interact with Icebreaker</Typography>
-      </Grid>
-    </Grid>
-  );
-};
+// const Icebreaker = () => {
+//   return (
+//     <Grid container >
+//       <Grid item xs={12} style={style}>
+//         <Typography variant="h6" align="center">Interact with Icebreaker</Typography>
+//       </Grid>
+//     </Grid>
+//   );
+// };
 
 const Wheel = () => {
   return (
@@ -117,7 +118,7 @@ const Main = ({ user, handleLogout, setUser }) => {
           <Grid container item xs={12} style={style}>
             {activeTab === 'matches' && <Matches />}
             {activeTab === 'profile' && <UserProfile user={ user }/>}
-            {activeTab === 'icebreaker' && <Icebreaker />}
+            {activeTab === 'icebreaker' && <Icebreaker googleId={ user.googleId }/>}
             {activeTab === 'wheel' && <Wheel />}
           </Grid>
         </Grid>
