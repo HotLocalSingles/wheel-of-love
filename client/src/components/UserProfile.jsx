@@ -17,26 +17,11 @@ import Box from '@mui/material/Box';
 
 // Material UI:
 import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
-//Tester Styling:
-const classes = {
-  root: {
-    flexGrow: 1
-  },
-  paper: {
-    padding: 20,
-    textAlign: "center",
-  }
-};
-const style = {
-  align: "center",
-  border: '1px solid black'
-};
 
 const UserProfile = ({ user, setUser, }) => {
   const navigate = useNavigate();
@@ -159,7 +144,7 @@ const UserProfile = ({ user, setUser, }) => {
                     { editing ? <EditGender user={ user } editedGender={ editedGender } setEditedGender={ setEditedGender }/> : <Typography >Gender: {user.gender}</Typography>}
                     { editing ? <EditAge user={ user } editedAge={ editedAge } setEditedAge={ setEditedAge }/> : <Typography marginLeft={2}>Age: {user.age}</Typography> }
                   </Box>
-                  <Typography marginTop={1}>Lives in {user.location}</Typography>
+                  { editing ? <EditLocation user={ user } editedLocation={ editedLocation } setEditedLocation={ setEditedLocation }/> : <Typography marginTop={1}>Lives in {user.location}</Typography>}
                   <Typography id="vibe" marginTop={1} ><Vibe bio={user.bio} dbVibe={user.vibe}/></Typography>
                 </CardContent>
                 {(isHovered && !editing) && (
