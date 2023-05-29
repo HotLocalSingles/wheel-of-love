@@ -13,11 +13,9 @@ import EditBio from './EditProfileComp.jsx/EditBio.jsx';
 
 // Material UI:
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
 //Tester Styling:

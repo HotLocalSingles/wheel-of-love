@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 const Icebreaker = ({ googleId }) => {
 
@@ -24,13 +26,20 @@ const Icebreaker = ({ googleId }) => {
       });
   };
   return (
-    <>
-      <div >
+    <Grid container >
+      <Grid container item xs={12} >
+        <Typography variant="h4" align="center">{ icebreaker }</Typography>
+      </Grid>
+      <Grid container item xs={12} >
+        <button onClick={handleNewIcebreakerClick}>Create New Icebreaker</button>
+        <button onClick={handleSaveIcebreakerClick}>Save Favorite Icebreaker</button>
+      </Grid>
+      {/* <div >
         <button onClick={handleNewIcebreakerClick}>Create New Icebreaker</button>
         <button onClick={handleSaveIcebreakerClick}>Save Favorite Icebreaker</button>
       </div>
-      <div>{icebreaker}</div>
-    </>
+      <div>{icebreaker}</div> */}
+    </Grid>
   );
 };
 
