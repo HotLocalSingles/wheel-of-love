@@ -5,6 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 // import './wheel.css';
 
 const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
@@ -147,17 +148,10 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
   };
 
   return (
-    <div
-      className='wheelContainerContainer'
-      style={{
-        width: '50%',
-        margin: 'auto',
-        textAlign: 'center',
-        color: 'black',
-        position: 'absolute',
-      }}
-    >
-      <h3 style={{ marginBottom: '20px' }}>Have Fate Pick your Date</h3>
+<div className="neonBorder" style={{ backgroundColor: 'white' }}>
+
+      <Typography variant='h3'>Have Fate Pick your Date</Typography>
+
 
       <div
         className='wheelAndCheckboxContainer'

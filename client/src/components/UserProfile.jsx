@@ -151,7 +151,12 @@ const UserProfile = ({ user, setUser, editing, setEditing }) => {
         <Button variant="outlined" color="secondary" size="medium" onClick={ submitNewUserInfo }>Save Profile</Button>
         <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
       </div>) : null}
-
+      <Grid item xs={12} alignItems="center">
+        <Typography variant="h6">
+              Photos
+        </Typography>
+        <Photos id={user.id} />
+      </Grid>
     </div>
   );
 };

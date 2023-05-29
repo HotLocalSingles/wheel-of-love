@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+
 
 const Photos = ({ id }) => {
 
   const [photos, setPhotos] = useState([]);
   const [imageURL, setImageURL] = useState('');
+
+  function srcset(image, size, rows = 1, cols = 1) {
+    return {
+      src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
+      srcSet: `${image}?w=${size * cols}&h=${
+        size * rows
+      }&fit=crop&auto=format&dpr=2 2x`,
+    };
+  }
 
   const handleImageURLChange = (e) => {
     setImageURL(e.target.value);
@@ -43,7 +55,14 @@ const Photos = ({ id }) => {
 
   return (
     <>
-      <div>
+<ImageList sx={{ width: '100%', height: 'auto' }} variant="quilted" cols={4} rowHeight="auto">
+        {photos.map((photo, i) => (
+          <ImageListItem key={i} onClick={() => handleDeletePhoto(photo)}>
+            <img {...srcset(photo, 121)} alt={`Photo ${i + 1}`} loading="lazy" />
+          </ImageListItem>
+        ))}
+      </ImageList>
+      {/* <div>
         {photos.map((photo, i) => (
           <img
             onClick={() => handleDeletePhoto(photo)}
@@ -53,7 +72,7 @@ const Photos = ({ id }) => {
             src={photo}
           />
         ))}
-      </div>
+      </div> */}
       <div>
         <input
           onChange={handleImageURLChange}
