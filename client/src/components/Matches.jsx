@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -46,7 +45,7 @@ const Matches = ({ user }) => {
   const [isLoading, setIsLoading] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   const getMatches = async () => {
@@ -116,7 +115,7 @@ const Matches = ({ user }) => {
       <Stack direction="column" spacing={1} sx={{ height: '500px', width: '100%', overflow: 'auto' }}>
         {matches.map((match) => (
           <Stack style={style} key={match.username} direction="row" sx={{ height: '100%', width: '100%' }} spacing={1}>
-            <Card key={match.susername} sx={{ height: '100%', width: '100%', }}>
+            <Card key={match.username} sx={{ height: '100%', width: '100%', }}>
               <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
                 <Avatar
                   alt={match.name}
