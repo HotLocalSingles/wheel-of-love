@@ -98,89 +98,185 @@ const NewUser = ({ user, setUser }) => {
   }, [showBio, editUsername, editGender, confirmedAge, editLocation]);
 
   return (
-    <div>
-      <Typography variant="h5" gutterBottom>Looks Like You're a New User.</Typography>
-      <Typography variant="h5" gutterBottom>Time to Add Some Information so the Local Singles Know What They're Getting Into!</Typography>
+    <Box mt={4}>
+      <Typography variant="h5" gutterBottom>
+        Create account:
+      </Typography>
 
       {editUsername ? (
-        <div>
-          <Typography id="username-textbox" gutterBottom>Username:</Typography>
-          <TextField required size="small" id="outlined-basic" label="Username" onChange={ (event) => setUsername(event.target.value) } />
-          <Button variant="contained" onClick={ handleUsernameSave }>Save</Button>
-        </div>
+        <Box mt={2}>
+          <Typography variant="body1" gutterBottom>
+            Username:
+          </Typography>
+          <Stack mt={2} direction="row" spacing={2} alignItems="center">
+            <TextField
+              required
+              size="small"
+              id="outlined-basic"
+              label="Username"
+              onChange={(event) => setUsername(event.target.value)}
+            />
+            <Button variant="contained" onClick={handleUsernameSave}>
+              Save
+            </Button>
+          </Stack>
+        </Box>
       ) : (
-        <div>
-          <Typography id="username-textbox" gutterBottom>Username: { username }</Typography>
-          <Button variant="contained" onClick={ () => { setEditUsername(true) } }>Edit Username</Button>
-        </div>
+        <Box mt={2}>
+          <Typography variant="body1" gutterBottom>
+            Username: {username}
+          </Typography>
+          <Button variant="contained" onClick={() => setEditUsername(true)}>
+            Edit Username
+          </Button>
+        </Box>
       )}
 
-      <Typography id="gender-checkbox" gutterBottom>Gender Selected: { selectedGender }</Typography>
+      <Typography variant="body1" gutterBottom>
+        Gender Selected: {selectedGender}
+      </Typography>
       {editGender ? (
-        <div>
-          <FormGroup>
-            <FormControlLabel value="Male" control={ <Radio /> } label="Male" checked={ selectedGender === 'Male' } onChange={ handleGenderChange } />
-            <FormControlLabel value="Female" control={ <Radio /> } label="Female" checked={ selectedGender === 'Female' } onChange={ handleGenderChange } />
-            <FormControlLabel value="Queer" control={ <Radio /> } label="Queer" checked={ selectedGender === 'Queer' } onChange={ handleGenderChange } />
-          </FormGroup>
-          <Button variant="contained" onClick={ handleGenderSave }>Set Gender</Button>
-        </div>
+        <Box mt={2}>
+          <Stack mt={2} direction="row" spacing={2} alignItems="center">
+            <FormGroup row>
+              <FormControlLabel
+                value="Male"
+                control={<Radio />}
+                label="Male"
+                checked={selectedGender === 'Male'}
+                onChange={handleGenderChange}
+              />
+              <FormControlLabel
+                value="Female"
+                control={<Radio />}
+                label="Female"
+                checked={selectedGender === 'Female'}
+                onChange={handleGenderChange}
+              />
+              <FormControlLabel
+                value="Queer"
+                control={<Radio />}
+                label="Queer"
+                checked={selectedGender === 'Queer'}
+                onChange={handleGenderChange}
+              />
+            </FormGroup>
+            <Button variant="contained" onClick={handleGenderSave}>
+              Set Gender
+            </Button>
+          </Stack>
+        </Box>
       ) : (
-        <div>
-          <Button variant="contained" onClick={ () => setEditGender(true) }>Edit Gender</Button>
-        </div>
+        <Box mt={2}>
+          <Button variant="contained" onClick={() => setEditGender(true)}>
+            Edit Gender
+          </Button>
+        </Box>
       )}
 
-      <Typography id="age-slider" gutterBottom> Age: { age } </Typography>
+      <Typography variant="body1" gutterBottom>
+        Age: {age}
+      </Typography>
       {confirmedAge ? (
-        <div>
-          <Button variant="contained" onClick={ () => setConfirmedAge(false) }>Edit Age</Button>
-        </div>
+        <Box mt={2}>
+          <Button variant="contained" onClick={() => setConfirmedAge(false)}>
+            Edit Age
+          </Button>
+        </Box>
       ) : (
-        <div>
-          <Slider id="age-slider" value={ age } min={ 18 } max={ 95 } step={ 1 } onChange={ handleAgeChange } aria-labelledby="age-slider" />
-          <Button variant="contained" onClick={ () => setConfirmedAge(true) }>Set Age</Button>
-
-        </div>
+        <Box mt={2}>
+          <Stack mt={2} direction="row" spacing={2} alignItems="center">
+            <Slider
+              id="age-slider"
+              value={age}
+              min={18}
+              max={100}
+              step={1}
+              onChange={handleAgeChange}
+              aria-labelledby="age-slider"
+              sx={{ width: '10%' }}
+            />
+            <Button variant="contained" onClick={() => setConfirmedAge(true)}>
+              Set Age
+            </Button>
+          </Stack>
+        </Box>
       )}
-
       {editLocation ? (
-        <div>
-          <Typography id="location-textbox" gutterBottom>Location:</Typography>
+        <Box mt={2}>
+          <Typography variant="body1" gutterBottom>
+            Location:
+          </Typography>
           {editLocation && location.length > 0 && (
             <Alert severity="warning">You better be spelling that city name correctly!</Alert>
           )}
-          <TextField required size="small" id="outlined-basic" label="Location" onChange={ (event) => setLocation(event.target.value) } />
-          <Button variant="contained" onClick={ handleLocationSave }>Save</Button>
-        </div>
+          <Stack mt={2} direction="row" spacing={2} alignItems="center">
+            <TextField
+              required
+              size="small"
+              id="outlined-basic"
+              label="Location"
+              onChange={(event) => setLocation(event.target.value)}
+            />
+            <Button variant="contained" onClick={handleLocationSave}>
+            Save
+            </Button>
+          </Stack>
+        </Box>
       ) : (
-        <div>
-          <Typography id="location-textbox" gutterBottom>Location: { location }</Typography>
-          <Button variant="contained" onClick={ () => setEditLocation(true) }>Edit Location</Button>
-        </div>
+        <Box mt={2}>
+          <Typography variant="body1" gutterBottom>
+            Location: {location}
+          </Typography>
+          <Button variant="contained" onClick={() => setEditLocation(true)}>
+            Edit Location
+          </Button>
+        </Box>
       )}
 
-      { showBio ? (
-        <TextField id="outlined-textarea" label="Bio" multiline rows={ 4 } value={ bio } onChange={ handleBioChange } />
+      {showBio ? (
+        <Stack mt={2} direction="row" spacing={2} alignItems="center">
+          <TextField
+            id="outlined-textarea"
+            label="Bio"
+            multiline
+            rows={4}
+            value={bio}
+            onChange={handleBioChange}
+            variant="outlined"
+            sx={{ width: '15%' }}
+            margin="normal"
+          />
+        </Stack>
       ) : (
-        <div>
-          <Typography id="bio-typography" gutterBottom>Bio:</Typography>
-          <Typography>{ bio }</Typography>
-          <Button variant="contained" onClick={ () => setShowBio(true) }>Edit Bio</Button>
-        </div>
-      ) }
-      { showBio && (
-        <Button variant="contained" onClick={ handleBioSave }>Set Bio</Button>
-      ) }
-      <div>
-      </div>
-      {allSaved ? (
-        <div>
-          <Typography id="confirm" gutterBottom> Ready to Submit? </Typography>
-          <Button variant="contained" onClick={ submitNewUserInfo }>Submit</Button>
-        </div>
-      ) : null}
-    </div>
+        <Box mt={2}>
+          <Typography variant="body1" gutterBottom>
+            Bio:
+          </Typography>
+          <Typography>{bio}</Typography>
+          <Button variant="contained" onClick={() => setShowBio(true)}>
+            Edit Bio
+          </Button>
+        </Box>
+      )}
+
+      {showBio && (
+        <Button variant="contained" onClick={handleBioSave}>
+          Set Bio
+        </Button>
+      )}
+
+      {allSaved && (
+        <Box mt={2}>
+          <Typography variant="body1" gutterBottom>
+            Ready to Submit?
+          </Typography>
+          <Button variant="contained" onClick={submitNewUserInfo}>
+            Submit
+          </Button>
+        </Box>
+      )}
+    </Box>
   );
 };
 
