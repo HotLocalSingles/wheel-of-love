@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 //Material UI
@@ -92,7 +93,7 @@ const Wheel = () => {
 const Main = ({ user, handleLogout, setUser }) => {
 
   const [activeTab, setActiveTab] = useState('profile');
-
+  const navigate = useNavigate();
 
 
   return (
@@ -124,7 +125,7 @@ const Main = ({ user, handleLogout, setUser }) => {
           </Grid>
           <Grid item xs={6}>
             <div className="tab neonBorder">
-              <Typography onClick={() => setActiveTab('wheel')} fontFamily="Sacramento" variant="h4" align="center" className="white-text">Wheel/Chat</Typography>
+              <Typography onClick={() => navigate('/wheel')} fontFamily="Sacramento" variant="h4" align="center" className="white-text">Wheel/Chat</Typography>
             </div>
           </Grid>
         </Grid>
@@ -138,7 +139,6 @@ const Main = ({ user, handleLogout, setUser }) => {
           {activeTab === 'matches' && <Matches user={ user }/>}
           {activeTab === 'profile' && <UserProfile user={ user } setUser={ setUser }/>}
           {activeTab === 'icebreaker' && <Icebreaker googleId={ user.googleId }/>}
-          {activeTab === 'wheel' && <Wheel />}
         </Grid>
       </Grid>
 

@@ -137,7 +137,7 @@ const App = () => {
         <Route path="/matchPage/:matchName" element={<MatchPage setUser={ setUser }/>} />
         <Route path="/login" element={ <Login login={ login }/>} />
         <Route path="/newUser" element={<NewUser user={ user } setUser={ setUser }/>} />
-
+        <Route path="/wheel" element={ <Home user={ user } setUser={ setUser }/> } />
       </Routes>
     </div>
   );
