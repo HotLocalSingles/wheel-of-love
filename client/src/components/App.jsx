@@ -32,7 +32,7 @@ const App = () => {
 
   // const [user, setUser] = useState(fakeUser);
   // const [isLoading, setIsLoading] = useState(false); //<-- Bypassing the login screen and loading screen
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   //The states, storing the logged in user information and if the page is loading information
   const [user, setUser] = useState(null);
