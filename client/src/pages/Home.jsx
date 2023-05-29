@@ -35,13 +35,9 @@ const classes = {
 };
 
 
-const Home = ({ user, handleLogout, setUser }) => {
+const Home = ({ user }) => {
   const [socket, setSocket] = useState(null);
   const [selectedUser, getSelectedUser] = useState(null);
-
-  //For editing user profile and bio
-  const [editing, setEditing] = useState(false);
-  const [isEditingBio, setIsEditingBio] = useState(false);
 
 
   const [isChatting, setIsChatting] = useState(false);
@@ -74,58 +70,13 @@ const Home = ({ user, handleLogout, setUser }) => {
       <div style={classes.root}>
         <Grid container spacing={3}>
 
-          {/* Top Bar */}
-          <Grid container item xs={12} spacing={3} alignItems="center">
-            <Grid item xs={4}>
-
-            </Grid>
-            <Grid item xs={4}>
-              {/* Free to put something here */}
-            </Grid>
-
-            <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <OptionsList user={ user } handleLogout={ handleLogout } setEditing={setEditing} setIsEditingBio={ setIsEditingBio }/>
-            </Grid>
-          </Grid>
-
-          {/* Profile Box */}
-          <Grid item xs={12} sm={8} alignItems="center">
-            <div className="neonBorder">
-              <Grid item xs={12}>
-                <Paper style={classes.paper}>
-                  <UserProfile user={user} setUser={setUser} editing={editing} setEditing={setEditing} isEditingBio={ isEditingBio } setIsEditingBio={ setIsEditingBio }/>
-                  {/* {editing ? null : (
-                    <Button variant="outlined" color="secondary" size="medium" onClick={() => setEditing(true)}>Edit Profile</Button>
-                  )} */}
-                </Paper>
-              </Grid>
-            </div>
-          </Grid>
-
-          {/* Matches Box */}
-
-          <Grid item xs={12} sm={4} alignItems="center" style={{ backgroundColor: 'white' }}>
-            <div className="neonBorder">
-              <Grid item xs={12} alignItems="center" >
-                <Typography variant="h6" align="center">Matches</Typography>
-                <Matches user={user} />
-              </Grid>
-              <Grid item xs={12} alignItems="center">
-                <Typography variant="h6" align="center">Icebreaker</Typography>
-                <Icebreaker user={user} />
-              </Grid>
-            </div>
-          </Grid>
-
-
           {/* Wheel Box */}
           {isChatting ? (
             <Grid container item xs={12} spacing={3} alignItems="center">
-              <Grid item xs={12} sm={6}>
-                <Typography variant="h6" align="center">Wheel</Typography>
-                <Wheel user={user} socket={socket} setIsChatting={setIsChatting} getSelectedUser={getSelectedUser} />
+              <Grid item xs={12} sm={2}>
+                <Button type='outlined' align="center" onClick={ () => navigate('/') }>Back to Main</Button>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={10}>
                 <Paper style={classes.paper}>
                   <Typography variant="h6" align="center">Chat</Typography>
                   <Chat initialUser={user} selectedUser={selectedUser} />
@@ -134,6 +85,7 @@ const Home = ({ user, handleLogout, setUser }) => {
             </Grid>
           ) : (
             <Grid item xs={12} sm={6}>
+              <Button type='outlined' align="center" onClick={ () => navigate('/') }>Back to Main</Button>
               <Wheel user={user} socket={socket} setIsChatting={setIsChatting} getSelectedUser={getSelectedUser} />
             </Grid>
           )}

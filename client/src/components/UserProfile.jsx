@@ -162,6 +162,9 @@ const UserProfile = ({ user, setUser, }) => {
           <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
         </div>) : null}
       </Grid>
+      <Grid item xs={12}>
+        <Photos id={ user.id } />
+      </Grid>
     </Grid>
   );
 };
