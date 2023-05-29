@@ -19,6 +19,9 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+// import '../../../styles/login.css';
+
+
 
 const classes = {
   root: {
@@ -69,65 +72,66 @@ const Home = ({ user, handleLogout, setUser }) => {
           {/* Top Bar */}
           <Grid container item xs={12} spacing={3} alignItems="center">
             <Grid item xs={4}>
+
             </Grid>
             <Grid item xs={4}>
-              <Typography align="center">Neon App Name</Typography>
+              {/* <Conversations user={user} socket={socket} /> */}
             </Grid>
-            <Grid item xs={4}>
+
+            <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button variant="outlined" color="error" size="medium" onClick={handleLogout}>Logout</Button>
             </Grid>
           </Grid>
 
           {/* Profile Box */}
-          <Grid item xs={12} sm={6} alignItems="center">
-            <Grid item xs={12}>
-              <Paper style={classes.paper}>
-                <UserProfile user={user} setUser={setUser} editing={ editing } setEditing={ setEditing }/>
-                { editing ? null : <Button variant="outlined" color="secondary" size="medium" onClick= { () => setEditing(true) }>Edit Profile</Button>}
-              </Paper>
-            </Grid>
-            <Grid item xs={12} alignItems="center">
-              <Typography align="center">Photos</Typography>
-              <Photos id={user.id}/>
-            </Grid>
+          <Grid item xs={12} sm={8} alignItems="center">
+            <div className="neonBorder">
+              <Grid item xs={12}>
+                <Paper style={classes.paper}>
+                  <UserProfile user={user} setUser={setUser} editing={editing} setEditing={setEditing} />
+                  {editing ? null : (
+                    <Button variant="outlined" color="secondary" size="medium" onClick={() => setEditing(true)}>Edit Profile</Button>
+                  )}
+                </Paper>
+              </Grid>
+            </div>
           </Grid>
 
           {/* Matches Box */}
-          <Grid item xs={12} sm={6} alignItems="center">
-            <Grid item xs={12} alignItems="center">
-              <Typography align="center">Matches</Typography>
-              <Matches user={ user } />
-            </Grid>
-            <Grid item xs={12} alignItems="center">
-              <Typography>Icebreaker</Typography>
-              <Icebreaker user={ user } />
-            </Grid>
+
+          <Grid item xs={12} sm={4} alignItems="center" style={{ backgroundColor: 'white' }}>
+            <div className="neonBorder">
+              <Grid item xs={12} alignItems="center" >
+                <Typography variant="h6" align="center">Matches</Typography>
+                <Matches user={user} />
+              </Grid>
+              <Grid item xs={12} alignItems="center">
+                <Typography variant="h6" align="center">Icebreaker</Typography>
+                <Icebreaker user={user} />
+              </Grid>
+            </div>
           </Grid>
 
+
           {/* Wheel Box */}
-          { isChatting ? (
+          {isChatting ? (
             <Grid container item xs={12} spacing={3} alignItems="center">
               <Grid item xs={12} sm={6}>
-                <Paper style={classes.paper}>
-                  <Typography align="center">Wheel</Typography>
-                  <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting } getSelectedUser={ getSelectedUser }/>
-                </Paper>
+                <Typography variant="h6" align="center">Wheel</Typography>
+                <Wheel user={user} socket={socket} setIsChatting={setIsChatting} getSelectedUser={getSelectedUser} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Paper style={classes.paper}>
-                  <Typography>Conditional Rendering of Chat</Typography>
-                  <Chat initialUser={ user } selectedUser={ selectedUser }/>
+                  <Typography variant="h6" align="center">Chat</Typography>
+                  <Chat initialUser={user} selectedUser={selectedUser} />
                 </Paper>
               </Grid>
             </Grid>
           ) : (
-            <Grid item xs={12} alignItems="center">
-              <Paper style={classes.paper}>
-                <Typography>Wheel</Typography>
-                <Wheel user={ user } socket={ socket } setIsChatting={ setIsChatting } getSelectedUser={ getSelectedUser }/>
-              </Paper>
+            <Grid item xs={12} sm={6}>
+              <Wheel user={user} socket={socket} setIsChatting={setIsChatting} getSelectedUser={getSelectedUser} />
             </Grid>
-          ) }
+          )}
         </Grid>
       </div>
     </div>

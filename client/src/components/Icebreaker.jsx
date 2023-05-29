@@ -26,11 +26,11 @@ const Icebreaker = ({ user }) => {
   };
   return (
     <>
-      <div>
+      <div >
         <button onClick={handleNewIcebreakerClick}>Create New Icebreaker</button>
         <button onClick={handleSaveIcebreakerClick}>Save Favorite Icebreaker</button>
       </div>
-      <h1>{icebreaker}</h1>
+      <div>{icebreaker}</div>
     </>
   );
 };
