@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 
 //Material UI
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 
 
@@ -37,6 +31,10 @@ const matches = [
   },
 ];
 
+const user = {
+  name: "Me",
+}
+
 const Matches = () => {
   return (
     <Grid container >
@@ -51,10 +49,44 @@ const Matches = () => {
 
 };
 
+const UserProfile = () => {
+  return (
+    <Grid container >
+      <Grid item xs={12} style={style}>
+        <Avatar />
+        <Typography variant="h6" align="center">{user.name}</Typography>
+      </Grid>
+    </Grid>
+
+  );
+};
+
+const Icebreaker = () => {
+  return (
+    <Grid container >
+      <Grid item xs={12} style={style}>
+        <Typography variant="h6" align="center">Interact with Icebreaker</Typography>
+      </Grid>
+    </Grid>
+  );
+};
+
+const Wheel = () => {
+  return (
+    <Grid container >
+      <Grid item xs={12} style={style}>
+        <Typography variant="h6" align="center">Wheel</Typography>
+      </Grid>
+    </Grid>
+  );
+};
+
 
 const Main = ({ user, handleLogout, setUser }) => {
 
-  const [showMatches, setShowMatches] = useState(false);
+  const [activeTab, setActiveTab] = useState('profile');
+
+
 
   return (
     <div className="pageContainer">
@@ -68,16 +100,16 @@ const Main = ({ user, handleLogout, setUser }) => {
               <Typography variant="h4" align="center">Wheel of Love</Typography>
             </Grid>
             <Grid item xs={6} style={style}>
-              <Typography variant="h6" align="center">Profile</Typography>
+              <Typography onClick={ () => setActiveTab('profile') } variant="h6" align="center">Profile</Typography>
             </Grid>
             <Grid item xs={6} style={style}>
-              <Typography onClick={ () => setShowMatches(!showMatches)} variant="h6" align="center">Matches</Typography>
+              <Typography onClick={ () => setActiveTab('matches')} variant="h6" align="center">Matches</Typography>
             </Grid>
             <Grid item xs={6} style={style}>
-              <Typography variant="h6" align="center">Ice Breaker</Typography>
+              <Typography onClick={ () => setActiveTab('icebreaker') } variant="h6" align="center">Ice Breaker</Typography>
             </Grid>
             <Grid item xs={6} style={style}>
-              <Typography variant="h6" align="center">Wheel/Chat</Typography>
+              <Typography onClick={ () => setActiveTab('wheel') } variant="h6" align="center">Wheel/Chat</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -86,7 +118,10 @@ const Main = ({ user, handleLogout, setUser }) => {
         <Grid container item xs={6} sm={6} style={style}>
           <Typography variant="h3" align="center">Right Column</Typography>
           <Grid container item xs={12} style={style}>
-            { showMatches ? <Matches/> : null}
+            {activeTab === 'matches' && <Matches />}
+            {activeTab === 'profile' && <UserProfile />}
+            {activeTab === 'icebreaker' && <Icebreaker />}
+            {activeTab === 'wheel' && <Wheel />}
           </Grid>
         </Grid>
 
