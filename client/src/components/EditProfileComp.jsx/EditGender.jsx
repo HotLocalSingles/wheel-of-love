@@ -10,7 +10,7 @@ const EditGender = ({ user, editedGender, setEditedGender }) => {
 
   return (
     <div>
-      <Typography id="gender" gutterBottom>Gender:</Typography>
+      {/* <Typography id="gender" gutterBottom>Gender:</Typography> */}
       <FormControl sx={{ m: 1, }} size="small">
         <InputLabel id="demo-simple-select-label">Genders</InputLabel>
         <Select value={editedGender} label="Genders" onChange={ (event) => setEditedGender(event.target.value) }>
