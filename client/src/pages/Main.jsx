@@ -97,12 +97,12 @@ const Main = ({ user, handleLogout, setUser }) => {
 
 
   return (
-    <Grid spacing={5} className="page-container" container style={style}>
+    <Grid spacing={5} className="page-container" container >
 
       {/* Left Grid */}
-      <Grid spacing={2} container item xs={6} sm={6} style={style}>
+      <Grid spacing={2} container item xs={6} sm={6} >
 
-        <Grid container item xs={12} style={style}>
+        <Grid container item xs={12}>
 
           <Grid item xs={12} className="wheel-sign neonBorder">
             <Typography fontFamily="Sacramento" className="neonText" variant="h2" align="center">Wheel of Love</Typography>
@@ -110,31 +110,31 @@ const Main = ({ user, handleLogout, setUser }) => {
 
           <Grid item xs={6}>
             <div className="tab neonBorder">
-              <Typography onClick={() => setActiveTab('profile')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Profile</Typography>
+              <Typography onClick={() => setActiveTab('profile')} fontFamily="Sacramento" variant="h4" align="center" className="white-text">Profile</Typography>
             </div>
           </Grid>
           <Grid item xs={6}>
             <div className="tab neonBorder">
-              <Typography onClick={() => setActiveTab('matches')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Matches</Typography>
+              <Typography onClick={() => setActiveTab('matches')} fontFamily="Sacramento" variant="h4" align="center" className="white-text">Matches</Typography>
             </div>
           </Grid>
           <Grid item xs={6}>
             <div className="tab neonBorder">
-              <Typography onClick={() => setActiveTab('icebreaker')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Ice Breaker</Typography>
+              <Typography onClick={() => setActiveTab('icebreaker')} fontFamily="Sacramento" variant="h4" align="center" className="white-text">Ice Breaker</Typography>
             </div>
           </Grid>
           <Grid item xs={6}>
             <div className="tab neonBorder">
-              <Typography onClick={() => setActiveTab('wheel')} fontFamily="Sacramento" variant="h6" align="center" className="white-text">Wheel/Chat</Typography>
+              <Typography onClick={() => setActiveTab('wheel')} fontFamily="Sacramento" variant="h4" align="center" className="white-text">Wheel/Chat</Typography>
             </div>
           </Grid>
         </Grid>
       </Grid>
 
       {/* Right Grid */}
-      <Grid container item xs={6} sm={6} style={style}>
+      <Grid container item xs={6} sm={6} >
 
-        <Grid container item xs={12} style={style}>
+        <Grid container alignItems='center' item xs={12} >
           {activeTab === 'matches' && <Matches user={ user }/>}
           {activeTab === 'profile' && <UserProfile user={ user }/>}
           {activeTab === 'icebreaker' && <Icebreaker googleId={ user.googleId }/>}
