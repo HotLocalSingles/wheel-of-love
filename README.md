@@ -37,3 +37,14 @@ The Chat then establishes a private room using Socket.io between the two users. 
 Any ice breakers the user chooses can be added to the database and will be available as a favorite that the user can select from.
 
 The Vibe Rating using an api that 
+
+----------------------------------------------------------
+## **Contributors**
+
+Logan Hochwald https://github.com/loganhochwald
+
+Alex Lambert https://github.com/xanderlambert
+
+Bryan Burnside https://github.com/bryanpburnside
+
+Cynthia Harris https://github.com/CynLadyPenguin
