@@ -1,12 +1,33 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { IconButton, FormControl, Container, Divider, TextField, Box, Grid, Typography, List, ListItem, ListItemText, Avatar, Paper } from '@mui/material';
+
+//importing from the specific endpoint takes less toll on computer
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { io } from 'socket.io-client';
 
+/*
+The chat component is designed to take in the logged in user
+and the user selected from the wheel or from clicking one of the matches.
+Then allow those users to communicate in a private chat room in real time.
+Messages are saved to mysql database so they can be rendered later
+This component will also render any previous messages between the users
+*/
 const Chat = ({ initialUser, selectedUser }) => {
-  //room
-  const room = 'chat room';
+  //create room using the two user IDs so it will always be unique
+  //sort so the room number for both people is consistent in database
+  const room = [initialUser.id, selectedUser.id].sort().join("-"); //works
   //states for user and messages
-  // const [selectUser, setSelectUser] = useState(initialUser ? initialUser.name : '');
+  const [conversations, setConversations] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [nickname, setNickname] = useState(initialUser.name);
@@ -16,14 +37,14 @@ const Chat = ({ initialUser, selectedUser }) => {
     //create the socket instance and connect to the server
     const socket = io('http://localhost:3000', {
       query: {
-        userId: initialUser.username,
+        userId: initialUser.id,
       }
     });
     setSocket(socket);
     //join the chat room
     socket.emit('private-chat', {
-      senderId: initialUser.username,
-      receiverId: selectedUser.username,
+      senderId: initialUser.id,
+      receiverId: selectedUser.id,
       room: room
     });
 
@@ -39,14 +60,81 @@ const Chat = ({ initialUser, selectedUser }) => {
     };
   }, []);
 
+  //fetch messages from the server
+  const fetchMessages = async () => {
+    const res = await fetch('/chats/conversations');
+    const data = await res.json();
+    // console.log(data); //[ { room: 'blah', messages: [] } ]
+    setConversations(data);
+    //render the previous messages as soon as the room is established
+    const conversation = data.find(convo => convo.room === room);
+    if (conversation) {
+      setMessages(conversation.messages);
+    } else {
+      setMessages([]);
+    }
+  };
+
+  //get the message from the database on mount
+  useEffect(() => {
+    fetchMessages(selectedConversation);
+  }, []);
+
+  //get the previous messages and store them in the correct conversation
+  const fetchPreviousMessages = async (conversation) => {
+    if (conversation && conversation.messages) {
+      setMessages(conversation.messages);
+    } else {
+      setMessages([]);
+    }
+  };
+  
+  useEffect(() => {
+    //fetch previous messages when the selectedConversation changes
+    fetchPreviousMessages(selectedConversation);
+  }, [selectedConversation, selectedUser]);
+
 
   //listChatMessages will display all the messages in the state array 'messages'
   //and create a listItem from each message obj
   //add styling later
   const listChatMessages = messages.map((messageObj, index) => {
     return (
-      <ListItem key={index}>
-        <ListItemText primary={`${messageObj.nickname}: ${messageObj.message}`} />
+      <ListItem
+        key={index}
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+          marginBottom: '10px',
+          maxWidth: '95%'
+        }}
+      >
+        <ListItemText
+          primary={`${messageObj.nickname}: ${messageObj.message}`}
+          sx={{
+            display: 'inline-block',
+            padding: '10px',
+            borderRadius: '5px',
+            backgroundImage: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            fontWeight: 'bolder',
+            position: 'relative',
+            zIndex: '1',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            backgroundColor: 'black',
+            border: '2px solid #a738ff',
+            zIndex: '0',
+          }}
+        />
       </ListItem>
     );
   });
@@ -58,11 +146,24 @@ const Chat = ({ initialUser, selectedUser }) => {
       //create a new message object
       const newMessage = {
         nickname: nickname,
-        senderId: initialUser.username,
-        receiverId: selectedUser.username,
+        senderId: initialUser.id,
+        receiverId: selectedUser.id,
         message: message,
         room: room
       };
+      //check if a conversation already exists for the room
+      const conversation = conversations.filter(convo => convo.room === room);
+
+      //if the conversation exists, add the message to it
+      //if it doesn't, create a new conversation
+      //do it here because listChatMessages re-renders too much
+      if (conversation[0] && conversation[0].messages) {
+        conversation[0].messages.push(newMessage);
+        setSelectedConversation(conversation[0]);
+      } else {
+        setConversations(prevConversations => [...prevConversations, { room: room, messages: [newMessage] }]);
+        setSelectedConversation(conversation[0]);
+      }
       //emit the message with socket
       // console.log(newMessage);
       socket.emit('private-chat-message', newMessage);
@@ -100,51 +201,95 @@ const Chat = ({ initialUser, selectedUser }) => {
   */
   return (
     <Fragment>
-      <Container>
-        <Paper elevation={6}>
-          <Box padding={3}>
-            <Typography>
-              {/* add maybe icebreaker here? */}
-              Temp Title for Chatbox
-            </Typography>
-            <Divider />
-            <Grid container spacing={4} alignItems="center">
-              <Grid item id='chatBox' xs={20}>
-                <List id='chatBoxMessages'>
-                  { listChatMessages }
-                </List>
-              </Grid>
-              <Grid xs={6} item>
-                <FormControl fullWidth>
-                  <TextField
-                    sx={{
-                      border: 1,
-                    }}
-                    onKeyPress={ handleKeyPress }
-                    onChange={ (e) => setMessage(e.target.value) }
-                    value={ message }
-                    label="What would you like to say?"
-                    variant="outlined"/>
-                </FormControl>
-              </Grid>
-              <Grid item xs={1}>
-                <IconButton
-                  onClick={ sendMessage }
-                  fontSize='large'>Send
-                </IconButton>
-              </Grid>
+      <Typography
+        sx={{
+          display: 'inline-block',
+          padding: '10px',
+          borderRadius: '5px',
+          border: '2px solid #a738ff',
+          background: 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 'bold',
+        }}>
+              Now Chatting with {selectedUser.name}
+      </Typography>
+      <Container sx={{
+        height: "650px",
+        width: "600px",
+        backgroundImage: 'url(https://i.gifer.com/Ctsx.gif)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        <Box padding={3}>
+          <Divider />
+          <Grid container spacing={4} alignItems="center"
+            sx={{ backgroundColor: 'rgba(0, 0, 255, 0)' }}>
+            <Grid item id='chatBox' xs={20}>
+              <List
+                id='chatBoxMessages'
+                sx={{
+                  height: '800px',
+                  width: '400px',
+                  backgroundColor: 'rgba(0, 0, 255, 0)',
+                  overflowY: 'auto',
+                  maxHeight: '400px',
+                  overflow: 'auto',
+                  '&::-webkit-scrollbar': {
+                    width: '0.2em'
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: 'rgba(0,0,0,.1)',
+                    outline: '1px solid slategrey'
+                  }
+                }}>
+                { listChatMessages }
+              </List>
             </Grid>
-          </Box>
-          <Grid item xs={2}>
-            <FormControl fullWidth>
-              <TextField
-                onChange={ (e) => handleNicknameChange(e) }
-                value={ nickname }
-                label="add a nickname"
-                variant="outlined"/>
-            </FormControl>
+            <Grid xs={6} item>
+              <FormControl fullWidth>
+                <TextField
+                  sx={{
+                    border: 1,
+                    borderRadius: '5px',
+                    backgroundColor: '#c7b4a7'
+                  }}
+                  onKeyPress={ handleKeyPress }
+                  onChange={ (e) => setMessage(e.target.value) }
+                  value={ message }
+                  label="What would you like to say?"
+                  variant="outlined"/>
+              </FormControl>
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton
+                sx={{ backgroundColor: '#c7b4a7'}}
+                onClick={ sendMessage }
+                fontSize='large'>Send
+              </IconButton>
+            </Grid>
           </Grid>
-        </Paper>
+        </Box>
+        <Grid item xs={2}>
+          <FormControl fullWidth>
+            <TextField
+              sx={{
+                backgroundColor: '#c7b4a7',
+                color: 'black',
+                fontWeight: '800',
+                width: '200px',
+                borderRadius: '5px'
+              }}
+              onChange={ (e) => handleNicknameChange(e) }
+              value={ nickname }
+              label="add a nickname"
+              variant="outlined"/>
+          </FormControl>
+        </Grid>
       </Container>
     </Fragment>
   );

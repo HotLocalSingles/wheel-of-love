@@ -13,7 +13,6 @@ import Photos from '../components/Photos.jsx';
 import OptionsList from '../components/HomePieces/OptionsList.jsx';
 
 import Wheel from '../components/Wheel.jsx';
-import Conversations from '../components/Conversations.jsx';
 
 //Material UI
 import Grid from '@mui/material/Grid';
@@ -60,7 +59,7 @@ const Home = ({ user, handleLogout, setUser }) => {
     //create the socket instance
     const socket = io('http://localhost:3000', {
       query: {
-        userId: user.username,
+        userId: user.id,
       }
     });
     setSocket(socket);
@@ -78,9 +77,7 @@ const Home = ({ user, handleLogout, setUser }) => {
           {/* Top Bar */}
           <Grid container item xs={12} spacing={3} alignItems="center">
             <Grid item xs={4}>
-              <div className="neonText">
-                <Typography variant="h4" align="left" fontFamily="Sacramento">Wheel of Love</Typography>
-              </div>
+
             </Grid>
             <Grid item xs={4}>
               {/* Free to put something here */}

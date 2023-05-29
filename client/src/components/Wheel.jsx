@@ -34,8 +34,8 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
       }
       console.log('Backend call for all users:', insertUsers);
       //adding filtering (by location) directly, because I want it done automagically.
-      // currently checking if i can filter by ID since users dont yet have properties.
-      //this could proabably be done on backend, idk if that would mess anyone up, so its here for now.
+      // currently checking if i can filter by ID since users don't yet have properties.
+      //this could probably be done on backend, idk if that would mess anyone up, so its here for now.
       setUsers(insertUsers);
     } catch (error) {
       console.error('Error fetching all users on client side wheel:', error);
@@ -53,7 +53,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
   }, [users, selectedUsers, maleChecked, femaleChecked, queerChecked]);
 
   // For MUI checkboxes/ filtering
-  // * So this also  filters out the self, users who dont share the self's location, and users the wheel has chosen (this session) *
+  // * So this also  filters out the self, users who don't share the self's location, and users the wheel has chosen (this session) *
   const genderFilter = () => {
     const genderFilteredUsers = users.filter((dater) => {
       const isGenderMatched =
@@ -118,8 +118,8 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
       // update matches db with the chosen user(matched w/the logged in)
       // console.log(user.id, 'CHOSEN USER ID ');
       // Update matches db with the chosen user (matched with the logged-in user)
-      const userId = thatUser.id; // Replace with the actual user ID
-      const userId2 = user.id; // Replace with the actual user ID
+      const userId = thatUser.id;
+      const userId2 = user.id;
 
       axios
         .post(`/matches/${userId}`, { userId2 })
@@ -141,7 +141,7 @@ const Wheel = ({ user, socket, setIsChatting, getSelectedUser }) => {
         socket.emit('private-chat', {
           senderId: thatUser.username,
           receiverId: user.username,
-          room: 'chat room',
+          room: [thatUser.id, user.id].sort().join("-"),
         });
       }
     }, rotationDuration);
