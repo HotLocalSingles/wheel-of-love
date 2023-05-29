@@ -52,7 +52,7 @@ const Vibe = ({ bio, dbVibe }) => {
 
   return (
     <>
-      Vibe: { vibe }
+      Vibe Rater: { vibe }
     </>
   );
 };
