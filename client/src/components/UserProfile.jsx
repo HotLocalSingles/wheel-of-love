@@ -10,6 +10,10 @@ import EditLocation from './EditProfileComp.jsx/EditLocation.jsx';
 import EditGender from './EditProfileComp.jsx/EditGender.jsx';
 import EditAge from './EditProfileComp.jsx/EditAge.jsx';
 import EditBio from './EditProfileComp.jsx/EditBio.jsx';
+import Stack from '@mui/material/Stack';
+import { Card, CardContent, CardActions, } from '@mui/material';
+import Box from '@mui/material/Box';
+
 
 // Material UI:
 import Avatar from '@mui/material/Avatar';
@@ -27,6 +31,10 @@ const classes = {
     padding: 20,
     textAlign: "center",
   }
+};
+const style = {
+  align: "center",
+  border: '1px solid black'
 };
 
 const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEditingBio, }) => {
@@ -102,8 +110,44 @@ const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEd
 
   return (
     <Grid container >
+      <Grid item xs={12} style={{ height: '100%', width: '100%', }}>
+        <Stack direction="column" spacing={1} sx={{ height: '100%', width: '100%' }}>
+          <Stack key={user.username} direction="row" sx={{ height: '100%', width: '100%' }} spacing={1}>
+            <Card key={user.name} sx={{ height: '100%', width: '100%' }}>
+              <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
+                <Avatar
+                  alt={user.name}
+                  src={user.picture}
+                  sx={{ width: 180, height: 180, objectFit: 'cover', marginLeft: 1, marginTop: 1 }}
+                />
+                <CardContent sx={{ flex: 1 }}>
+                  <Box display="flex" alignItems="center">
+                    { editing ? <EditName user={ user } editedName={ editedName } setEditedName={ setEditedName }/> : <Typography gutterBottom variant="h5" component="div">{user.name}</Typography>}
+                    { editing ? <EditUsername user={ user } editedUsername={ editedUsername } setEditedUsername={ setEditedUsername }/> : <Typography variant="body2" color="text.secondary" marginLeft={1}>@{user.username}</Typography> }
+                  </Box>
+                  <Typography  marginTop={1}>
+                    {user.bio}
+                  </Typography>
+                  <Box display="flex" alignItems="center" marginTop={3}>
+                    { editing ? <EditGender user={ user } editedGender={ editedGender } setEditedGender={ setEditedGender }/> : <Typography >Gender: {user.gender}</Typography>}
+                    { editing ? <EditAge user={ user } editedAge={ editedAge } setEditedAge={ setEditedAge }/> : <Typography  marginLeft={2}>Age: {user.age}</Typography> }
+                  </Box>
+                  <Typography  marginTop={1}>Lives in {user.location}</Typography>
+                  <Typography id="vibe" marginTop={1} ><Vibe bio={user.bio} dbVibe={user.vibe}/></Typography>
+                </CardContent>
+              </Box>
+              <CardActions>
+              </CardActions>
+            </Card>
+          </Stack>
+        </Stack>
+        { editing ? (<div>
+          <Button variant="outlined" color="secondary" size="medium" onClick={ submitNewUserInfo }>Save Profile</Button>
+          <Button variant="outlined" color="error" size="medium" onClick={ handleCancelClick }>Cancel Edit</Button>
+        </div>) : null}
+      </Grid>
 
-      <Grid container spacing={1}>
+      {/* <Grid container spacing={1}>
         <Grid container item xs={12} spacing={3}>
           <>
             <Grid item xs={4} container direction="column" justifyContent="center" alignItems="center">
@@ -150,7 +194,7 @@ const UserProfile = ({ user, setUser, editing, setEditing, setIsEditingBio, isEd
       </div>) : null}
       <Grid item xs={12} alignItems="center">
         <Photos id={user.id} />
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };
