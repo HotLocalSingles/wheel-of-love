@@ -1,7 +1,6 @@
 # **Wheel Of Love**
 This is a dating app that utilizes a wheel to match users. Users can create their own profiles, see their matches, spin the wheel to get matched to another user, chat with other users in real time, create icebreakers to help them 'break the ice' with their matches, and see what's up with the vibe rater. This dating app give a bit of spontaneity and fun to the dating world.
 
-![Alt text](client/images/Screenshot 2023-06-10 111253.png)
 
 ## Table of Contents
 
